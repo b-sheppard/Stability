@@ -7,8 +7,11 @@ target 'balance' do
 
   # Pods for balance
 
+    pod 'Charts'
+    pod 'SearchTextField'
 	pod 'Firebase'
-	pod 'Firebase/Database'
+    pod 'Firebase/Database'
+    pod 'Firebase/Core'
 	pod 'SwiftLint'
 
   target 'balanceTests' do

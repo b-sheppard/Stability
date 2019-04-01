@@ -8,14 +8,23 @@
 
 /* Begin PBXBuildFile section */
 		322084C0C541AEE44EC8135B /* Pods_balance.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E47598C73C75F75B1486951 /* Pods_balance.framework */; };
+		51050C362155E736005A13DC /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51050C352155E736005A13DC /* MainNavigationController.swift */; };
+		51050C382155E76F005A13DC /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51050C372155E76F005A13DC /* MainViewController.swift */; };
+		51050C3A2155E7D5005A13DC /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51050C392155E7D5005A13DC /* TaskViewController.swift */; };
+		510A0F2521976CE300230340 /* AddCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510A0F2421976CE300230340 /* AddCategoryViewController.swift */; };
+		513C8FF0219D363600785705 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513C8FEF219D363600785705 /* CategoryViewController.swift */; };
+		514F52712197FC590091FA83 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 514F52702197FC590091FA83 /* GoogleService-Info.plist */; };
+		516B679C21A28284008BDCF4 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516B679B21A28284008BDCF4 /* HomeViewController.swift */; };
+		516B679E21A28B94008BDCF4 /* NSUIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516B679D21A28B94008BDCF4 /* NSUIColor+Hex.swift */; };
 		518256A6210FA94500A0788D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518256A5210FA94500A0788D /* AppDelegate.swift */; };
 		518256A8210FA94500A0788D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518256A7210FA94500A0788D /* ViewController.swift */; };
-		518256AB210FA94500A0788D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 518256A9210FA94500A0788D /* Main.storyboard */; };
 		518256AE210FA94500A0788D /* balance.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 518256AC210FA94500A0788D /* balance.xcdatamodeld */; };
 		518256B0210FA94500A0788D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 518256AF210FA94500A0788D /* Assets.xcassets */; };
-		518256B3210FA94500A0788D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 518256B1210FA94500A0788D /* LaunchScreen.storyboard */; };
 		518256BE210FA94600A0788D /* balanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518256BD210FA94600A0788D /* balanceTests.swift */; };
 		518256C9210FA94600A0788D /* balanceUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518256C8210FA94600A0788D /* balanceUITests.swift */; };
+		518F4C5921AB34DF00E4EBA7 /* TaskGenericViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518F4C5821AB34DF00E4EBA7 /* TaskGenericViewController.swift */; };
+		51B207FC219F91B300563A9F /* AddTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B207FB219F91B300563A9F /* AddTaskViewController.swift */; };
+		51F5C56921DDBBEF00627E15 /* ActiveTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F5C56821DDBBEF00627E15 /* ActiveTaskViewController.swift */; };
 		66C1639EAF88506A71237C65 /* Pods_balanceTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85199DF706B26AC73A90B763 /* Pods_balanceTests.framework */; };
 		9F627E0ABEF9A00A92637751 /* Pods_balanceUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B02F5F7E53A1BD04E93E098 /* Pods_balanceUITests.framework */; };
 /* End PBXBuildFile section */
@@ -40,13 +49,19 @@
 /* Begin PBXFileReference section */
 		0928861B1DFDF136483F3A97 /* Pods-balance.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-balance.debug.xcconfig"; path = "Pods/Target Support Files/Pods-balance/Pods-balance.debug.xcconfig"; sourceTree = "<group>"; };
 		3FB9138893847D07954CA142 /* Pods-balanceUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-balanceUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-balanceUITests/Pods-balanceUITests.release.xcconfig"; sourceTree = "<group>"; };
+		51050C352155E736005A13DC /* MainNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
+		51050C372155E76F005A13DC /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		51050C392155E7D5005A13DC /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
+		510A0F2421976CE300230340 /* AddCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryViewController.swift; sourceTree = "<group>"; };
+		513C8FEF219D363600785705 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
+		514F52702197FC590091FA83 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		516B679B21A28284008BDCF4 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		516B679D21A28B94008BDCF4 /* NSUIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSUIColor+Hex.swift"; sourceTree = "<group>"; };
 		518256A2210FA94500A0788D /* balance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = balance.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		518256A5210FA94500A0788D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		518256A7210FA94500A0788D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		518256AA210FA94500A0788D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		518256AD210FA94500A0788D /* balance.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = balance.xcdatamodel; sourceTree = "<group>"; };
 		518256AF210FA94500A0788D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		518256B2210FA94500A0788D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		518256B4210FA94600A0788D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		518256B9210FA94600A0788D /* balanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = balanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		518256BD210FA94600A0788D /* balanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = balanceTests.swift; sourceTree = "<group>"; };
@@ -54,6 +69,9 @@
 		518256C4210FA94600A0788D /* balanceUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = balanceUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		518256C8210FA94600A0788D /* balanceUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = balanceUITests.swift; sourceTree = "<group>"; };
 		518256CA210FA94600A0788D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		518F4C5821AB34DF00E4EBA7 /* TaskGenericViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskGenericViewController.swift; sourceTree = "<group>"; };
+		51B207FB219F91B300563A9F /* AddTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewController.swift; sourceTree = "<group>"; };
+		51F5C56821DDBBEF00627E15 /* ActiveTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveTaskViewController.swift; sourceTree = "<group>"; };
 		5B02F5F7E53A1BD04E93E098 /* Pods_balanceUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_balanceUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		85199DF706B26AC73A90B763 /* Pods_balanceTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_balanceTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8652619EAFFA78E9AC962A43 /* Pods-balance.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-balance.release.xcconfig"; path = "Pods/Target Support Files/Pods-balance/Pods-balance.release.xcconfig"; sourceTree = "<group>"; };
@@ -131,11 +149,20 @@
 			children = (
 				518256A5210FA94500A0788D /* AppDelegate.swift */,
 				518256A7210FA94500A0788D /* ViewController.swift */,
-				518256A9210FA94500A0788D /* Main.storyboard */,
 				518256AF210FA94500A0788D /* Assets.xcassets */,
-				518256B1210FA94500A0788D /* LaunchScreen.storyboard */,
+				514F52702197FC590091FA83 /* GoogleService-Info.plist */,
 				518256B4210FA94600A0788D /* Info.plist */,
 				518256AC210FA94500A0788D /* balance.xcdatamodeld */,
+				51050C352155E736005A13DC /* MainNavigationController.swift */,
+				51050C372155E76F005A13DC /* MainViewController.swift */,
+				51050C392155E7D5005A13DC /* TaskViewController.swift */,
+				51B207FB219F91B300563A9F /* AddTaskViewController.swift */,
+				518F4C5821AB34DF00E4EBA7 /* TaskGenericViewController.swift */,
+				513C8FEF219D363600785705 /* CategoryViewController.swift */,
+				510A0F2421976CE300230340 /* AddCategoryViewController.swift */,
+				516B679D21A28B94008BDCF4 /* NSUIColor+Hex.swift */,
+				516B679B21A28284008BDCF4 /* HomeViewController.swift */,
+				51F5C56821DDBBEF00627E15 /* ActiveTaskViewController.swift */,
 			);
 			path = balance;
 			sourceTree = "<group>";
@@ -240,13 +267,16 @@
 				TargetAttributes = {
 					518256A1210FA94500A0788D = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 					};
 					518256B8210FA94600A0788D = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 						TestTargetID = 518256A1210FA94500A0788D;
 					};
 					518256C3210FA94600A0788D = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 						TestTargetID = 518256A1210FA94500A0788D;
 					};
 				};
@@ -276,9 +306,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				518256B3210FA94500A0788D /* LaunchScreen.storyboard in Resources */,
 				518256B0210FA94500A0788D /* Assets.xcassets in Resources */,
-				518256AB210FA94500A0788D /* Main.storyboard in Resources */,
+				514F52712197FC590091FA83 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -342,13 +371,17 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-balance/Pods-balance-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/Charts/Charts.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/SearchTextField/SearchTextField.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Charts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SearchTextField.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
@@ -382,9 +415,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				510A0F2521976CE300230340 /* AddCategoryViewController.swift in Sources */,
+				51050C362155E736005A13DC /* MainNavigationController.swift in Sources */,
 				518256A8210FA94500A0788D /* ViewController.swift in Sources */,
 				518256A6210FA94500A0788D /* AppDelegate.swift in Sources */,
+				513C8FF0219D363600785705 /* CategoryViewController.swift in Sources */,
+				51F5C56921DDBBEF00627E15 /* ActiveTaskViewController.swift in Sources */,
+				516B679C21A28284008BDCF4 /* HomeViewController.swift in Sources */,
+				51050C382155E76F005A13DC /* MainViewController.swift in Sources */,
+				518F4C5921AB34DF00E4EBA7 /* TaskGenericViewController.swift in Sources */,
 				518256AE210FA94500A0788D /* balance.xcdatamodeld in Sources */,
+				516B679E21A28B94008BDCF4 /* NSUIColor+Hex.swift in Sources */,
+				51B207FC219F91B300563A9F /* AddTaskViewController.swift in Sources */,
+				51050C3A2155E7D5005A13DC /* TaskViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,25 +461,6 @@
 			targetProxy = 518256C5210FA94600A0788D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		518256A9210FA94500A0788D /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				518256AA210FA94500A0788D /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		518256B1210FA94500A0788D /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				518256B2210FA94500A0788D /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		518256CB210FA94600A0788D /* Debug */ = {
@@ -567,7 +591,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.orbmentality.balance;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -586,7 +610,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.orbmentality.balance;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -607,7 +631,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.orbmentality.balanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/balance.app/balance";
 			};
@@ -629,7 +653,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.orbmentality.balanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/balance.app/balance";
 			};
@@ -650,7 +674,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.orbmentality.balanceUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = balance;
 			};
@@ -671,7 +695,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.orbmentality.balanceUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = balance;
 			};

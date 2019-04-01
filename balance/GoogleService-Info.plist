@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>651262267092-rb4bqdbsqb4h44u0p2lv4qff5kumpvtp.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.651262267092-rb4bqdbsqb4h44u0p2lv4qff5kumpvtp</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBm_UfAPjK0C7ZdRi_enqOgImzzDrC6yZU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>651262267092</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.orbmentality.balance</string>
+	<key>PROJECT_ID</key>
+	<string>balance-c8879</string>
+	<key>STORAGE_BUCKET</key>
+	<string>balance-c8879.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true></true>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false></false>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:651262267092:ios:19580a176c68dbb9</string>
+	<key>DATABASE_URL</key>
+	<string>https://balance-c8879.firebaseio.com</string>
+</dict>
+</plist>
