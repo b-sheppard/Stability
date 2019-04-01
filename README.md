@@ -25,3 +25,8 @@ pod 'SearchTextField'
 pod 'Firebase'
 pod 'SwiftLint'
 ```
+
+Once the repo has been downloaded, inside the directory of balance, type the command 
+```
+pod install
+```
