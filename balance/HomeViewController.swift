@@ -102,8 +102,6 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         startUnscheduledTimer()
         
         //save locally
-        UserDefaults.standard.set(isTimerRunning,
-                                  forKey:"quitTimerRunning")
         ref?.child("active").child(selected).setValue(seconds)
         ref?.child("categories").child(selected).child("Active").child(selectedTaskName.text!).setValue(secondsLeftInTask)
         selectedTaskName.text = "Select a task"
@@ -127,8 +125,6 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         runTimer()
         
         isTimerRunning = true
-        UserDefaults.standard.set(isTimerRunning,
-                                  forKey:"quitTimerRunning")
     }
     
     func runTimer() {
@@ -418,15 +414,8 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         
         setupView()
         
-        let quitTimerRunning = UserDefaults.standard.object(forKey: "quitTimerRunning") as? Bool
-        
        // let quitTimerRunning = false
         
-        if quitTimerRunning == true {
-            passedSeconds = UserDefaults.standard.object(forKey: "passedSeconds") as? Int ?? 0
-        } else {
-            selectedTaskName.text = "Select a task"
-        }
         
         startUnscheduledTimer()
     }
@@ -460,9 +449,6 @@ class HomeViewController: UIViewController, ChartViewDelegate {
          }*/
         print("=============== APP LOADED FROM BACKGROUND ================")
         
-        let hasCompletedTutorial = UserDefaults.standard.object(forKey: "hasCompletedTutorial")
-
-        secondsCompleted = UserDefaults.standard.integer(forKey: "secondsCompleted")
 
     }
     
@@ -473,17 +459,10 @@ class HomeViewController: UIViewController, ChartViewDelegate {
          }
          UserDefaults.standard.synchronize()
          print("in main view controller appgoesinto.")*/
-        quitDate = Date()
-        UserDefaults.standard.set(secondsCompleted, forKey: "secondsCompleted")
-        invalidateTimer() //NEW
-        UserDefaults.standard.synchronize()
     }
     
     @objc func appBecameActive() {
         print("============= APP BECAME ACTIVE ==============")
-        let passedSeconds = UserDefaults.standard.integer(forKey: "secondsInBackground")
-        secondsCompleted = UserDefaults.standard.integer(forKey: "secondsCompleted")
-        let quitDate = UserDefaults.standard.object(forKey: "quitDate") as? Date
         if quitDate == nil {
             print("nil quitdate")
         }

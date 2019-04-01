@@ -53,9 +53,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //done
         print("application will resign active...")
-        //set the time of exiting app to calculate time it was in background later
-        let currentDate = Date()
-        UserDefaults.standard.set(currentDate as Date, forKey:"quitDate")
+        // LEFT THIS ONE FOR REFERENCE
+        //UserDefaults.standard.set(currentDate as Date, forKey:"quitDate")
 
     }
 
@@ -65,53 +64,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("did enter background app goes in.")
         
         NotificationCenter.default.post(name: Notification.Name(rawValue: "AppDidEnterBackground"), object: nil)
-        let quitTimerRunning =
-            UserDefaults.standard.bool(forKey: "quitTimerRunning")
-        
-        let currentDate = Date()
-        UserDefaults.standard.set(currentDate as Date, forKey:"quitDate")
-        
-        print("quitTimerRunning?", quitTimerRunning)
-        print("currentDate", currentDate)
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-        let currentDate = Date()
-        
-        //retrieve time of exit, calculate time in background, set
-        let quitDate = UserDefaults.standard.object(forKey: "quitDate") as! Date
-        print("quit date in will enter foreground:", quitDate)
-        let passedSeconds = currentDate.timeIntervalSince(quitDate)
-        UserDefaults.standard.set(passedSeconds, forKey: "secondsInBackground")
-        print("passed seconds will enter foreground:", passedSeconds)
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         print("app did become active..")
-        let currentDate = Date()
-
-        //retrieve time of exit, calculate time in background, set
-        let quitTimerRunning = UserDefaults.standard.object(forKey: "quitTimerRunning") as? Bool
-
-        if quitTimerRunning == true {
-            let quitDate = UserDefaults.standard.object(forKey: "quitDate") as! Date
-            print("quit date became activ:", quitDate)
-            let passedSeconds = currentDate.timeIntervalSince(quitDate)
-            UserDefaults.standard.set(passedSeconds, forKey: "secondsInBackground")
-            print("passed seconds active:", passedSeconds)
-        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         print("app will terminate..")
-        
-        //set the time of exiting app to calculate time it was in background later
-        let currentDate = Date()
-        UserDefaults.standard.set(currentDate as Date, forKey:"quitDate")
         
         self.saveContext()
     }
