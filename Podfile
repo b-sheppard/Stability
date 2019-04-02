@@ -9,10 +9,11 @@ target 'balance' do
 
     pod 'Charts'
     pod 'SearchTextField'
-	pod 'Firebase'
+    pod 'Firebase'
     pod 'Firebase/Database'
     pod 'Firebase/Core'
-	pod 'SwiftLint'
+    pod 'RealmSwift'
+    pod 'SwiftLint'
 
   target 'balanceTests' do
     inherit! :search_paths

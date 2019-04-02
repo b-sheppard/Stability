@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import FirebaseDatabase
+import RealmSwift
 
 class TaskViewController: UIViewController, UITextFieldDelegate {
     
@@ -22,12 +23,15 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
     var ref:DatabaseReference?
     var handle:DatabaseHandle?
     
+    let realm = try! Realm()
+    
+    // go to homeview
     @objc public func homeButtonTapped() {
         print("Home button pressed")
         let  vc =  self.navigationController?.viewControllers.filter({$0 is HomeViewController}).first
         
         self.navigationController?.popToViewController(vc!, animated: true)
-    }
+    } // homeButtonTapped()
 
     //add new category
     @objc public func buttonTapped(sender: UIButton) {
@@ -48,7 +52,7 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
         else {
             categoryView(type:type, color: color)
         }
-    }
+    } // buttonTapped()
     
     //create up category view
     func addCategoryView() {
@@ -59,7 +63,7 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
         self.addChild(addCategoryViewController)
         self.view.addSubview(addCategoryViewController.view)
         addCategoryViewController.didMove(toParent: self)
-    }
+    } // addCategoryView
     
     //go to category view
     func categoryView(type:String, color: UIColor) {
@@ -69,14 +73,13 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
         categoryView.color = color
         
         navigationController?.pushViewController(categoryView, animated: true)
-        
-    }
+    } // categoryView()
     
     func hideContentController(content: UIViewController) {
         content.willMove(toParent: nil)
         content.view.removeFromSuperview()
         content.removeFromParent()
-    }
+    } // hideContentController()
     
     //create scroll view and buttons
     func createScrollView() {
@@ -135,14 +138,15 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
             buttonCount += 1
         }
         view.addSubview(scrollView)
-    }
+    } // createScrollView()
     
     //create newTask textfield and keyboard
     func createTextField() {
         let screensize: CGRect = UIScreen.main.bounds
         let screenWidth = screensize.width
         let screenHeight = screensize.height
-        let taskTextField = UITextField(frame: CGRect(x: 20, y: screenHeight/8, width: screenWidth - 40, height: 60))
+        let taskTextField = UITextField(frame: CGRect(x: 20, y: screenHeight/8,
+                                                      width: screenWidth - 40, height: 60))
         taskTextField.backgroundColor = .white
         taskTextField.borderStyle = .roundedRect
         taskTextField.placeholder = "this does nothing... for now"
@@ -150,14 +154,16 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
         taskTextField.keyboardAppearance = .dark
         
         view.addSubview(taskTextField)
-    }
+    } //createTextField()
     
     override func viewDidDisappear(_ animated: Bool) {
         self.navigationController?.isNavigationBarHidden = false
-    }
+    } // viewDidDisappear()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        updateLocalDatabase()
         
         ref = Database.database().reference()
         
@@ -198,5 +204,9 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
         self.navigationItem.rightBarButtonItem = homeButton
         self.navigationItem.setHidesBackButton(true, animated: false)
         
+    } // viewDidLoad()
+    
+    func updateLocalDatabase() {
+        
     }
-}
+} // class TaskViewController()

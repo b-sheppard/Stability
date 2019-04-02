@@ -48,38 +48,14 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     var resumeTapped = false
     
     
-    
-    //==========================================
-    //          UNSCHEDULED TIMER
-    //==========================================
-    func startUnscheduledTimer() {
-        startDate = Date()
-        unscheduledTimer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: #selector(self.updateUnscheduledTimer), userInfo: nil, repeats: true)
-    }
-    func stopUnscheduledTimer() {
-        unscheduledTimer?.invalidate()
-    }
-    @objc func updateUnscheduledTimer() {
-        if(Double(secondsCompleted) >= dayInSeconds) {
-            print("not enough time in the day!!")
-            stopUnscheduledTimer()
-        }
-        else {
-            secondsCompleted += 1
-            updateChart()
-        }
-    }
-    
-    
-    
     //==========================================
     //          SCHEDULED TIMER
     //==========================================
-    
+    /*
     //ensures that there is a task is selected
     func shouldStartTimer(category: String) {
         if category != "" {
-            print("istimer running: ", isTimerRunning)
+            print("is timer running: ", isTimerRunning)
             if isTimerRunning == true {
                 print("stop timer")
                 mainButton.setTitle("Start", for: .normal)
@@ -125,6 +101,8 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         runTimer()
         
         isTimerRunning = true
+        UserDefaults.standard.set(isTimerRunning,
+                                  forKey:"quitTimerRunning")
     }
     
     func runTimer() {
@@ -156,7 +134,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         }
     }
     
-    
+    */
     
     //==========================================
     //          BUTTON FUNCTIONS
@@ -167,7 +145,6 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         ref?.child("selected").observeSingleEvent(of: .value, with: { (snapshot) in
             self.selected = snapshot.value! as! String
             
-            self.shouldStartTimer(category:self.selected)
         })
     }
     
@@ -360,9 +337,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         
         let constraints: [NSLayoutConstraint] = [horizontalCenter, verticalCenter, width, height]
         NSLayoutConstraint.activate(constraints)
-        
-        addButton()
-        addLabel()
+    
         self.circleView.delegate = self
         
         //updateChart()
@@ -404,25 +379,45 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         
         // self.navigationController?.isNavigationBarHidden = true;
         
-        let addButton = UIBarButtonItem(title: "Add Task",
+        let addTaskButton = UIBarButtonItem(title: "Add Task",
                                          style: .plain,
                                          target: self,
                                          action: #selector(HomeViewController.addButtonTapped))
         
         view.backgroundColor = .white
-        self.navigationItem.rightBarButtonItem = addButton
+        self.navigationItem.rightBarButtonItem = addTaskButton
         
         setupView()
+        addButton()
+        addLabel()
         
-       // let quitTimerRunning = false
-        
-        
-        startUnscheduledTimer()
+        selectedTaskName.text = "Select a task"
     }
 
     override func viewDidAppear(_ animated: Bool) {
         updateChart()
     }
+    
+    
+    /*
+    func restartTimer() {
+        // check if task timer was running
+        isTimerRunning = (UserDefaults.standard.object(forKey: "isTimerRunning") != nil)
+        
+        let passedSeconds = UserDefaults.standard.integer(forKey: "secondsInBackground")
+        self.seconds -= passedSeconds
+        self.secondsCompleted += passedSeconds
+        
+        updateChart()
+        
+        // restart task timer
+        if(isTimerRunning) {
+            startTimer()
+        }
+        else {
+            startUnscheduledTimer() //restart freetime timer
+        }
+    }*/
     
     
     
@@ -433,45 +428,20 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     
     
     @objc func appLoadedFromBackground() {
-        /*
-         print("=============== APP LOADED FROM BACKGROUND ================")
-         if isTimerRunning {
-         print("had time running: ")
-         let quitTimerRunning = UserDefaults.standard.set(isTimerRunning,
-         forKey:"quitTimerRunning")
-         let passedSeconds = UserDefaults.standard.integer(forKey: "secondsInBackground")
-         let quitDate = UserDefaults.standard.object(forKey: "quitDate") as? Date
-         if quitDate == nil {
-         print("nil quitdate")
-         }
-         self.seconds -= passedSeconds
-         self.secondsCompleted += passedSeconds
-         }*/
         print("=============== APP LOADED FROM BACKGROUND ================")
-        
+        //let hasCompletedTutorial = UserDefaults.standard.object(forKey: "hasCompletedTutorial")
 
     }
     
     @objc func appGoesIntoBackground() {
-        /*
-         if isTimerRunning == true{
-         quitDate = Date()
-         }
-         UserDefaults.standard.synchronize()
-         print("in main view controller appgoesinto.")*/
+        quitDate = Date()
+        
+        UserDefaults.standard.set(isTimerRunning, forKey: "isTimerRunning")
+        
     }
     
     @objc func appBecameActive() {
         print("============= APP BECAME ACTIVE ==============")
-        if quitDate == nil {
-            print("nil quitdate")
-        }
-        self.seconds -= passedSeconds
-        self.secondsCompleted += passedSeconds
-        updateChart()
-        if !isTimerRunning {
-            startUnscheduledTimer()
-        }
     }
     
     func addObservers() {
