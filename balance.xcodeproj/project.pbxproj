@@ -16,6 +16,7 @@
 		514F52712197FC590091FA83 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 514F52702197FC590091FA83 /* GoogleService-Info.plist */; };
 		516B679C21A28284008BDCF4 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516B679B21A28284008BDCF4 /* HomeViewController.swift */; };
 		516B679E21A28B94008BDCF4 /* NSUIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516B679D21A28B94008BDCF4 /* NSUIColor+Hex.swift */; };
+		517B488222531ADE00544647 /* RealmObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517B488122531ADE00544647 /* RealmObjects.swift */; };
 		518256A6210FA94500A0788D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518256A5210FA94500A0788D /* AppDelegate.swift */; };
 		518256A8210FA94500A0788D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518256A7210FA94500A0788D /* ViewController.swift */; };
 		518256AE210FA94500A0788D /* balance.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 518256AC210FA94500A0788D /* balance.xcdatamodeld */; };
@@ -57,6 +58,7 @@
 		514F52702197FC590091FA83 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		516B679B21A28284008BDCF4 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		516B679D21A28B94008BDCF4 /* NSUIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSUIColor+Hex.swift"; sourceTree = "<group>"; };
+		517B488122531ADE00544647 /* RealmObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmObjects.swift; sourceTree = "<group>"; };
 		518256A2210FA94500A0788D /* balance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = balance.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		518256A5210FA94500A0788D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		518256A7210FA94500A0788D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 				516B679D21A28B94008BDCF4 /* NSUIColor+Hex.swift */,
 				516B679B21A28284008BDCF4 /* HomeViewController.swift */,
 				51F5C56821DDBBEF00627E15 /* ActiveTaskViewController.swift */,
+				517B488122531ADE00544647 /* RealmObjects.swift */,
 			);
 			path = balance;
 			sourceTree = "<group>";
@@ -421,6 +424,7 @@
 			files = (
 				510A0F2521976CE300230340 /* AddCategoryViewController.swift in Sources */,
 				51050C362155E736005A13DC /* MainNavigationController.swift in Sources */,
+				517B488222531ADE00544647 /* RealmObjects.swift in Sources */,
 				518256A8210FA94500A0788D /* ViewController.swift in Sources */,
 				518256A6210FA94500A0788D /* AppDelegate.swift in Sources */,
 				513C8FF0219D363600785705 /* CategoryViewController.swift in Sources */,

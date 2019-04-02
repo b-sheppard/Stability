@@ -22,9 +22,7 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
     
     var ref:DatabaseReference?
     var handle:DatabaseHandle?
-    
-    let realm = try! Realm()
-    
+        
     // go to homeview
     @objc public func homeButtonTapped() {
         print("Home button pressed")

@@ -10,6 +10,9 @@ import UIKit
 import CoreData
 import Firebase
 import FirebaseDatabase
+import RealmSwift
+
+var uiRealm = try! Realm() // realm file
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
