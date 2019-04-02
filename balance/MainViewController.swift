@@ -27,7 +27,7 @@ let colors : [Int] = [0x1AEEEE, 0xEE1AEE, 0x1AEE84, 0xEEEE1A, 0x900C3F, 0x808B96
 
 class MainViewController: UIViewController {
     
-    let categoryNames = ["Work", "Health", "Social", "Sleep", "Hobbies"]
+    let categoryNames = ["Work", "Health", "Social", "Sleep", "Hobbies", "Unscheduled"]
     
     var ref:DatabaseReference?
 
@@ -67,7 +67,7 @@ class MainViewController: UIViewController {
     func createDatabase() {
         //add category to database
         var i = 0
-        while i < 5 {
+        while i < 6 {
             ref?.child("categories").child(categoryNames[i]).setValue(["Color" : colors[i],
                                                                        "Name" : categoryNames[i],
                                                                        "Tasks" : "",
