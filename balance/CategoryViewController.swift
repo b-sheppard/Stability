@@ -201,7 +201,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         handle = ref?.child("categories/" + path).observe(.childRemoved, with: { (snapshot) in
             if (snapshot.value as? Int) != nil {
                 let key = snapshot.key
-                if let positionInTasks = self.tasks.index(of: key) {
+                if let positionInTasks = self.tasks.firstIndex(of: key) {
                     self.tasks.remove(at: positionInTasks)
                     self.times.removeValue(forKey: key)
 

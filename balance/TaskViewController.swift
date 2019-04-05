@@ -22,7 +22,7 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
     
     var ref:DatabaseReference?
     var handle:DatabaseHandle?
-        
+    
     // go to homeview
     @objc public func homeButtonTapped() {
         print("Home button pressed")
@@ -180,7 +180,7 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
         // updates category list if category removed
         handle = ref?.child("categories").observe(.childRemoved, with: { (snapshot) in
             if let item = snapshot.childSnapshot(forPath: "/Name").value as? String {
-                if let position = self.categoryNames.index(of: item) {
+                if let position = self.categoryNames.firstIndex(of: item) {
                     self.categoryNames.remove(at: position)
                     print(item + " category removed")
                 }
@@ -204,7 +204,4 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
         
     } // viewDidLoad()
     
-    func updateLocalDatabase() {
-        
-    }
 } // class TaskViewController()
