@@ -51,6 +51,9 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     //==========================================
     //          SCHEDULED TIMER
     //==========================================
+    @objc public func startTapped() {
+        print("test")
+    }
     /*
     //ensures that there is a task is selected
     func shouldStartTimer(category: String) {
@@ -142,9 +145,8 @@ class HomeViewController: UIViewController, ChartViewDelegate {
 
     //center button TAPPED
     @objc func buttonTapped() {
-        ref?.child("selected").observeSingleEvent(of: .value, with: { (snapshot) in
+        ref?.child(USER_PATH + "/selected").observeSingleEvent(of: .value, with: { (snapshot) in
             self.selected = snapshot.value! as! String
-            
         })
     }
     
@@ -161,7 +163,6 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     //==========================================
     //gets name of seleved chart
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
-        
         let c = categoryPosition[String(Int(entry.x))]!
         goToCategory(category: c)
     }
@@ -182,7 +183,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             
         else {
             //assign color to category
-            ref?.child("categories").child(category).child("Color")
+            ref?.child(USER_PATH + "/categories").child(category).child("Color")
                 .observeSingleEvent(of: .value, with: { (snapshot) in
                     let color = NSUIColor(hex: snapshot.value! as! Int)
                     categoryView.color = color
@@ -232,7 +233,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         categories.append(completedEntry)
         categoryPosition[String(position)] = "Completed"
         
-        let chartDataSet = PieChartDataSet(values: categories, label: nil)
+        let chartDataSet = PieChartDataSet(entries: categories, label: nil)
         let chartData = PieChartData(dataSet: chartDataSet)
 
         var categoryColor : [NSUIColor] = []
@@ -254,7 +255,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     
     // updates colors (name of category as key)
     func updateColor(category: String) {
-        ref?.child("categories").child(category).child("Color")
+        ref?.child(USER_PATH + "/categories").child(category).child("Color")
             .observeSingleEvent(of: .value, with: { (snapshot) in
                 let color = NSUIColor(hex: snapshot.value! as! Int)
                 self.colorOf[category] = color
@@ -274,9 +275,9 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         mainButton.clipsToBounds = true
         mainButton.translatesAutoresizingMaskIntoConstraints = false
         
-        mainButton.addTarget(self, action: #selector(MainViewController.buttonTapped), for: .touchUpInside)
+        mainButton.addTarget(self, action: #selector(HomeViewController.startTapped), for: .touchUpInside)
         mainButton.setTitle("Start", for: .normal)
-        mainButton.titleLabel?.font = UIFont(name:"Times New Roman", size: 60)
+        mainButton.titleLabel?.font = UIFont(name:"Futura", size: 60)
         mainButton.setTitleColor(.black, for: .normal)
         mainButton.backgroundColor = .white
         
@@ -311,7 +312,6 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     
     
     func setupView() {
-        
         circleView = PieChartView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
         circleView.backgroundColor = .white
         circleView.clipsToBounds = true
@@ -354,7 +354,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         addObservers()
         
         // updates category list if new category added
-        handle = ref?.child("active").observe(.childAdded, with: { (snapshot) in
+        handle = ref?.child(USER_PATH + "/active").observe(.childAdded, with: { (snapshot) in
             //get name of category
             let categoryName = snapshot.key
             self.timeOf[categoryName] = snapshot.value as? Int
@@ -362,7 +362,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         })
         
         // updates category list if new category deleted
-        handle = ref?.child("active").observe(.childRemoved, with: { (snapshot) in
+        handle = ref?.child(USER_PATH + "/active").observe(.childRemoved, with: { (snapshot) in
             let categoryName = snapshot.key
             self.timeOf.removeValue(forKey: categoryName)
             self.colorOf.removeValue(forKey: categoryName)
@@ -371,7 +371,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         
         
         //updates when value changes in firebase
-        handle = ref?.child("active").observe(.childChanged, with: { (snapshot) in
+        handle = ref?.child(USER_PATH + "/active").observe(.childChanged, with: { (snapshot) in
             let categoryName = snapshot.key
             self.timeOf[categoryName] = snapshot.value as? Int
             self.updateChart()

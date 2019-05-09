@@ -102,7 +102,7 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
             let hour = components.value(for: .hour)!
             let minute = components.value(for: .minute)!
             
-            ref?.child("categories").child(path).child(text).setValue(3600*hour + 60*minute)
+            ref?.child(USER_PATH + "/categories").child(path).child(text).setValue(3600*hour + 60*minute)
             taskTextField.text = ""
         }
         self.view.removeFromSuperview()

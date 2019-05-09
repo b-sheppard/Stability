@@ -15,11 +15,11 @@ class ActiveTaskViewController: UIViewController,
     
     //cell is tapped
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        ref?.child("selected").setValue(name)
+        ref?.child(USER_PATH + "/selected").setValue(name)
         //adds selected task name to firebase
-        ref?.child("selectedTask").setValue(self.tasks[indexPath.row])
-        ref?.child("selectedTask").child("Name").setValue(self.tasks[indexPath.row])
-        ref?.child("selectedTask").child("Duration").setValue(self.times[tasks[indexPath.row]])
+        ref?.child(USER_PATH + "/selectedTask").setValue(self.tasks[indexPath.row])
+        ref?.child(USER_PATH + "/selectedTask").child("Name").setValue(self.tasks[indexPath.row])
+        ref?.child(USER_PATH + "/selectedTask").child("Duration").setValue(self.times[tasks[indexPath.row]])
         
     }
     
@@ -52,7 +52,6 @@ class ActiveTaskViewController: UIViewController,
             //get tasks that will be deleted by swipe
             let toDelete = tasks[indexPath.row]
             deleteTask(task:toDelete)
-            // handle delete (by removing the data from your array and updating the tableview)
         }
     }
     
@@ -88,8 +87,8 @@ class ActiveTaskViewController: UIViewController,
     
     //deletes category from database
     func deleteCategory() {
-        ref?.child("categories").child(name).removeValue()
-        ref?.child("active").child(name).removeValue()
+        ref?.child(USER_PATH + "/categories").child(name).removeValue()
+        ref?.child(USER_PATH + "/active").child(name).removeValue()
         
         navigationController?.popViewController(animated: true)
     }
@@ -126,7 +125,7 @@ class ActiveTaskViewController: UIViewController,
     //delete task from database (and subtract value from active
     func deleteTask(task:String) {
         //updates active times
-        ref?.child("categories").child(name).child("Active").child(task)
+        ref?.child(USER_PATH + "/categories").child(name).child("Active").child(task)
             .observeSingleEvent(of: .value, with: {(taskTime) in
             let timeToRemove = taskTime.value! as! Int
             self.ref?.child("active").child(self.name).observeSingleEvent(of: .value, with: {(snapshot) in
@@ -136,7 +135,7 @@ class ActiveTaskViewController: UIViewController,
             })
         })
         //deletes reference of active tasks
-        ref?.child("categories").child(name).child("Active").child(task).removeValue()
+        ref?.child(USER_PATH + "/categories").child(name).child("Active").child(task).removeValue()
     }
     
     //destroy view
@@ -185,7 +184,7 @@ class ActiveTaskViewController: UIViewController,
         
         path = self.name + "/Active/"
         // updates tasks list if new tasks added
-        handle = ref?.child("categories/" + path).observe(.childAdded, with: { (snapshot) in
+        handle = ref?.child(USER_PATH + "/categories/" + path).observe(.childAdded, with: { (snapshot) in
             if let value = snapshot.value as? Int {
                 let key = snapshot.key
                 self.times[key] = value
@@ -194,7 +193,7 @@ class ActiveTaskViewController: UIViewController,
             }
         })
         //updates tasks list if tasks was deleted
-        handle = ref?.child("categories/" + path).observe(.childRemoved, with: { (snapshot) in
+        handle = ref?.child(USER_PATH + "/categories/" + path).observe(.childRemoved, with: { (snapshot) in
             if (snapshot.value as? Int) != nil {
                 let key = snapshot.key
                 if let positionInTasks = self.tasks.firstIndex(of: key) {

@@ -7,7 +7,9 @@
 //
 
 import Foundation
-
+import Firebase
+import RealmSwift
+/*
 func updateLocalDatabase() {
     let ref = Database.database().reference()
     // collects data from Firebase
@@ -49,3 +51,4 @@ func updateLocalDatabase() {
         user.writeToRealm()
     })
 }
+*/

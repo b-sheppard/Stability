@@ -37,12 +37,17 @@ extension User {
         }
     }
 }
-// not currently being used---------------------------------
+// not currently being used---------------------------------^
 
 // timer settings when exiting/entering app
 class TimerStatus : Object {
     @objc dynamic var dateOnExit : Date? = nil
     let timerRunning = RealmOptional<Bool>()
+}
+
+class Tasks : Object {
+    @objc dynamic var duration = 0
+    @objc dynamic var name = ""
 }
 
 extension TimerStatus {

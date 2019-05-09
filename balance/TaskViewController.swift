@@ -31,7 +31,7 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
         self.navigationController?.popToViewController(vc!, animated: true)
     } // homeButtonTapped()
 
-    //add new category
+    // add new category
     @objc public func buttonTapped(sender: UIButton) {
         //title
         guard let type = sender.currentTitle else {
@@ -43,7 +43,6 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
             print("no color to choose from")
             return
         }
-        print(type + " Category")
         if type == "+" {
             addCategoryView()
         }
@@ -116,14 +115,14 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
             
             if category == "+" {
                 button.setTitle(category, for: .normal)
-                button.titleLabel?.font = UIFont(name:"Times New Roman", size: 80)
+                button.titleLabel?.font = UIFont(name:"Futura", size: 80)
                 button.setTitleColor(.white, for: .normal)
                 button.backgroundColor = gray //gray
                 button.addTarget(self, action: #selector(buttonTapped(sender:)), for: .touchUpInside)
             }
             else {
                 button.setTitle(category, for: .normal)
-                button.titleLabel?.font = UIFont(name:"Times New Roman", size: 30)
+                button.titleLabel?.font = UIFont(name:"Futura", size: 30)
                 button.setTitleColor(UIColor.black.withAlphaComponent(0.6), for: .normal)
                 //button color
                 let buttonColor = UIColor(hex: categoryColors[buttonCount])
@@ -161,12 +160,12 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        updateLocalDatabase()
+        //updateLocalDatabase()
         
         ref = Database.database().reference()
         
         // updates category list if new category added
-        handle = ref?.child("categories").observe(.childAdded, with: { (snapshot) in
+        handle = ref?.child(USER_PATH + "/categories").observe(.childAdded, with: { (snapshot) in
             if let item = snapshot.childSnapshot(forPath: "/Name").value as? String {
                 self.categoryNames.insert(item, at: 0)
                 
@@ -178,7 +177,7 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
         })
         
         // updates category list if category removed
-        handle = ref?.child("categories").observe(.childRemoved, with: { (snapshot) in
+        handle = ref?.child(USER_PATH + "/categories").observe(.childRemoved, with: { (snapshot) in
             if let item = snapshot.childSnapshot(forPath: "/Name").value as? String {
                 if let position = self.categoryNames.firstIndex(of: item) {
                     self.categoryNames.remove(at: position)

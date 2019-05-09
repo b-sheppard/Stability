@@ -13,6 +13,7 @@ import FirebaseDatabase
 import RealmSwift
 
 var uiRealm = try! Realm() // realm file
+let USER_PATH = "Users" // path to user
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -29,8 +30,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         
-        let mainViewController = TaskViewController() //task
-    //    let mainViewController = MainViewController() //plus button
+    //    let mainViewController = TaskViewController() //task
+        let mainViewController = MainViewController() //plus button
         
         
         

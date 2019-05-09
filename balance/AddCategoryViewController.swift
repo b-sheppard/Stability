@@ -74,8 +74,8 @@ class AddCategoryViewController: UIViewController, UITextFieldDelegate {
         }
         if text != "" {
             print("Add " + text)
-            ref?.child("active/\(text)/").setValue(0)
-            ref?.child("categories/\(text)/").setValue(["Color" : colorPicked,
+            ref?.child(USER_PATH + "/active/\(text)/").setValue(0)
+            ref?.child(USER_PATH + "/categories/\(text)/").setValue(["Color" : colorPicked,
                                                            "Name" : text,
                                                            "Tasks" : ""])
             categoryTextField.text = ""
@@ -137,7 +137,7 @@ class AddCategoryViewController: UIViewController, UITextFieldDelegate {
             button.clipsToBounds = true
             
             button.setTitle(colors[i], for: .normal)
-            button.titleLabel?.font = UIFont(name:"Times New Roman", size: 30)
+            button.titleLabel?.font = UIFont(name:"Futura", size: 30)
             button.setTitleColor(UIColor.black.withAlphaComponent(0.6), for: .normal)
             button.backgroundColor = NSUIColor(hex: colors_int[i])
             

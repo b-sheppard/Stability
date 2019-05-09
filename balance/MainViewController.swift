@@ -27,12 +27,11 @@ let colors : [Int] = [0x1AEEEE, 0xEE1AEE, 0x1AEE84, 0xEEEE1A, 0x900C3F, 0x808B96
 
 class MainViewController: UIViewController {
     
-    let categoryNames = ["Work", "Health", "Social", "Sleep", "Hobbies", "Unscheduled"]
+    let categoryNames = ["Work", "Health", "Social", "Sleep", "Hobbies"]
     
     var ref:DatabaseReference?
 
     @objc func buttonTapped() {
-        print("Button Tapped")
         let taskViewController = TaskViewController()
         navigationController?.pushViewController(taskViewController, animated: true)
     }
@@ -46,7 +45,7 @@ class MainViewController: UIViewController {
         
         mainButton.addTarget(self, action: #selector(MainViewController.buttonTapped), for: .touchUpInside)
         mainButton.setTitle("+", for: .normal)
-        mainButton.titleLabel?.font = UIFont(name:"Times New Roman", size: 60)
+        mainButton.titleLabel?.font = UIFont(name:"Futura", size: 60)
         mainButton.setTitleColor(UIColor(hex: colors[5]), for: .normal)
         mainButton.backgroundColor = .white
         
@@ -67,13 +66,13 @@ class MainViewController: UIViewController {
     func createDatabase() {
         //add category to database
         var i = 0
-        while i < 6 {
-            ref?.child("categories").child(categoryNames[i]).setValue(["Color" : colors[i],
+        while i < 5 {
+            ref?.child(USER_PATH + "/categories").child(categoryNames[i]).setValue(["Color" : colors[i],
                                                                        "Name" : categoryNames[i],
                                                                        "Tasks" : "",
                                                                        "Active" : ""])
-            ref?.child("active").child(categoryNames[i]).setValue(0)
-            ref?.child("selected").setValue("")
+            ref?.child(USER_PATH + "/active").child(categoryNames[i]).setValue(0)
+            ref?.child(USER_PATH + "/selected").setValue("")
             i += 1
         }
     }
