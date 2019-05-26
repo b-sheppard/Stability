@@ -34,6 +34,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
                 //REALM
                 let predicate = NSPredicate(format: "name = %@", self.name)
                 let unscheduled = uirealm.objects(Category.self).filter("name = 'Unscheduled'").first
+                let unscheduledTask = uirealm.objects(Task.self).filter("name = 'Unscheduled'").first
                 let runningCategory = uirealm.objects(Category.self).filter(predicate).first
                 var newCategoryTime = taskValue
                     
@@ -46,12 +47,14 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
                     newTask.category = self.name
                     newTask.name = self.tasks[indexPath.row]
                     newTask.duration = taskValue
+                 //   newTask.duration = 5
                 }
                     
                 // edge case if timer isn't running
                 if balanceTimer.categorySelected == "Unscheduled" {
                     try! uirealm.write {
                         unscheduled!.duration = balanceTimer.timeRemaining
+                        unscheduledTask!.duration = balanceTimer.timeRemainingInTask
                     }
                 }
                 // category doesn't exist
@@ -63,6 +66,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
                     try! uirealm.write {
                         uirealm.add(categoryToAdd)
                         unscheduled!.duration -= newCategoryTime
+                        unscheduledTask!.duration -= newCategoryTime
                         
                         //add task
                         uirealm.add(newTask)
@@ -72,6 +76,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
                 else {
                     try! uirealm.write {
                         unscheduled!.duration -= newCategoryTime
+                        unscheduledTask!.duration -= newCategoryTime
                         newCategoryTime += runningCategory!.duration
                         runningCategory!.duration = newCategoryTime
                         
@@ -82,6 +87,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
                 // edge case if timer isn't running
                 if balanceTimer.categorySelected == "Unscheduled" {
                     balanceTimer.timeRemaining = unscheduled!.duration
+                    balanceTimer.timeRemainingInTask = unscheduledTask!.duration
                 }
             })
         })

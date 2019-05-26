@@ -23,6 +23,7 @@ class ActiveTaskViewController: UIViewController,
         
         // REALM
         balanceTimer.categoryStaged = name
+        balanceTimer.taskSelected = self.tasks[indexPath.row]
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -136,6 +137,7 @@ class ActiveTaskViewController: UIViewController,
         let toDelete = uirealm.objects(Task.self).filter(Tpredicate).first!
         
         let unscheduled = uirealm.objects(Category.self).filter("name = 'Unscheduled'").first!
+        let unscheduledTask = uirealm.objects(Task.self).filter("name = 'Unscheduled'").first!
         
         let Cpredicate = NSPredicate(format: "name = %@", toDelete.category)
         let category = uirealm.objects(Category.self).filter(Cpredicate).first
@@ -145,17 +147,20 @@ class ActiveTaskViewController: UIViewController,
         if balanceTimer.categorySelected == "Unscheduled" {
             try! uirealm.write {
                 unscheduled.duration = balanceTimer.timeRemaining
+                unscheduledTask.duration = balanceTimer.timeRemaining
             }
         }
         
         try! uirealm.write {
             category!.duration = newTime
             unscheduled.duration += toDelete.duration
+            unscheduledTask.duration += toDelete.duration
             uirealm.delete(toDelete)
         }
         
         if balanceTimer.categorySelected == "Unscheduled" {
             balanceTimer.timeRemaining = unscheduled.duration
+            balanceTimer.timeRemainingInTask = unscheduledTask.duration
         }
     }
     
