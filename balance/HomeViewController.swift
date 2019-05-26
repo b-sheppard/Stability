@@ -155,6 +155,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         
         try! uirealm.write {
             checkStatus.timerRunning = false
+            checkStatus.currentCategory = "Unscheduled"
             uirealm.delete(toDelete)
         }
         //balanceTimer.startScheduled()

@@ -57,8 +57,8 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
                 // category doesn't exist
                 if(runningCategory == nil) {
                     let categoryToAdd = Category()
-                    //categoryToAdd.duration = newCategoryTime
-                    categoryToAdd.duration = 5
+                    categoryToAdd.duration = newCategoryTime
+                    //categoryToAdd.duration = 5
                     categoryToAdd.name = self.name
                     try! uirealm.write {
                         uirealm.add(categoryToAdd)
