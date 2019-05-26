@@ -196,7 +196,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
 
     
     @objc func updateChart() {
-        print(balanceTimer.timeRemainingInTask)
+        //print(balanceTimer.timeRemainingInTask)
         if(balanceTimer.timeRemainingInTask <= 0) {
             taskFinished()
         }

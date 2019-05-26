@@ -15,12 +15,12 @@ class ActiveTaskViewController: UIViewController,
     
     //cell is tapped
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        ref?.child(USER_PATH + "/selected").setValue(name)
+        /*ref?.child(USER_PATH + "/selected").setValue(name)
         //adds selected task name to firebase
         ref?.child(USER_PATH + "/selectedTask").setValue(self.tasks[indexPath.row])
         ref?.child(USER_PATH + "/selectedTask").child("Name").setValue(self.tasks[indexPath.row])
         ref?.child(USER_PATH + "/selectedTask").child("Duration").setValue(self.times[tasks[indexPath.row]])
-        
+        */
         // REALM
         balanceTimer.categoryStaged = name
         balanceTimer.taskSelected = self.tasks[indexPath.row]
@@ -67,7 +67,6 @@ class ActiveTaskViewController: UIViewController,
     var ref:DatabaseReference?
     var handle:DatabaseHandle?
     var tableView: UITableView!
-    var activeTasks = [Task]()
     
     @objc func homeButtonTapped() {
         let  vc =  self.navigationController?.viewControllers.filter({$0 is HomeViewController}).first
@@ -130,9 +129,9 @@ class ActiveTaskViewController: UIViewController,
     func deleteTask(task:String) {
         //updates active times
         //deletes reference of active tasks
-        ref?.child(USER_PATH + "/categories").child(name).child("Active").child(task).removeValue()
+        //ref?.child(USER_PATH + "/categories").child(name).child("Active").child(task).removeValue()
         
-        print(uirealm.objects(Task.self))
+        //print(uirealm.objects(Task.self))
         let Tpredicate = NSPredicate(format: "name = %@", task)
         let toDelete = uirealm.objects(Task.self).filter(Tpredicate).first!
         
@@ -150,7 +149,7 @@ class ActiveTaskViewController: UIViewController,
                 unscheduledTask.duration = balanceTimer.timeRemaining
             }
         }
-        
+        print("add ", toDelete.duration)
         try! uirealm.write {
             category!.duration = newTime
             unscheduled.duration += toDelete.duration
@@ -162,6 +161,9 @@ class ActiveTaskViewController: UIViewController,
             balanceTimer.timeRemaining = unscheduled.duration
             balanceTimer.timeRemainingInTask = unscheduledTask.duration
         }
+        
+        fetchData()
+        tableView.reloadData()
     }
     
     //destroy view
@@ -203,9 +205,26 @@ class ActiveTaskViewController: UIViewController,
 
     }
     
+    func fetchData() {
+        self.times.removeAll()
+        self.tasks.removeAll()
+        
+        let predicate = NSPredicate(format: "category = %@", self.name)
+        let activeTasks = uirealm.objects(Task.self).filter(predicate)
+        
+        for task in activeTasks {
+            self.times[task.name] = task.duration
+            self.tasks.append(task.name)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        fetchData()
+        //tableView.reloadData()
+
+        /*
         ref = Database.database().reference()
         
         path = self.name + "/Active/"
@@ -229,7 +248,7 @@ class ActiveTaskViewController: UIViewController,
                     self.tableView.reloadData()
                 }
             }
-        })
+        })*/
         setupView()
     }
 }
