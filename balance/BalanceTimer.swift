@@ -18,9 +18,8 @@ class BalanceTimer : Object {
     var categoryStaged = ""
     var taskSelected = ""
     var taskTimer: Timer?
+    var taskFinished = false
     
-    var categories = ActiveCategories()
-
     // FUNCTIONS----------------------------------
     @objc public func startScheduled() {
         if(timeRemaining == 0) {
@@ -38,7 +37,7 @@ class BalanceTimer : Object {
     @objc public func updateScheduled() {
         if(timeRemaining == 0) {
             stopScheduled()
-            print("OUT OF TIME")
+            taskFinished = true
         }
         secondsCompleted += 1
         secondsRunning += 1

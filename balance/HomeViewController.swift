@@ -42,7 +42,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     //          SCHEDULED TIMER
     //==========================================
     @objc public func startTapped() {
-        let checkStatus = realm.objects(TimerStatus.self).first
+        let checkStatus = uirealm.objects(TimerStatus.self).first
 
         if !checkStatus!.timerRunning && balanceTimer.categoryStaged != "" {
             mainButton.setTitle("STOP", for: .normal)
@@ -51,8 +51,8 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             
             //update time remaining
             let predicate = NSPredicate(format: "name = %@", balanceTimer.categorySelected)
-            let runningCategory = realm.objects(Category.self).filter(predicate).first
-            try! realm.write {
+            let runningCategory = uirealm.objects(Category.self).filter(predicate).first
+            try! uirealm.write {
                 checkStatus?.timerRunning = true
                 runningCategory!.duration = balanceTimer.timeRemaining
             }
@@ -60,7 +60,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             balanceTimer.categorySelected = balanceTimer.categoryStaged
             balanceTimer.categoryStaged = ""
             let PREDICATE = NSPredicate(format: "name = %@",balanceTimer.categorySelected)
-            let newCategory = realm.objects(Category.self).filter(PREDICATE).first
+            let newCategory = uirealm.objects(Category.self).filter(PREDICATE).first
             balanceTimer.categorySelected = newCategory!.name
             balanceTimer.timeRemaining = newCategory!.duration
             balanceTimer.taskSelected = newCategory!.name
@@ -72,15 +72,15 @@ class HomeViewController: UIViewController, ChartViewDelegate {
 
             // current time remaining
             let PREDICATE = NSPredicate(format: "name = %@",balanceTimer.categorySelected)
-            let runningCategory = realm.objects(Category.self).filter(PREDICATE).first
+            let runningCategory = uirealm.objects(Category.self).filter(PREDICATE).first
             
-            try! realm.write {
+            try! uirealm.write {
                 checkStatus?.timerRunning = false
                 runningCategory!.duration = balanceTimer.timeRemaining
             }
             // start free-time timer
             let predicate = NSPredicate(format: "name = %@", "Unscheduled")
-            let unscheduled = realm.objects(Category.self).filter(predicate).first
+            let unscheduled = uirealm.objects(Category.self).filter(predicate).first
             balanceTimer.categorySelected = "Unscheduled"
             balanceTimer.timeRemaining = unscheduled!.duration
             balanceTimer.taskSelected = "Unscheduled"
@@ -138,16 +138,70 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         }
     }
     
+    @objc func taskFinished() {
+        // task has finished
+        print(balanceTimer.timeRemaining)
+        let unscheduled = uirealm.objects(Category.self).filter("name = 'Unscheduled'").first!
+        let checkStatus = uirealm.objects(TimerStatus.self).first!
+
+        let predicate = NSPredicate(format: "name = %@", balanceTimer.categorySelected)
+        let toDelete = uirealm.objects(Category.self).filter(predicate).first!
+        let secondsOvertime = unscheduled.duration + balanceTimer.timeRemaining
+    
+        balanceTimer.timeRemaining = secondsOvertime
+        balanceTimer.secondsRunning = 0
+        balanceTimer.categorySelected = "Unscheduled"
+        balanceTimer.taskSelected = "Unscheduled"
+        
+        try! uirealm.write {
+            checkStatus.timerRunning = false
+            uirealm.delete(toDelete)
+        }
+        //balanceTimer.startScheduled()
+        balanceTimer.taskFinished = false
+        mainButton.setTitle("START", for: .normal)
+        /*if(secondsOvertime <= 0) {
+            print("MUST FIX SCHEDULE")
+        }
+        else {
+            balanceTimer.timeRemaining = unscheduled.duration
+            balanceTimer.secondsRunning = 0
+            balanceTimer.categorySelected = "Unscheduled"
+            balanceTimer.taskSelected = "Unscheduled"
+         
+            try! uirealm.write {
+                checkStatus.timerRunning = false
+                uirealm.delete(toDelete)
+            }
+            balanceTimer.startScheduled()
+            balanceTimer.taskFinished = false
+            mainButton.setTitle("START", for: .normal)
+        } //else*/
+        fetchData()
+    } //taskFinished()
+    
     @objc func updateChart() {
+        
+        if(balanceTimer.timeRemaining <= 0) {
+            taskFinished()
+        }
+        
         var categories : [PieChartDataEntry] = Array()
         
         //get times of categories
         var position = 0
 
+        print(active_categories)
         for cat in active_categories {
             let dataEntry = PieChartDataEntry(value: Double(cat.duration), label: nil)
-            if(cat.name == balanceTimer.categorySelected) {
+            if cat.name == balanceTimer.categorySelected {
                 dataEntry.value = Double(balanceTimer.timeRemaining)
+            }
+            if cat.duration == 0 {
+                dataEntry.value = 0
+            }
+            else if cat.duration <= 3600 {
+                dataEntry.value = 3600.0
             }
             dataEntry.x = Double(position)
             categories.append(dataEntry)
@@ -188,7 +242,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     //          BASIC SETUP
     //==========================================
     func addButton() {
-        let checkStatus = realm.objects(TimerStatus.self).first
+        let checkStatus = uirealm.objects(TimerStatus.self).first
 
         mainButton = UIButton(type: .custom)
         mainButton.frame = CGRect(x: 160, y: 100, width: 200, height: 200)
@@ -236,7 +290,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     }
     // gathers active tasks from Realm
     func fetchData() {
-        let activeCategories = realm.objects(Category.self)
+        let activeCategories = uirealm.objects(Category.self)
         active_categories.removeAll()
         for cat in activeCategories {
             active_categories.append(cat)
@@ -331,5 +385,28 @@ class HomeViewController: UIViewController, ChartViewDelegate {
 
     override func viewDidAppear(_ animated: Bool) {
         fetchData()
+        updateChart()
+    }
+    
+    //===========================================================
+    //           OBSERVERS
+    //===========================================================
+    @objc func appBecameActive() {
+        if(balanceTimer.timeRemaining <= 0) {
+            taskFinished()
+        }
+    } //appBecameActive()
+    
+    func addObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(appBecameActive),
+                                               name: UIApplication.didBecomeActiveNotification, object:nil)
+    }
+    
+    func resetObservers() {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    deinit {
+        resetObservers()
     }
 }
