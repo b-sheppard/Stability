@@ -52,6 +52,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             //update time remaining
             let predicate = NSPredicate(format: "name = %@", balanceTimer.categorySelected)
             let runningCategory = uirealm.objects(Category.self).filter(predicate).first
+            
             try! uirealm.write {
                 checkStatus?.timerRunning = true
                 runningCategory!.duration = balanceTimer.timeRemaining
@@ -61,9 +62,14 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             balanceTimer.categoryStaged = ""
             let PREDICATE = NSPredicate(format: "name = %@",balanceTimer.categorySelected)
             let newCategory = uirealm.objects(Category.self).filter(PREDICATE).first
+            
+            let taskPredicate = NSPredicate(format: "name = %@", balanceTimer.taskSelected)
+            let newTask = uirealm.objects(Task.self).filter(taskPredicate).first
+            
             balanceTimer.categorySelected = newCategory!.name
             balanceTimer.timeRemaining = newCategory!.duration
-            balanceTimer.taskSelected = newCategory!.name
+            balanceTimer.taskSelected = newTask!.name
+            balanceTimer.timeRemainingInTask = newTask!.duration
             balanceTimer.startScheduled()
         }
         else if checkStatus!.timerRunning {
@@ -74,9 +80,13 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             let PREDICATE = NSPredicate(format: "name = %@",balanceTimer.categorySelected)
             let runningCategory = uirealm.objects(Category.self).filter(PREDICATE).first
             
+            let taskPredicate = NSPredicate(format: "name = %@", balanceTimer.taskSelected)
+            let runningTask = uirealm.objects(Task.self).filter(taskPredicate).first
+            
             try! uirealm.write {
                 checkStatus?.timerRunning = false
                 runningCategory!.duration = balanceTimer.timeRemaining
+                runningTask!.duration = balanceTimer.timeRemainingInTask
             }
             // start free-time timer
             let predicate = NSPredicate(format: "name = %@", "Unscheduled")
@@ -84,6 +94,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             balanceTimer.categorySelected = "Unscheduled"
             balanceTimer.timeRemaining = unscheduled!.duration
             balanceTimer.taskSelected = "Unscheduled"
+            balanceTimer.timeRemainingInTask = unscheduled!.duration
             balanceTimer.startScheduled()
             
         }
@@ -137,53 +148,56 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             navigationController?.pushViewController(categoryView, animated: false)
         }
     }
-    
     @objc func taskFinished() {
         // task has finished
-        print(balanceTimer.timeRemaining)
+        // print(balanceTimer.timeRemaining)
         let unscheduled = uirealm.objects(Category.self).filter("name = 'Unscheduled'").first!
         let checkStatus = uirealm.objects(TimerStatus.self).first!
-
-        let predicate = NSPredicate(format: "name = %@", balanceTimer.categorySelected)
-        let toDelete = uirealm.objects(Category.self).filter(predicate).first!
-        let secondsOvertime = unscheduled.duration + balanceTimer.timeRemaining
-    
+        
+        let categoryPredicate = NSPredicate(format: "name = %@", balanceTimer.categorySelected)
+        let taskPredicate = NSPredicate(format: "name = %@", balanceTimer.taskSelected)
+        let categoryToDelete = uirealm.objects(Category.self).filter(categoryPredicate).first!
+        let taskToDelete = uirealm.objects(Task.self).filter(taskPredicate).first!
+        var secondsOvertime = 0
+        
+        // last task in category finished
+        if(balanceTimer.timeRemaining <= 0) {
+            secondsOvertime = unscheduled.duration + balanceTimer.timeRemaining
+            try! uirealm.write {
+                checkStatus.timerRunning = false
+                checkStatus.currentCategory = "Unscheduled"
+                checkStatus.currentTask = "Unscheduled"
+                uirealm.delete(categoryToDelete)
+                uirealm.delete(taskToDelete)
+            }
+        }
+        // not last task in category
+        else if(balanceTimer.timeRemainingInTask <= 0) {
+            secondsOvertime = unscheduled.duration + balanceTimer.timeRemainingInTask
+            try! uirealm.write {
+                checkStatus.timerRunning = false
+                checkStatus.currentCategory = "Unscheduled"
+                checkStatus.currentTask = "Unscheduled"
+                uirealm.delete(taskToDelete)
+            }
+        }
+        
         balanceTimer.timeRemaining = secondsOvertime
+        balanceTimer.timeRemainingInTask = secondsOvertime
         balanceTimer.secondsRunning = 0
         balanceTimer.categorySelected = "Unscheduled"
         balanceTimer.taskSelected = "Unscheduled"
         
-        try! uirealm.write {
-            checkStatus.timerRunning = false
-            checkStatus.currentCategory = "Unscheduled"
-            uirealm.delete(toDelete)
-        }
         //balanceTimer.startScheduled()
         balanceTimer.taskFinished = false
         mainButton.setTitle("START", for: .normal)
-        /*if(secondsOvertime <= 0) {
-            print("MUST FIX SCHEDULE")
-        }
-        else {
-            balanceTimer.timeRemaining = unscheduled.duration
-            balanceTimer.secondsRunning = 0
-            balanceTimer.categorySelected = "Unscheduled"
-            balanceTimer.taskSelected = "Unscheduled"
-         
-            try! uirealm.write {
-                checkStatus.timerRunning = false
-                uirealm.delete(toDelete)
-            }
-            balanceTimer.startScheduled()
-            balanceTimer.taskFinished = false
-            mainButton.setTitle("START", for: .normal)
-        } //else*/
         fetchData()
-    } //taskFinished()
+    }
+
     
     @objc func updateChart() {
-        
-        if(balanceTimer.timeRemaining <= 0) {
+        print(balanceTimer.timeRemainingInTask)
+        if(balanceTimer.timeRemainingInTask <= 0) {
             taskFinished()
         }
         
@@ -192,7 +206,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         //get times of categories
         var position = 0
 
-        print(active_categories)
+        //print(active_categories)
         for cat in active_categories {
             let dataEntry = PieChartDataEntry(value: Double(cat.duration), label: nil)
             if cat.name == balanceTimer.categorySelected {
@@ -393,7 +407,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     //           OBSERVERS
     //===========================================================
     @objc func appBecameActive() {
-        if(balanceTimer.timeRemaining <= 0) {
+        if(balanceTimer.timeRemainingInTask <= 0) {
             taskFinished()
         }
     } //appBecameActive()

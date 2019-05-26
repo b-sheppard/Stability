@@ -53,12 +53,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             unscheduled.duration = 86400
             unscheduled.name = "Unscheduled"
             
+            let unscheduledTask = Task()
+            unscheduledTask.duration = unscheduled.duration
+            unscheduledTask.name = unscheduled.name
+            unscheduledTask.category = "Unscheduled"
+            
             let status = TimerStatus() // timer status
 
             // REALM
             try! uirealm.write() {
                 uirealm.add(status)
                 uirealm.add(unscheduled)
+                uirealm.add(unscheduledTask)
             }
         }
         else {
@@ -81,6 +87,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let predicate = NSPredicate(format: "name = %@", balanceTimer.categorySelected)
         let runningCategory = uirealm.objects(Category.self).filter(predicate).first
         
+        let taskPredicate = NSPredicate(format: "name = %@", balanceTimer.taskSelected)
+        let runningTask = uirealm.objects(Task.self).filter(taskPredicate).first
+        
         // Stop running timer (store time remaining in task)
         let date = Date()
         let secondsLeft = balanceTimer.stopScheduled()
@@ -95,8 +104,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             checkStatus?.dateOnExit = date
             checkStatus?.timerRunning = timerRunning
             checkStatus?.currentCategory = balanceTimer.categorySelected
+            checkStatus?.currentTask = balanceTimer.taskSelected
             runningCategory!.duration = secondsLeft
             runningCategory!.name = balanceTimer.categorySelected
+            runningTask!.duration = balanceTimer.timeRemainingInTask
+            runningTask!.name = balanceTimer.taskSelected
         }
 
     }
@@ -125,13 +137,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let predicate = NSPredicate(format: "name = %@", checkStatus!.currentCategory)
         let runningCategory = uirealm.objects(Category.self).filter(predicate).first
         
+        let taskPredicate = NSPredicate(format: "name = %@", checkStatus!.currentTask)
+        var runningTask = uirealm.objects(Task.self).filter(taskPredicate).first
+        
         let timeInactive = (checkStatus?.dateOnExit?.timeIntervalSinceNow ?? 0) * -1
         balanceTimer.secondsCompleted = Double(checkStatus?.secondsCompleted ?? 0) + timeInactive
         
-        
+        // category time
         balanceTimer.timeRemaining = runningCategory!.duration
         balanceTimer.categorySelected = runningCategory!.name
         balanceTimer.timeRemaining -= Int(timeInactive)
+        
+        //task time
+        balanceTimer.timeRemainingInTask = runningTask!.duration
+        balanceTimer.taskSelected = runningTask!.name
+        balanceTimer.timeRemainingInTask -= Int(timeInactive)
 
         balanceTimer.startScheduled()
         //print(uirealm.objects(Category.self))

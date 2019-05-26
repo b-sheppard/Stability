@@ -13,6 +13,7 @@ class BalanceTimer : Object {
     var secondsCompleted = 0.0
     
     var timeRemaining = 0
+    var timeRemainingInTask = 0
     var secondsRunning = 0
     var categorySelected = ""
     var categoryStaged = ""
@@ -35,12 +36,13 @@ class BalanceTimer : Object {
         return timeRemaining
     }
     @objc public func updateScheduled() {
-        if(timeRemaining == 0) {
+        if(timeRemaining == 0 || timeRemainingInTask == 0) {
             stopScheduled()
             taskFinished = true
         }
         secondsCompleted += 1
         secondsRunning += 1
         timeRemaining -= 1
+        timeRemainingInTask -= 1
     }
 }
