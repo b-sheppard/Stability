@@ -12,10 +12,14 @@
 		51050C382155E76F005A13DC /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51050C372155E76F005A13DC /* MainViewController.swift */; };
 		51050C3A2155E7D5005A13DC /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51050C392155E7D5005A13DC /* TaskViewController.swift */; };
 		510A0F2521976CE300230340 /* AddCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510A0F2421976CE300230340 /* AddCategoryViewController.swift */; };
+		510FCB8F2281355B00841B48 /* BalanceTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510FCB8E2281355B00841B48 /* BalanceTimer.swift */; };
+		5121E88C2299AD9500BBD928 /* ActiveCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5121E88B2299AD9500BBD928 /* ActiveCategories.swift */; };
 		513C8FF0219D363600785705 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513C8FEF219D363600785705 /* CategoryViewController.swift */; };
 		514F52712197FC590091FA83 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 514F52702197FC590091FA83 /* GoogleService-Info.plist */; };
 		516B679C21A28284008BDCF4 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516B679B21A28284008BDCF4 /* HomeViewController.swift */; };
 		516B679E21A28B94008BDCF4 /* NSUIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516B679D21A28B94008BDCF4 /* NSUIColor+Hex.swift */; };
+		517B488222531ADE00544647 /* RealmObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517B488122531ADE00544647 /* RealmObjects.swift */; };
+		517B48842256D76A00544647 /* scratch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517B48832256D76A00544647 /* scratch.swift */; };
 		518256A6210FA94500A0788D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518256A5210FA94500A0788D /* AppDelegate.swift */; };
 		518256A8210FA94500A0788D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518256A7210FA94500A0788D /* ViewController.swift */; };
 		518256AE210FA94500A0788D /* balance.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 518256AC210FA94500A0788D /* balance.xcdatamodeld */; };
@@ -53,10 +57,14 @@
 		51050C372155E76F005A13DC /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		51050C392155E7D5005A13DC /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
 		510A0F2421976CE300230340 /* AddCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryViewController.swift; sourceTree = "<group>"; };
+		510FCB8E2281355B00841B48 /* BalanceTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceTimer.swift; sourceTree = "<group>"; };
+		5121E88B2299AD9500BBD928 /* ActiveCategories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveCategories.swift; sourceTree = "<group>"; };
 		513C8FEF219D363600785705 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		514F52702197FC590091FA83 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		516B679B21A28284008BDCF4 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		516B679D21A28B94008BDCF4 /* NSUIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSUIColor+Hex.swift"; sourceTree = "<group>"; };
+		517B488122531ADE00544647 /* RealmObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmObjects.swift; sourceTree = "<group>"; };
+		517B48832256D76A00544647 /* scratch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = scratch.swift; sourceTree = "<group>"; };
 		518256A2210FA94500A0788D /* balance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = balance.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		518256A5210FA94500A0788D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		518256A7210FA94500A0788D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -163,6 +171,10 @@
 				516B679D21A28B94008BDCF4 /* NSUIColor+Hex.swift */,
 				516B679B21A28284008BDCF4 /* HomeViewController.swift */,
 				51F5C56821DDBBEF00627E15 /* ActiveTaskViewController.swift */,
+				517B488122531ADE00544647 /* RealmObjects.swift */,
+				517B48832256D76A00544647 /* scratch.swift */,
+				510FCB8E2281355B00841B48 /* BalanceTimer.swift */,
+				5121E88B2299AD9500BBD928 /* ActiveCategories.swift */,
 			);
 			path = balance;
 			sourceTree = "<group>";
@@ -267,16 +279,16 @@
 				TargetAttributes = {
 					518256A1210FA94500A0788D = {
 						CreatedOnToolsVersion = 9.4.1;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 					};
 					518256B8210FA94600A0788D = {
 						CreatedOnToolsVersion = 9.4.1;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						TestTargetID = 518256A1210FA94500A0788D;
 					};
 					518256C3210FA94600A0788D = {
 						CreatedOnToolsVersion = 9.4.1;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						TestTargetID = 518256A1210FA94500A0788D;
 					};
 				};
@@ -421,15 +433,19 @@
 			files = (
 				510A0F2521976CE300230340 /* AddCategoryViewController.swift in Sources */,
 				51050C362155E736005A13DC /* MainNavigationController.swift in Sources */,
+				517B488222531ADE00544647 /* RealmObjects.swift in Sources */,
 				518256A8210FA94500A0788D /* ViewController.swift in Sources */,
 				518256A6210FA94500A0788D /* AppDelegate.swift in Sources */,
 				513C8FF0219D363600785705 /* CategoryViewController.swift in Sources */,
 				51F5C56921DDBBEF00627E15 /* ActiveTaskViewController.swift in Sources */,
+				510FCB8F2281355B00841B48 /* BalanceTimer.swift in Sources */,
 				516B679C21A28284008BDCF4 /* HomeViewController.swift in Sources */,
 				51050C382155E76F005A13DC /* MainViewController.swift in Sources */,
+				5121E88C2299AD9500BBD928 /* ActiveCategories.swift in Sources */,
 				518F4C5921AB34DF00E4EBA7 /* TaskGenericViewController.swift in Sources */,
 				518256AE210FA94500A0788D /* balance.xcdatamodeld in Sources */,
 				516B679E21A28B94008BDCF4 /* NSUIColor+Hex.swift in Sources */,
+				517B48842256D76A00544647 /* scratch.swift in Sources */,
 				51B207FC219F91B300563A9F /* AddTaskViewController.swift in Sources */,
 				51050C3A2155E7D5005A13DC /* TaskViewController.swift in Sources */,
 			);
@@ -595,7 +611,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.orbmentality.balance;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -614,7 +630,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.orbmentality.balance;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -635,7 +651,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.orbmentality.balanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/balance.app/balance";
 			};
@@ -657,7 +673,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.orbmentality.balanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/balance.app/balance";
 			};
@@ -678,7 +694,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.orbmentality.balanceUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = balance;
 			};
@@ -699,7 +715,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.orbmentality.balanceUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = balance;
 			};

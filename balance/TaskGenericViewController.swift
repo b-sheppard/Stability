@@ -99,7 +99,7 @@ class TaskGenericViewController: UIViewController, UITextFieldDelegate {
             let hour = components.value(for: .hour)!
             let minute = components.value(for: .minute)!
             
-            ref?.child("categories").child(path).child(text).setValue(60*hour + minute)
+            ref?.child(USER_PATH + "/categories").child(path).child(text).setValue(60*hour + minute)
             taskTextField.text = ""
         }
         self.view.removeFromSuperview()

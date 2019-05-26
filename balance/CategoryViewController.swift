@@ -15,20 +15,73 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     //cell is tapped
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //get current number of active minutes
-        ref?.child("active").child(name).observeSingleEvent(of: .value, with: {(snapshot) in
+        ref?.child(USER_PATH + "/active").child(name).observeSingleEvent(of: .value, with: {(snapshot) in
             var newTime = snapshot.value! as! Int
             
             //adds selected number of active minutes to the total
-            self.ref?.child("categories/" + self.path).child(self.tasks[indexPath.row])
+            self.ref?.child(USER_PATH + "/categories/" + self.path).child(self.tasks[indexPath.row])
                 .observeSingleEvent(of: .value, with: {(snapshot) in
                 let taskValue = snapshot.value! as! Int
                 newTime += taskValue
+                    
                 //adds total time to active list
-                self.ref?.child("active").child(self.name).setValue(newTime)
+                self.ref?.child(USER_PATH + "/active").child(self.name).setValue(newTime)
                     
                 //create reference to active tasks (stored in categories)
-                self.ref?.child("categories").child(self.name).child("Active")
+                self.ref?.child(USER_PATH + "/categories").child(self.name).child("Active")
                         .child(self.tasks[indexPath.row]).setValue(taskValue)
+                    
+                //REALM
+                let predicate = NSPredicate(format: "name = %@", self.name)
+                let unscheduled = realm.objects(Category.self).filter("name = 'Unscheduled'").first
+                let runningCategory = realm.objects(Category.self).filter(predicate).first
+                var newCategoryTime = taskValue
+                    
+                // add task to realm
+                let Tpredicate = NSPredicate(format: "name = %@", self.tasks[indexPath.row])
+                let doesExist = realm.objects(Task.self).filter(Tpredicate).first
+                let newTask = Task()
+                if(doesExist != nil) { print("Task already active") }
+                else {
+                    newTask.category = self.name
+                    newTask.name = self.tasks[indexPath.row]
+                    newTask.duration = taskValue
+                }
+                    
+                // edge case if timer isn't running
+                if balanceTimer.categorySelected == "Unscheduled" {
+                    try! realm.write {
+                        unscheduled!.duration = balanceTimer.timeRemaining
+                    }
+                }
+                // category doesn't exist
+                if(runningCategory == nil) {
+                    let categoryToAdd = Category()
+                    categoryToAdd.duration = newCategoryTime
+                    categoryToAdd.name = self.name
+                    try! realm.write {
+                        realm.add(categoryToAdd)
+                        unscheduled!.duration -= newCategoryTime
+                        
+                        //add task
+                        realm.add(newTask)
+                    }
+                }
+                // category exists
+                else {
+                    try! realm.write {
+                        unscheduled!.duration -= newCategoryTime
+                        newCategoryTime += runningCategory!.duration
+                        runningCategory!.duration = newCategoryTime
+                        
+                        // add task
+                        realm.add(newTask)
+                    }
+                }
+                // edge case if timer isn't running
+                if balanceTimer.categorySelected == "Unscheduled" {
+                    balanceTimer.timeRemaining = unscheduled!.duration
+                }
             })
         })
     }
@@ -126,7 +179,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     }
     //delete task from database
     func deleteTask(task:String) {
-        ref?.child("categories").child(path).child(task).removeValue()
+        ref?.child(USER_PATH + "/categories").child(path).child(task).removeValue()
     }
     
     func setupView() {
@@ -153,7 +206,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         deleteButton.frame = CGRect(x: x_pos - 150, y: y_pos, width: 300, height:60)
         deleteButton.clipsToBounds = true
         deleteButton.setTitle("Delete Category", for: .normal)
-        deleteButton.titleLabel?.font = UIFont(name:"Times New Roman", size: 30)
+        deleteButton.titleLabel?.font = UIFont(name:"Futura", size: 30)
         deleteButton.setTitleColor(.red, for: .normal)
         deleteButton.backgroundColor = .white
         deleteButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
@@ -167,7 +220,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         button.clipsToBounds = true
         
         button.setTitle("+", for: .normal)
-        button.titleLabel?.font = UIFont(name:"Times New Roman", size: 80)
+        button.titleLabel?.font = UIFont(name:"Futura", size: 80)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = color //current color
         button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
@@ -189,7 +242,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         
         path = self.name + "/Tasks/"
         // updates tasks list if new tasks added
-        handle = ref?.child("categories/" + path).observe(.childAdded, with: { (snapshot) in
+        handle = ref?.child(USER_PATH + "/categories/" + path).observe(.childAdded, with: { (snapshot) in
             if let value = snapshot.value as? Int {
                 let key = snapshot.key
                 self.times[key] = value
@@ -198,10 +251,10 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
             }
         })
         //updates tasks list if tasks was deleted
-        handle = ref?.child("categories/" + path).observe(.childRemoved, with: { (snapshot) in
+        handle = ref?.child(USER_PATH + "/categories/" + path).observe(.childRemoved, with: { (snapshot) in
             if (snapshot.value as? Int) != nil {
                 let key = snapshot.key
-                if let positionInTasks = self.tasks.index(of: key) {
+                if let positionInTasks = self.tasks.firstIndex(of: key) {
                     self.tasks.remove(at: positionInTasks)
                     self.times.removeValue(forKey: key)
 
