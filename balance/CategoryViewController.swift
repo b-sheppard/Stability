@@ -33,13 +33,13 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
                     
                 //REALM
                 let predicate = NSPredicate(format: "name = %@", self.name)
-                let unscheduled = realm.objects(Category.self).filter("name = 'Unscheduled'").first
-                let runningCategory = realm.objects(Category.self).filter(predicate).first
+                let unscheduled = uirealm.objects(Category.self).filter("name = 'Unscheduled'").first
+                let runningCategory = uirealm.objects(Category.self).filter(predicate).first
                 var newCategoryTime = taskValue
                     
                 // add task to realm
                 let Tpredicate = NSPredicate(format: "name = %@", self.tasks[indexPath.row])
-                let doesExist = realm.objects(Task.self).filter(Tpredicate).first
+                let doesExist = uirealm.objects(Task.self).filter(Tpredicate).first
                 let newTask = Task()
                 if(doesExist != nil) { print("Task already active") }
                 else {
@@ -50,32 +50,33 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
                     
                 // edge case if timer isn't running
                 if balanceTimer.categorySelected == "Unscheduled" {
-                    try! realm.write {
+                    try! uirealm.write {
                         unscheduled!.duration = balanceTimer.timeRemaining
                     }
                 }
                 // category doesn't exist
                 if(runningCategory == nil) {
                     let categoryToAdd = Category()
-                    categoryToAdd.duration = newCategoryTime
+                    //categoryToAdd.duration = newCategoryTime
+                    categoryToAdd.duration = 5
                     categoryToAdd.name = self.name
-                    try! realm.write {
-                        realm.add(categoryToAdd)
+                    try! uirealm.write {
+                        uirealm.add(categoryToAdd)
                         unscheduled!.duration -= newCategoryTime
                         
                         //add task
-                        realm.add(newTask)
+                        uirealm.add(newTask)
                     }
                 }
                 // category exists
                 else {
-                    try! realm.write {
+                    try! uirealm.write {
                         unscheduled!.duration -= newCategoryTime
                         newCategoryTime += runningCategory!.duration
                         runningCategory!.duration = newCategoryTime
                         
                         // add task
-                        realm.add(newTask)
+                        uirealm.add(newTask)
                     }
                 }
                 // edge case if timer isn't running

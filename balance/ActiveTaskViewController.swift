@@ -131,27 +131,27 @@ class ActiveTaskViewController: UIViewController,
         //deletes reference of active tasks
         ref?.child(USER_PATH + "/categories").child(name).child("Active").child(task).removeValue()
         
-        print(realm.objects(Task.self))
+        print(uirealm.objects(Task.self))
         let Tpredicate = NSPredicate(format: "name = %@", task)
-        let toDelete = realm.objects(Task.self).filter(Tpredicate).first!
+        let toDelete = uirealm.objects(Task.self).filter(Tpredicate).first!
         
-        let unscheduled = realm.objects(Category.self).filter("name = 'Unscheduled'").first!
+        let unscheduled = uirealm.objects(Category.self).filter("name = 'Unscheduled'").first!
         
         let Cpredicate = NSPredicate(format: "name = %@", toDelete.category)
-        let category = realm.objects(Category.self).filter(Cpredicate).first
+        let category = uirealm.objects(Category.self).filter(Cpredicate).first
         let newTime = category!.duration - toDelete.duration
         
         //edge case if task is active
         if balanceTimer.categorySelected == "Unscheduled" {
-            try! realm.write {
+            try! uirealm.write {
                 unscheduled.duration = balanceTimer.timeRemaining
             }
         }
         
-        try! realm.write {
+        try! uirealm.write {
             category!.duration = newTime
             unscheduled.duration += toDelete.duration
-            realm.delete(toDelete)
+            uirealm.delete(toDelete)
         }
         
         if balanceTimer.categorySelected == "Unscheduled" {

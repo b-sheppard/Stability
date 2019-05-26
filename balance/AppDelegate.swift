@@ -12,7 +12,7 @@ import Firebase
 import FirebaseDatabase
 import RealmSwift
 
-var realm = try! Realm() // realm file
+var uirealm = try! Realm() // realm file
 var firstTime = true
 var balanceTimer = BalanceTimer() // custom timer
 let USER_PATH = "Users" // path to user
@@ -56,9 +56,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let status = TimerStatus() // timer status
 
             // REALM
-            try! realm.write() {
-                realm.add(status)
-                realm.add(unscheduled)
+            try! uirealm.write() {
+                uirealm.add(status)
+                uirealm.add(unscheduled)
             }
         }
         else {
@@ -76,10 +76,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
         
         print("----WRITING TO REALM----\n")
-        let checkStatus = realm.objects(TimerStatus.self).first
+        let checkStatus = uirealm.objects(TimerStatus.self).first
         
         let predicate = NSPredicate(format: "name = %@", balanceTimer.categorySelected)
-        let runningCategory = realm.objects(Category.self).filter(predicate).first
+        let runningCategory = uirealm.objects(Category.self).filter(predicate).first
         
         // Stop running timer (store time remaining in task)
         let date = Date()
@@ -90,7 +90,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             timerRunning = false
         }
         
-        try! realm.write() {
+        try! uirealm.write() {
             checkStatus?.secondsCompleted = Int(balanceTimer.secondsCompleted)
             checkStatus?.dateOnExit = date
             checkStatus?.timerRunning = timerRunning
@@ -120,10 +120,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let predicate = NSPredicate(format: "name = %@", active)
         let runningTask = realm.objects(Task.self).filter(predicate).first
         */
-        let checkStatus = realm.objects(TimerStatus.self).first
+        let checkStatus = uirealm.objects(TimerStatus.self).first
         
         let predicate = NSPredicate(format: "name = %@", checkStatus!.currentCategory)
-        let runningCategory = realm.objects(Category.self).filter(predicate).first
+        let runningCategory = uirealm.objects(Category.self).filter(predicate).first
         
         let timeInactive = (checkStatus?.dateOnExit?.timeIntervalSinceNow ?? 0) * -1
         balanceTimer.secondsCompleted = Double(checkStatus?.secondsCompleted ?? 0) + timeInactive
@@ -132,13 +132,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         balanceTimer.timeRemaining = runningCategory!.duration
         balanceTimer.categorySelected = runningCategory!.name
         balanceTimer.timeRemaining -= Int(timeInactive)
-        if balanceTimer.timeRemaining < 0 {
-            print("OVER TIME")
-        }
-        else {
-            balanceTimer.startScheduled()
-        }
-        print(realm.objects(Category.self))
+
+        balanceTimer.startScheduled()
+        //print(uirealm.objects(Category.self))
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
