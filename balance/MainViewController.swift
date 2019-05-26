@@ -86,5 +86,6 @@ class MainViewController: UIViewController {
         addButton()
         createDatabase()
         
+        firstTime = false
     }
 }

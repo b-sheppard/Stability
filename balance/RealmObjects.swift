@@ -8,7 +8,7 @@
 
 import Foundation
 import RealmSwift
-
+/*
 // not currently being used---------------------------------
 class User : Object {
     var categories = List<Category>() // collection of categories
@@ -24,37 +24,29 @@ class Category : Object {
 
 }
 
-class Task : Object {
+class Tasks : Object {
     @objc dynamic var name : String? = nil // name of task
     var time = RealmOptional<Int>() // time of task
-}
+}*/
 
-
-extension User {
-    func writeToRealm() {
-        try! uiRealm.write() {
-            uiRealm.add(self)
-        }
-    }
-}
 // not currently being used---------------------------------^
 
 // timer settings when exiting/entering app
 class TimerStatus : Object {
     @objc dynamic var dateOnExit : Date? = nil
-    let timerRunning = RealmOptional<Bool>()
+    @objc dynamic var timerRunning = false
+    @objc dynamic var secondsCompleted = 0
+    @objc dynamic var currentCategory = "Unscheduled"
 }
 
-class Tasks : Object {
+class Task : Object {
     @objc dynamic var duration = 0
     @objc dynamic var name = ""
+    @objc dynamic var category = ""
 }
 
-extension TimerStatus {
-    func writeToRealm() {
-        try! uiRealm.write() {
-            uiRealm.add(self)
-        }
-    }
+class Category : Object {
+    @objc dynamic var duration = 0
+    @objc dynamic var name = ""
 }
 

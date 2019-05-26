@@ -21,6 +21,8 @@ class ActiveTaskViewController: UIViewController,
         ref?.child(USER_PATH + "/selectedTask").child("Name").setValue(self.tasks[indexPath.row])
         ref?.child(USER_PATH + "/selectedTask").child("Duration").setValue(self.times[tasks[indexPath.row]])
         
+        // REALM
+        balanceTimer.categoryStaged = name
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -64,6 +66,7 @@ class ActiveTaskViewController: UIViewController,
     var ref:DatabaseReference?
     var handle:DatabaseHandle?
     var tableView: UITableView!
+    var activeTasks = [Task]()
     
     @objc func homeButtonTapped() {
         let  vc =  self.navigationController?.viewControllers.filter({$0 is HomeViewController}).first
@@ -125,17 +128,35 @@ class ActiveTaskViewController: UIViewController,
     //delete task from database (and subtract value from active
     func deleteTask(task:String) {
         //updates active times
-        ref?.child(USER_PATH + "/categories").child(name).child("Active").child(task)
-            .observeSingleEvent(of: .value, with: {(taskTime) in
-            let timeToRemove = taskTime.value! as! Int
-            self.ref?.child("active").child(self.name).observeSingleEvent(of: .value, with: {(snapshot) in
-                let totalTime = snapshot.value! as! Int
-                let newTime = totalTime - timeToRemove
-                self.ref?.child("active").child(self.name).setValue(newTime)
-            })
-        })
         //deletes reference of active tasks
         ref?.child(USER_PATH + "/categories").child(name).child("Active").child(task).removeValue()
+        
+        print(realm.objects(Task.self))
+        let Tpredicate = NSPredicate(format: "name = %@", task)
+        let toDelete = realm.objects(Task.self).filter(Tpredicate).first!
+        
+        let unscheduled = realm.objects(Category.self).filter("name = 'Unscheduled'").first!
+        
+        let Cpredicate = NSPredicate(format: "name = %@", toDelete.category)
+        let category = realm.objects(Category.self).filter(Cpredicate).first
+        let newTime = category!.duration - toDelete.duration
+        
+        //edge case if task is active
+        if balanceTimer.categorySelected == "Unscheduled" {
+            try! realm.write {
+                unscheduled.duration = balanceTimer.timeRemaining
+            }
+        }
+        
+        try! realm.write {
+            category!.duration = newTime
+            unscheduled.duration += toDelete.duration
+            realm.delete(toDelete)
+        }
+        
+        if balanceTimer.categorySelected == "Unscheduled" {
+            balanceTimer.timeRemaining = unscheduled.duration
+        }
     }
     
     //destroy view
@@ -204,7 +225,6 @@ class ActiveTaskViewController: UIViewController,
                 }
             }
         })
-        
         setupView()
     }
 }

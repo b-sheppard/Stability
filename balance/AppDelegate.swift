@@ -12,14 +12,16 @@ import Firebase
 import FirebaseDatabase
 import RealmSwift
 
-var uiRealm = try! Realm() // realm file
+var realm = try! Realm() // realm file
+var firstTime = true
+var balanceTimer = BalanceTimer() // custom timer
 let USER_PATH = "Users" // path to user
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
@@ -28,22 +30,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         mainNavigationController.title = "MainNG"
         
         
-        
-        
-    //    let mainViewController = TaskViewController() //task
-        let mainViewController = MainViewController() //plus button
-        
-        
-        
-        
-        
+        let mainViewController = MainViewController() //plus
+        let taskViewController = TaskViewController() // task
+        let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
         //mainViewController.title = "ADD A TASK"
         
        // mainNavigationController.viewControllers = [mainViewController]
  
         let homeViewController = HomeViewController()
-        mainNavigationController.viewControllers = [homeViewController, mainViewController]        
-        
+        if !launchedBefore {
+            mainNavigationController.viewControllers = [homeViewController, mainViewController]
+            UserDefaults.standard.set(true, forKey: "launchedBefore")
+            
+            //Add the unscheduled timer
+            /*let unscheduled = Task()
+            unscheduled.duration = 3600
+            unscheduled.name = "Unscheduled"
+            unscheduled.category = "Unscheduled"*/
+            
+            let unscheduled = Category()
+            //unscheduled.duration = 3600
+            unscheduled.duration = 86400
+            unscheduled.name = "Unscheduled"
+            
+            let status = TimerStatus() // timer status
+
+            // REALM
+            try! realm.write() {
+                realm.add(status)
+                realm.add(unscheduled)
+            }
+        }
+        else {
+            mainNavigationController.viewControllers = [homeViewController, taskViewController]
+        }
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         window?.rootViewController = mainNavigationController
@@ -55,47 +75,70 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
         
-        //done
-        print("application will resign active...")
+        print("----WRITING TO REALM----\n")
+        let checkStatus = realm.objects(TimerStatus.self).first
+        
+        let predicate = NSPredicate(format: "name = %@", balanceTimer.categorySelected)
+        let runningCategory = realm.objects(Category.self).filter(predicate).first
+        
+        // Stop running timer (store time remaining in task)
+        let date = Date()
+        let secondsLeft = balanceTimer.stopScheduled()
+        // keeps track of which timer is running
+        var timerRunning = true
+        if balanceTimer.categorySelected == "Unscheduled" {
+            timerRunning = false
+        }
+        
+        try! realm.write() {
+            checkStatus?.secondsCompleted = Int(balanceTimer.secondsCompleted)
+            checkStatus?.dateOnExit = date
+            checkStatus?.timerRunning = timerRunning
+            checkStatus?.currentCategory = balanceTimer.categorySelected
+            runningCategory!.duration = secondsLeft
+            runningCategory!.name = balanceTimer.categorySelected
+        }
 
     }
-
+/*
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-        print("did enter background app goes in.")
         
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "AppDidEnterBackground"), object: nil)
-        let isTimerRunning =
-            UserDefaults.standard.bool(forKey: "isTimerRunning")
-        
-        let currentDate = Date()
-        UserDefaults.standard.set(currentDate as Date, forKey:"quitDate")
-        
-        print("isTimerRunning: ", isTimerRunning)
-        print("currentDate: ", currentDate)
-    }
-
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
         
     }
-
+*/
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-
-        print("app did become active")
-        let currentDate = Date()
+        print("----------------ACTIVE-------------------\n")
+        /*let predicate = NSPredicate(format: "name = %@", status.currentTask)
+        tanDogs = realm.objects(Dog.self).filter(predicate)*/
+       
+        /*
+        let predicate = NSPredicate(format: "name = %@", active)
+        let runningTask = realm.objects(Task.self).filter(predicate).first
+        */
+        let checkStatus = realm.objects(TimerStatus.self).first
         
-        let isTimerRunning : Bool = (UserDefaults.standard.object(forKey: "isTimerRunning") != nil)
+        let predicate = NSPredicate(format: "name = %@", checkStatus!.currentCategory)
+        let runningCategory = realm.objects(Category.self).filter(predicate).first
         
-        var passedSeconds = 0.0
-        if(isTimerRunning == true) {
-            let quitDate = UserDefaults.standard.object(forKey: "quitDate") as! Date
-            passedSeconds = currentDate.timeIntervalSince(quitDate)
+        let timeInactive = (checkStatus?.dateOnExit?.timeIntervalSinceNow ?? 0) * -1
+        balanceTimer.secondsCompleted = Double(checkStatus?.secondsCompleted ?? 0) + timeInactive
+        
+        
+        balanceTimer.timeRemaining = runningCategory!.duration
+        balanceTimer.categorySelected = runningCategory!.name
+        balanceTimer.timeRemaining -= Int(timeInactive)
+        if balanceTimer.timeRemaining < 0 {
+            print("OVER TIME")
         }
-        UserDefaults.standard.set(passedSeconds, forKey: "secondsInBackground")
-        print("time passed: ", passedSeconds)
+        else {
+            balanceTimer.startScheduled()
+        }
+        print(realm.objects(Category.self))
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -103,9 +146,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Saves changes in the application's managed object context before the application terminates.
         print("app will terminate..")
         
-        //set the time of exiting app to calculate time it was in background later
-        let currentDate = Date()
-        UserDefaults.standard.set(currentDate as Date, forKey:"quitDate")
         
         self.saveContext()
     }

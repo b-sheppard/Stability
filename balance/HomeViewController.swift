@@ -31,19 +31,9 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     var selectedTaskName = UILabel()
     
     //timer variables
-    let dayInSeconds = 86400.0 //seconds in 24 hours
- //   let dayInSeconds = 3600.0
-    var secondsCompleted: Int = 0
-    var passedSeconds: Int = 0
-    var seconds: Int = 0
-    var secondsLeftInTask: Int = 0
-    var taskTimer: Timer?
-    var unscheduledTimer: Timer? //used for unscheduled time
-    var startDate: Date?
-    var quitDate: Date?
+    var timer: Timer?
     
-    //These will be used to make sure only one timer is created at a time.
-    var isTimerRunning: Bool = false
+    var active_categories = [Category]()
     
     var resumeTapped = false
     
@@ -52,103 +42,57 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     //          SCHEDULED TIMER
     //==========================================
     @objc public func startTapped() {
-        print("test")
-    }
-    /*
-    //ensures that there is a task is selected
-    func shouldStartTimer(category: String) {
-        if category != "" {
-            print("is timer running: ", isTimerRunning)
-            if isTimerRunning == true {
-                print("stop timer")
-                mainButton.setTitle("Start", for: .normal)
-                stopTimer()
-            } else {
-                stopUnscheduledTimer()
-                mainButton.setTitle("Stop", for: .normal)
-                startTimer()
+        let checkStatus = realm.objects(TimerStatus.self).first
+
+        if !checkStatus!.timerRunning && balanceTimer.categoryStaged != "" {
+            mainButton.setTitle("STOP", for: .normal)
+            //stop unscheduled timer
+            let timeRemaining = balanceTimer.stopScheduled()
+            
+            //update time remaining
+            let predicate = NSPredicate(format: "name = %@", balanceTimer.categorySelected)
+            let runningCategory = realm.objects(Category.self).filter(predicate).first
+            try! realm.write {
+                checkStatus?.timerRunning = true
+                runningCategory!.duration = balanceTimer.timeRemaining
             }
-        } else {
-            print("no task selected!")
+            // assign new timer
+            balanceTimer.categorySelected = balanceTimer.categoryStaged
+            balanceTimer.categoryStaged = ""
+            let PREDICATE = NSPredicate(format: "name = %@",balanceTimer.categorySelected)
+            let newCategory = realm.objects(Category.self).filter(PREDICATE).first
+            balanceTimer.categorySelected = newCategory!.name
+            balanceTimer.timeRemaining = newCategory!.duration
+            balanceTimer.taskSelected = newCategory!.name
+            balanceTimer.startScheduled()
+        }
+        else if checkStatus!.timerRunning {
+            mainButton.setTitle("START", for: .normal)
+            let timeRemaining = balanceTimer.stopScheduled()
+
+            // current time remaining
+            let PREDICATE = NSPredicate(format: "name = %@",balanceTimer.categorySelected)
+            let runningCategory = realm.objects(Category.self).filter(PREDICATE).first
+            
+            try! realm.write {
+                checkStatus?.timerRunning = false
+                runningCategory!.duration = balanceTimer.timeRemaining
+            }
+            // start free-time timer
+            let predicate = NSPredicate(format: "name = %@", "Unscheduled")
+            let unscheduled = realm.objects(Category.self).filter(predicate).first
+            balanceTimer.categorySelected = "Unscheduled"
+            balanceTimer.timeRemaining = unscheduled!.duration
+            balanceTimer.taskSelected = "Unscheduled"
+            balanceTimer.startScheduled()
+            
         }
     }
-    
-    //Stops the activity and saves to Firebase
-    func stopTimer() {
-        invalidateTimer()
-        isTimerRunning = false
-        //start unscheduledTimer
-        startUnscheduledTimer()
-        
-        //save locally
-        ref?.child("active").child(selected).setValue(seconds)
-        ref?.child("categories").child(selected).child("Active").child(selectedTaskName.text!).setValue(secondsLeftInTask)
-        selectedTaskName.text = "Select a task"
-    }
-    
-    //Starts new time with task
-    func startTimer() {
-        startDate = Date()
-        
-        //get seconds from firebase
-        ref?.child("active").child(selected).observeSingleEvent(of: .value, with: {(snapshot) in
-            print("value ", snapshot.value!)
-            self.seconds = snapshot.value! as! Int
-        })
-        //get time left to complete individual task
-        ref?.child("selectedTask").child("Duration").observeSingleEvent(of: .value, with: {(snapshot) in
-            let timeLeftInTask = snapshot.value! as! Int
-            self.secondsLeftInTask = timeLeftInTask
-        })
-        invalidateTimer()
-        runTimer()
-        
-        isTimerRunning = true
-        UserDefaults.standard.set(isTimerRunning,
-                                  forKey:"quitTimerRunning")
-    }
-    
-    func runTimer() {
-        taskTimer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: #selector(self.updateTimer), userInfo: nil, repeats: true)
-    }
-    
-    //ensures a non-running timer isn't invalidated
-    func invalidateTimer() {
-        if let timer = taskTimer {
-            timer.invalidate()
-        }
-        if let timer2 = unscheduledTimer {
-            timer2.invalidate()
-        }
-    }
-    
-    @objc func updateTimer() {
-        if(secondsLeftInTask <= 0 ||
-            seconds <= 0) {
-            print("time has reached 0")
-            stopTimer()
-        }
-        else {
-            seconds -= 1     //This will decrement(count down)the seconds
-            secondsCompleted += 1 //This will keep track of total completed seconds
-            secondsLeftInTask -= 1
-            timeOf[selected] = seconds
-            updateChart()
-        }
-    }
-    
-    */
+ 
     
     //==========================================
     //          BUTTON FUNCTIONS
     //==========================================
-
-    //center button TAPPED
-    @objc func buttonTapped() {
-        ref?.child(USER_PATH + "/selected").observeSingleEvent(of: .value, with: { (snapshot) in
-            self.selected = snapshot.value! as! String
-        })
-    }
     
     @objc func addButtonTapped() {
         print("Go to Task")
@@ -161,7 +105,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     //==========================================
     //          CHART FUNCTIONS
     //==========================================
-    //gets name of seleved chart
+    //gets name of selected chart
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
         let c = categoryPosition[String(Int(entry.x))]!
         goToCategory(category: c)
@@ -194,62 +138,40 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         }
     }
     
-    func updateChart() {
+    @objc func updateChart() {
         var categories : [PieChartDataEntry] = Array()
-        let currentCategories = Array(timeOf.values)
-        let currentCategoryNames = Array(timeOf.keys)
-        
-        var totalTime = 0.0 // used to calculate unscheduled time
         
         //get times of categories
         var position = 0
-        for time in currentCategories {
-            //add time entry to pie chart
-            let dataEntry = PieChartDataEntry(value: Double(time), label: nil)
+
+        for cat in active_categories {
+            let dataEntry = PieChartDataEntry(value: Double(cat.duration), label: nil)
+            if(cat.name == balanceTimer.categorySelected) {
+                dataEntry.value = Double(balanceTimer.timeRemaining)
+            }
             dataEntry.x = Double(position)
             categories.append(dataEntry)
             
-            //keep track of position
-            let categoryName = currentCategoryNames[position]
+            let categoryName = cat.name
             categoryPosition[String(position)] = categoryName
             position += 1
-            
-            //add to total time
-            totalTime += Double(time)
         }
         
-        //create unscheduled time
-        //dayInSeconds - (totalTime + secondsCompleted) is used to factor in time ticked away from active categories
-        let unscheduledEntry = PieChartDataEntry(value: dayInSeconds - (totalTime + Double(secondsCompleted)), label: nil)
-        //let unscheduledEntry = PieChartDataEntry(value: Double(240), label: nil) //placeholder
-        unscheduledEntry.x = Double(position)
-        categories.append(unscheduledEntry)
-        categoryPosition[String(position)] = "Unscheduled"
-        position += 1
-        
         //create completed time placeholder
-        let completedEntry = PieChartDataEntry(value: Double(secondsCompleted), label: nil)
+        let completedEntry = PieChartDataEntry(value: Double(balanceTimer.secondsCompleted), label: nil)
         completedEntry.x = Double(position)
         categories.append(completedEntry)
         categoryPosition[String(position)] = "Completed"
         
         let chartDataSet = PieChartDataSet(entries: categories, label: nil)
         let chartData = PieChartData(dataSet: chartDataSet)
-
         var categoryColor : [NSUIColor] = []
-
-        //get colors of categories
-        for category in currentCategoryNames {
-            let currentColor = colorOf[category]
-            categoryColor.append(currentColor!)
+        for cat in active_categories {
+            categoryColor.append(colorOf[cat.name] ?? NSUIColor(hex: 0000000))
         }
-        
-        categoryColor.append(gray)
         categoryColor.append(gold)
         
-        let final = categoryColor
-        
-        chartDataSet.colors = final
+        chartDataSet.colors = categoryColor
         circleView.data = chartData
     }
     
@@ -262,21 +184,24 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             })
     }
     
-    
-    
-    
     //==========================================
     //          BASIC SETUP
     //==========================================
     func addButton() {
+        let checkStatus = realm.objects(TimerStatus.self).first
+
         mainButton = UIButton(type: .custom)
         mainButton.frame = CGRect(x: 160, y: 100, width: 200, height: 200)
         mainButton.layer.cornerRadius = 0.5 * mainButton.bounds.size.width
         mainButton.clipsToBounds = true
         mainButton.translatesAutoresizingMaskIntoConstraints = false
-        
         mainButton.addTarget(self, action: #selector(HomeViewController.startTapped), for: .touchUpInside)
-        mainButton.setTitle("Start", for: .normal)
+        if(checkStatus!.timerRunning) {
+            mainButton.setTitle("STOP", for: .normal)
+        }
+        else {
+            mainButton.setTitle("START", for: .normal)
+        }
         mainButton.titleLabel?.font = UIFont(name:"Futura", size: 60)
         mainButton.setTitleColor(.black, for: .normal)
         mainButton.backgroundColor = .white
@@ -309,7 +234,16 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         view.addSubview(selectedTaskName)
         
     }
-    
+    // gathers active tasks from Realm
+    func fetchData() {
+        let activeCategories = realm.objects(Category.self)
+        active_categories.removeAll()
+        for cat in activeCategories {
+            active_categories.append(cat)
+        }
+        
+        self.colorOf["Unscheduled"] = gray
+    }
     
     func setupView() {
         circleView = PieChartView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
@@ -350,9 +284,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         ref = Database.database().reference()
-        
-        addObservers()
-        
+                
         // updates category list if new category added
         handle = ref?.child(USER_PATH + "/active").observe(.childAdded, with: { (snapshot) in
             //get name of category
@@ -387,77 +319,17 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         view.backgroundColor = .white
         self.navigationItem.rightBarButtonItem = addTaskButton
         
+        fetchData()
         setupView()
         addButton()
         addLabel()
         
         selectedTaskName.text = "Select a task"
+        
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: #selector(self.updateChart), userInfo: nil, repeats: true)
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        updateChart()
-    }
-    
-    
-    /*
-    func restartTimer() {
-        // check if task timer was running
-        isTimerRunning = (UserDefaults.standard.object(forKey: "isTimerRunning") != nil)
-        
-        let passedSeconds = UserDefaults.standard.integer(forKey: "secondsInBackground")
-        self.seconds -= passedSeconds
-        self.secondsCompleted += passedSeconds
-        
-        updateChart()
-        
-        // restart task timer
-        if(isTimerRunning) {
-            startTimer()
-        }
-        else {
-            startUnscheduledTimer() //restart freetime timer
-        }
-    }*/
-    
-    
-    
-    
-    //===========================================================
-    //           OBSERVERS
-    //===========================================================
-    
-    
-    @objc func appLoadedFromBackground() {
-        print("=============== APP LOADED FROM BACKGROUND ================")
-        //let hasCompletedTutorial = UserDefaults.standard.object(forKey: "hasCompletedTutorial")
-
-    }
-    
-    @objc func appGoesIntoBackground() {
-        quitDate = Date()
-        
-        UserDefaults.standard.set(isTimerRunning, forKey: "isTimerRunning")
-        
-    }
-    
-    @objc func appBecameActive() {
-        print("============= APP BECAME ACTIVE ==============")
-    }
-    
-    func addObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(appGoesIntoBackground),
-                                               name: UIApplication.willResignActiveNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appLoadedFromBackground),
-                                               name: UIApplication.willEnterForegroundNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appBecameActive),
-                                               name: UIApplication.didBecomeActiveNotification, object:nil)
-    }
-    
-    func resetObservers() {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-    deinit {
-        resetObservers()
+        fetchData()
     }
 }

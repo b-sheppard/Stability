@@ -23,12 +23,65 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
                 .observeSingleEvent(of: .value, with: {(snapshot) in
                 let taskValue = snapshot.value! as! Int
                 newTime += taskValue
+                    
                 //adds total time to active list
                 self.ref?.child(USER_PATH + "/active").child(self.name).setValue(newTime)
                     
                 //create reference to active tasks (stored in categories)
                 self.ref?.child(USER_PATH + "/categories").child(self.name).child("Active")
                         .child(self.tasks[indexPath.row]).setValue(taskValue)
+                    
+                //REALM
+                let predicate = NSPredicate(format: "name = %@", self.name)
+                let unscheduled = realm.objects(Category.self).filter("name = 'Unscheduled'").first
+                let runningCategory = realm.objects(Category.self).filter(predicate).first
+                var newCategoryTime = taskValue
+                    
+                // add task to realm
+                let Tpredicate = NSPredicate(format: "name = %@", self.tasks[indexPath.row])
+                let doesExist = realm.objects(Task.self).filter(Tpredicate).first
+                let newTask = Task()
+                if(doesExist != nil) { print("Task already active") }
+                else {
+                    newTask.category = self.name
+                    newTask.name = self.tasks[indexPath.row]
+                    newTask.duration = taskValue
+                }
+                    
+                // edge case if timer isn't running
+                if balanceTimer.categorySelected == "Unscheduled" {
+                    try! realm.write {
+                        unscheduled!.duration = balanceTimer.timeRemaining
+                    }
+                }
+                // category doesn't exist
+                if(runningCategory == nil) {
+                    let categoryToAdd = Category()
+                    categoryToAdd.duration = newCategoryTime
+                    categoryToAdd.name = self.name
+                    try! realm.write {
+                        realm.add(categoryToAdd)
+                        unscheduled!.duration -= newCategoryTime
+                        
+                        //add task
+                        realm.add(newTask)
+                    }
+                }
+                // category exists
+                else {
+                    try! realm.write {
+                        unscheduled!.duration -= newCategoryTime
+                        newCategoryTime += runningCategory!.duration
+                        runningCategory!.duration = newCategoryTime
+                        
+                        // add task
+                        realm.add(newTask)
+                    }
+                }
+                // edge case if timer isn't running
+                if balanceTimer.categorySelected == "Unscheduled" {
+                    balanceTimer.timeRemaining = unscheduled!.duration
+                }
             })
         })
     }
