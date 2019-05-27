@@ -13,13 +13,15 @@ import Charts
 
 
 class HomeViewController: UIViewController, ChartViewDelegate {
+    let white = UIColor(hex:15460841)
+    let gray = UIColor(hex:5263695)
+    
     //database variables
     var ref:DatabaseReference?
     var handle:DatabaseHandle?
     var circleView: PieChartView!
     
     //color variables
-    let gray = NSUIColor(hex: 8424342) //gray color
     let gold = NSUIColor(hex: 16766720) //gold color
     
     //active category variables
@@ -41,6 +43,9 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     //==========================================
     //          SCHEDULED TIMER
     //==========================================
+    @objc public func longPress() {
+        
+    }
     @objc public func startTapped() {
         let checkStatus = uirealm.objects(TimerStatus.self).first
 
@@ -270,13 +275,21 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     //==========================================
     func addButton() {
         let checkStatus = uirealm.objects(TimerStatus.self).first
+        
+        //tap
+        let tap = UITapGestureRecognizer(target: self, action: #selector(HomeViewController.startTapped))
+        //long press
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(HomeViewController.longPress))
+        longPress.minimumPressDuration = 3
 
         mainButton = UIButton(type: .custom)
         mainButton.frame = CGRect(x: 160, y: 100, width: 200, height: 200)
         mainButton.layer.cornerRadius = 0.5 * mainButton.bounds.size.width
         mainButton.clipsToBounds = true
         mainButton.translatesAutoresizingMaskIntoConstraints = false
-        mainButton.addTarget(self, action: #selector(HomeViewController.startTapped), for: .touchUpInside)
+        mainButton.addGestureRecognizer(tap)
+        mainButton.addGestureRecognizer(longPress)
+        //mainButton.addTarget(self, action: #selector(HomeViewController.startTapped), for: .touchUpInside)
         if(checkStatus!.timerRunning) {
             mainButton.setTitle("STOP", for: .normal)
         }
@@ -285,7 +298,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         }
         mainButton.titleLabel?.font = UIFont(name:"Futura", size: 60)
         mainButton.setTitleColor(.black, for: .normal)
-        mainButton.backgroundColor = .white
+        mainButton.backgroundColor = white
         
         view.addSubview(mainButton)
         
@@ -307,7 +320,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         selectedTaskName.frame = CGRect(x: screensize.width/2, y: 50, width: 300, height: 50)
         selectedTaskName.center.x = screensize.width/2
         selectedTaskName.center.y = screensize.height/7
-        selectedTaskName.backgroundColor = .white
+        selectedTaskName.backgroundColor = white
         selectedTaskName.text = "Select a task"
         selectedTaskName.textAlignment = .center
         selectedTaskName.textColor = .black
@@ -328,7 +341,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     
     func setupView() {
         circleView = PieChartView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
-        circleView.backgroundColor = .white
+        circleView.backgroundColor = white
         circleView.clipsToBounds = true
         circleView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -373,7 +386,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
                                          target: self,
                                          action: #selector(HomeViewController.addButtonTapped))
         
-        view.backgroundColor = .white
+        view.backgroundColor = white
         self.navigationItem.rightBarButtonItem = addTaskButton
         self.navigationItem.rightBarButtonItem?.tintColor = gray
         

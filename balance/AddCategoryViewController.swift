@@ -12,15 +12,29 @@ import FirebaseDatabase
 import Charts
 
 class AddCategoryViewController: UIViewController, UITextFieldDelegate {
-    let MAX_COLORS = 8;
+    let MAX_COLORS = 9;
     var ref:DatabaseReference?
     var categoryTextField:UITextField!
 
-    lazy var colors = ["yellow", "red", "blue",
-                       "green", "pink", "gray",
-                       "purple", "blue"]
+    lazy var colors = ["yellow",
+                       "red",
+                       "blue",
+                       "green",
+                       "pink",
+                       "purple",
+                       "b2",
+                       "orange",
+                        "o2"]
     
-    lazy var colors_int = [16777040,16727110,3978495,0x1AEE84,16751560,10660016,10178805, 65535]
+    var colors_int = [14596161,
+                      16463424,
+                      2390944,
+                      12120806,
+                      16746716,
+                      8354991,
+                      65535,
+                      16754334,
+                      16746513]
     /*lazy var colors_int = [65535, 16728064, 16760576,
                            8388863, 16741363, 7602058,
                            16743027, 16034113]*/

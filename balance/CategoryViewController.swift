@@ -11,6 +11,8 @@ import UIKit
 import FirebaseDatabase
 
 class CategoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    let white = UIColor(hex:15460841)
+    let gray = UIColor(hex:5263695)
     
     //cell is tapped
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -87,7 +89,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
         cell.textLabel!.text = tasks[indexPath.row]
-        cell.textLabel!.textColor = .white
+        cell.textLabel!.textColor = white
         cell.textLabel!.font = UIFont(name:"Futura", size: 30)
         cell.backgroundColor = color
         cell.accessoryType = .disclosureIndicator
@@ -122,13 +124,12 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     
     @objc func homeButtonTapped() {
         let  vc =  self.navigationController?.viewControllers.filter({$0 is HomeViewController}).first
-        navigationController?.navigationBar.barTintColor = .white
+        navigationController?.navigationBar.barTintColor = white
         self.navigationController?.popToViewController(vc!, animated: true)
     }
     //create right bar item
     let homeButton: UIBarButtonItem = {
         let barButtonItem = UIBarButtonItem(title: "Add Task", style: .plain, target: self, action: #selector(homeButtonTapped))
-        barButtonItem.tintColor = .white
         return barButtonItem
     }()
     
@@ -209,7 +210,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         deleteButton.setTitle("Delete Category", for: .normal)
         deleteButton.titleLabel?.font = UIFont(name:"Futura", size: 30)
         deleteButton.setTitleColor(.red, for: .normal)
-        deleteButton.backgroundColor = .white
+        deleteButton.backgroundColor = white
         deleteButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
         deleteButton.layer.cornerRadius = 10
         self.view.addSubview(deleteButton)

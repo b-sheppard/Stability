@@ -13,7 +13,8 @@ import RealmSwift
 
 class TaskViewController: UIViewController, UITextFieldDelegate {
     
-    let gray = UIColor(hex: colors[7])
+    let white = UIColor(hex:15460841)
+    let gray = UIColor(hex:5263695)
     
     let MAX_CATEGORIES = 9;
     var categoryNames:[String] = ["+"]
@@ -26,7 +27,7 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
     // go to homeview
     @objc public func homeButtonTapped() {
         let  vc =  self.navigationController?.viewControllers.filter({$0 is HomeViewController}).first
-        navigationController?.navigationBar.barTintColor = .white
+        navigationController?.navigationBar.barTintColor = white
         self.navigationController?.popToViewController(vc!, animated: true)
     } // homeButtonTapped()
 
@@ -90,7 +91,7 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
         scrollView = UIScrollView(frame: CGRect(x: 0, y: 2*screenHeight/8, width: scrollWidth, height: 3*scrollHeight/2))
         scrollView.isScrollEnabled = true
         scrollView.isUserInteractionEnabled = true
-        scrollView.backgroundColor = gray
+        scrollView.backgroundColor = white
         
         scrollView.showsHorizontalScrollIndicator = true;
         scrollView.showsVerticalScrollIndicator = true;
@@ -115,8 +116,8 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
             if category == "+" {
                 button.setTitle(category, for: .normal)
                 button.titleLabel?.font = UIFont(name:"Futura", size: 80)
-                button.setTitleColor(.white, for: .normal)
-                button.backgroundColor = gray //gray
+                button.setTitleColor(gray, for: .normal)
+                button.backgroundColor = white //gray
                 button.addTarget(self, action: #selector(buttonTapped(sender:)), for: .touchUpInside)
             }
             else {
@@ -148,7 +149,7 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
         taskTextField.placeholder = "this does nothing... for now"
         taskTextField.font = UIFont(name:"Futura", size: 20);
         taskTextField.keyboardAppearance = .dark
-        taskTextField.textColor = .white
+        taskTextField.textColor = white
         
         view.addSubview(taskTextField)
     } //createTextField()
@@ -189,7 +190,7 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
             }
         })
 
-        view.backgroundColor = gray
+        view.backgroundColor = white
 
         self.hideKeyboardWhenTappedAround()
         self.createTextField()

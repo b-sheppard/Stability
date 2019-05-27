@@ -11,6 +11,8 @@ import UIKit
 import FirebaseDatabase
 
 class AddTaskViewController: UIViewController, UITextFieldDelegate {
+    let white = UIColor(hex:15460841)
+    let gray = UIColor(hex:5263695)
     
     var color:UIColor!
     var ref:DatabaseReference?
@@ -75,7 +77,7 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
         timePicker = UIDatePicker(frame: CGRect(x: 0, y: Int(height/4), width: Int(width), height: Int(height/4)))
         timePicker.backgroundColor = color
         timePicker.datePickerMode = .countDownTimer
-        timePicker.tintColor = .white
+        timePicker.tintColor = white
         
         view.addSubview(timePicker)
         
@@ -119,7 +121,7 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
         let screenHeight = screensize.height
         
         taskTextField = UITextField(frame: CGRect(x: 20, y: screenHeight/10, width: screenWidth - 40, height: 60))
-        taskTextField.backgroundColor = .white
+        taskTextField.backgroundColor = white
         taskTextField.borderStyle = .roundedRect
         taskTextField.placeholder = "Give your task a name..."
         taskTextField.font = UIFont.systemFont(ofSize: 20.0);

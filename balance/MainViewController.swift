@@ -26,9 +26,20 @@ extension UIViewController {
 //let colors : [Int] = [0x1AEEEE, 0xEE1AEE, 0x1AEE84, 0xEEEE1A, 0x900C3F, 0x808B96]
 
 //["yellow", "red", "blue","green", "pink", "purple", "blue","gray"]
-let colors : [Int] = [16777040,16727110,3978495,0x1AEE84,16751560,10178805, 65535,10660016]
+//let colors : [Int] = [16777040,16727110,3978495,0x1AEE84,16751560,10178805, 65535,10660016]
+let colors = [14596161,
+              16463424,
+              2390944,
+              12120806,
+              16746716,
+              8354991,
+              65535,
+              16746513]
 
 class MainViewController: UIViewController {
+    
+    let white = UIColor(hex:15460841)
+    let gray = UIColor(hex:5263695)
     
     let categoryNames = ["Work", "Health", "Social", "Sleep", "Chores", "FOO", "BAR","BAZ"]
     
@@ -49,8 +60,8 @@ class MainViewController: UIViewController {
         mainButton.addTarget(self, action: #selector(MainViewController.buttonTapped), for: .touchUpInside)
         mainButton.setTitle("+", for: .normal)
         mainButton.titleLabel?.font = UIFont(name:"Futura", size: 60)
-        mainButton.setTitleColor(UIColor(hex: colors[7]), for: .normal)
-        mainButton.backgroundColor = .white
+        mainButton.setTitleColor(gray, for: .normal)
+        mainButton.backgroundColor = white
         
         view.addSubview(mainButton)
         
@@ -83,7 +94,7 @@ class MainViewController: UIViewController {
         ref = Database.database().reference()
         navigationController?.isNavigationBarHidden = true
 
-        view.backgroundColor = UIColor(hex: colors[7])
+        view.backgroundColor = gray
         addButton()
         createDatabase()
         

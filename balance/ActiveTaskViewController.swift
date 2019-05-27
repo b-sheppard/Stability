@@ -12,6 +12,8 @@ import FirebaseDatabase
 
 class ActiveTaskViewController: UIViewController,
         UITableViewDelegate, UITableViewDataSource {
+    let white = UIColor(hex:15460841)
+    let gray = UIColor(hex:5263695)
     
     //cell is tapped
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -44,7 +46,7 @@ class ActiveTaskViewController: UIViewController,
         cell?.detailTextLabel?.text = String(times[tasks[indexPath.row]]!)
         cell?.accessoryType = .disclosureIndicator
         cell?.backgroundColor = color
-        cell?.textLabel?.textColor = .white
+        cell?.textLabel?.textColor = white
         return cell ?? cell2
     }
     
@@ -69,6 +71,7 @@ class ActiveTaskViewController: UIViewController,
     var ref:DatabaseReference?
     var handle:DatabaseHandle?
     var tableView: UITableView!
+    var descriptionLabel = UILabel()
     
     @objc func homeButtonTapped() {
         let  vc =  self.navigationController?.viewControllers.filter({$0 is HomeViewController}).first
@@ -82,20 +85,8 @@ class ActiveTaskViewController: UIViewController,
         return barButtonItem
     }()
     
-    @objc func buttonTapped() {
-        deleteCategory()
-    }
-    
     @objc func addButtonTapped() {
         addTaskView()
-    }
-    
-    //deletes category from database
-    func deleteCategory() {
-        ref?.child(USER_PATH + "/categories").child(name).removeValue()
-        ref?.child(USER_PATH + "/active").child(name).removeValue()
-        
-        navigationController?.popViewController(animated: true)
     }
     
     //edit with info
@@ -176,6 +167,21 @@ class ActiveTaskViewController: UIViewController,
         self.removeFromParent()
     }
     
+    func addDescription() {
+        let screensize: CGRect = UIScreen.main.bounds
+        descriptionLabel.frame = CGRect(x: screensize.width/2, y: screensize.height,
+                                   width: screensize.width, height: 200)
+        descriptionLabel.center.x = screensize.width/2
+        descriptionLabel.center.y = 3*screensize.height/4
+        descriptionLabel.backgroundColor = color
+        descriptionLabel.numberOfLines = 0
+        descriptionLabel.text = "Tap a task to make active\nthen go back and press START"
+        descriptionLabel.textAlignment = .center
+        descriptionLabel.textColor = white
+        descriptionLabel.font = UIFont(name: "Futura", size: 20)
+        
+        self.view.addSubview(descriptionLabel)
+    }
     func setupView() {
         //initial positions
         let screensize: CGRect = UIScreen.main.bounds
@@ -254,5 +260,6 @@ class ActiveTaskViewController: UIViewController,
             }
         })*/
         setupView()
+        addDescription()
     }
 }

@@ -16,7 +16,6 @@ var uirealm = try! Realm() // realm file
 var firstTime = true
 var balanceTimer = BalanceTimer() // custom timer
 let USER_PATH = "Users" // path to user
-let white = 15790320
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
