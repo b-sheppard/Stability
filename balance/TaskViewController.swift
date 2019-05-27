@@ -25,7 +25,6 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
     
     // go to homeview
     @objc public func homeButtonTapped() {
-        print("Home button pressed")
         let  vc =  self.navigationController?.viewControllers.filter({$0 is HomeViewController}).first
         
         self.navigationController?.popToViewController(vc!, animated: true)
@@ -181,6 +180,7 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
             if let item = snapshot.childSnapshot(forPath: "/Name").value as? String {
                 if let position = self.categoryNames.firstIndex(of: item) {
                     self.categoryNames.remove(at: position)
+                    self.categoryColors.remove(at: position)
                     print(item + " category removed")
                 }
                 self.createScrollView()

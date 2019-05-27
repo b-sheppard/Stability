@@ -74,7 +74,6 @@ class AddCategoryViewController: UIViewController, UITextFieldDelegate {
         }
         if text != "" {
             print("Add " + text)
-            ref?.child(USER_PATH + "/active/\(text)/").setValue(0)
             ref?.child(USER_PATH + "/categories/\(text)/").setValue(["Color" : colorPicked,
                                                            "Name" : text,
                                                            "Tasks" : ""])

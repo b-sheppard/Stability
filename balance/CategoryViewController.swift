@@ -14,82 +14,69 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     
     //cell is tapped
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //get current number of active minutes
-        ref?.child(USER_PATH + "/active").child(name).observeSingleEvent(of: .value, with: {(snapshot) in
-            var newTime = snapshot.value! as! Int
-            
-            //adds selected number of active minutes to the total
-            self.ref?.child(USER_PATH + "/categories/" + self.path).child(self.tasks[indexPath.row])
-                .observeSingleEvent(of: .value, with: {(snapshot) in
-                let taskValue = snapshot.value! as! Int
-                newTime += taskValue
-                    
-                //adds total time to active list
-                self.ref?.child(USER_PATH + "/active").child(self.name).setValue(newTime)
-                    
-                //create reference to active tasks (stored in categories)
-                self.ref?.child(USER_PATH + "/categories").child(self.name).child("Active")
-                        .child(self.tasks[indexPath.row]).setValue(taskValue)
-                    
-                //REALM
-                let predicate = NSPredicate(format: "name = %@", self.name)
-                let unscheduled = uirealm.objects(Category.self).filter("name = 'Unscheduled'").first
-                let unscheduledTask = uirealm.objects(Task.self).filter("name = 'Unscheduled'").first
-                let runningCategory = uirealm.objects(Category.self).filter(predicate).first
-                var newCategoryTime = taskValue
-                    
-                // add task to realm
-                let Tpredicate = NSPredicate(format: "name = %@", self.tasks[indexPath.row])
-                let doesExist = uirealm.objects(Task.self).filter(Tpredicate).first
-                let newTask = Task()
-                if(doesExist != nil) { print("Task already active") }
-                else {
-                    newTask.category = self.name
-                    newTask.name = self.tasks[indexPath.row]
-                    newTask.duration = taskValue
-                 //   newTask.duration = 5
+        //adds selected number of active minutes to the total
+        self.ref?.child(USER_PATH + "/categories/" + self.path).child(self.tasks[indexPath.row])
+            .observeSingleEvent(of: .value, with: {(snapshot) in
+            let taskValue = snapshot.value! as! Int
+                
+            //REALM
+            let predicate = NSPredicate(format: "name = %@", self.name)
+            let unscheduled = uirealm.objects(Category.self).filter("name = 'Unscheduled'").first
+            let unscheduledTask = uirealm.objects(Task.self).filter("name = 'Unscheduled'").first
+            let runningCategory = uirealm.objects(Category.self).filter(predicate).first
+            var newCategoryTime = taskValue
+                
+            // add task to realm
+            let Tpredicate = NSPredicate(format: "name = %@", self.tasks[indexPath.row])
+            let doesExist = uirealm.objects(Task.self).filter(Tpredicate).first
+            let newTask = Task()
+            if(doesExist != nil) { print("Task already active") }
+            else {
+                newTask.category = self.name
+                newTask.name = self.tasks[indexPath.row]
+                newTask.duration = taskValue
+             //   newTask.duration = 5
+            }
+                
+            // edge case if timer isn't running
+            if balanceTimer.categorySelected == "Unscheduled" {
+                try! uirealm.write {
+                    unscheduled!.duration = balanceTimer.timeRemaining
+                    unscheduledTask!.duration = balanceTimer.timeRemainingInTask
                 }
+            }
+            // category doesn't exist
+            if(runningCategory == nil) {
+                let categoryToAdd = Category()
+                categoryToAdd.duration = newCategoryTime
+                //categoryToAdd.duration = 5
+                categoryToAdd.name = self.name
+                try! uirealm.write {
+                    uirealm.add(categoryToAdd)
+                    unscheduled!.duration -= newCategoryTime
+                    unscheduledTask!.duration -= newCategoryTime
                     
-                // edge case if timer isn't running
-                if balanceTimer.categorySelected == "Unscheduled" {
-                    try! uirealm.write {
-                        unscheduled!.duration = balanceTimer.timeRemaining
-                        unscheduledTask!.duration = balanceTimer.timeRemainingInTask
-                    }
+                    //add task
+                    uirealm.add(newTask)
                 }
-                // category doesn't exist
-                if(runningCategory == nil) {
-                    let categoryToAdd = Category()
-                    categoryToAdd.duration = newCategoryTime
-                    //categoryToAdd.duration = 5
-                    categoryToAdd.name = self.name
-                    try! uirealm.write {
-                        uirealm.add(categoryToAdd)
-                        unscheduled!.duration -= newCategoryTime
-                        unscheduledTask!.duration -= newCategoryTime
-                        
-                        //add task
-                        uirealm.add(newTask)
-                    }
+            }
+            // category exists
+            else {
+                try! uirealm.write {
+                    unscheduled!.duration -= newCategoryTime
+                    unscheduledTask!.duration -= newCategoryTime
+                    newCategoryTime += runningCategory!.duration
+                    runningCategory!.duration = newCategoryTime
+                    
+                    // add task
+                    uirealm.add(newTask)
                 }
-                // category exists
-                else {
-                    try! uirealm.write {
-                        unscheduled!.duration -= newCategoryTime
-                        unscheduledTask!.duration -= newCategoryTime
-                        newCategoryTime += runningCategory!.duration
-                        runningCategory!.duration = newCategoryTime
-                        
-                        // add task
-                        uirealm.add(newTask)
-                    }
-                }
-                // edge case if timer isn't running
-                if balanceTimer.categorySelected == "Unscheduled" {
-                    balanceTimer.timeRemaining = unscheduled!.duration
-                    balanceTimer.timeRemainingInTask = unscheduledTask!.duration
-                }
-            })
+            }
+            // edge case if timer isn't running
+            if balanceTimer.categorySelected == "Unscheduled" {
+                balanceTimer.timeRemaining = unscheduled!.duration
+                balanceTimer.timeRemainingInTask = unscheduledTask!.duration
+            }
         })
     }
     
@@ -149,8 +136,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     
     //deletes category from database
     func deleteCategory() {
-        ref?.child("categories").child(name).removeValue()
-        ref?.child("active").child(name).removeValue()
+        ref?.child(USER_PATH).child("categories").child(name).removeValue()
         
         navigationController?.popViewController(animated: true)
     }
