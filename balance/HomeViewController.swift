@@ -243,6 +243,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         let chartData = PieChartData(dataSet: chartDataSet)
         var categoryColor : [NSUIColor] = []
         for cat in active_categories {
+            updateColor(category: cat.name)
             categoryColor.append(colorOf[cat.name] ?? NSUIColor(hex: 0000000))
         }
         categoryColor.append(gold)
@@ -253,6 +254,10 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     
     // updates colors (name of category as key)
     func updateColor(category: String) {
+        if category == "Unscheduled" {
+            self.colorOf[category] = gray
+            return
+        }
         ref?.child(USER_PATH + "/categories").child(category).child("Color")
             .observeSingleEvent(of: .value, with: { (snapshot) in
                 let color = NSUIColor(hex: snapshot.value! as! Int)
@@ -360,30 +365,6 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         ref = Database.database().reference()
-                
-        // updates category list if new category added
-        handle = ref?.child(USER_PATH + "/active").observe(.childAdded, with: { (snapshot) in
-            //get name of category
-            let categoryName = snapshot.key
-            self.timeOf[categoryName] = snapshot.value as? Int
-            self.updateColor(category: categoryName)
-        })
-        
-        // updates category list if new category deleted
-        handle = ref?.child(USER_PATH + "/active").observe(.childRemoved, with: { (snapshot) in
-            let categoryName = snapshot.key
-            self.timeOf.removeValue(forKey: categoryName)
-            self.colorOf.removeValue(forKey: categoryName)
-            self.updateChart()
-        })
-        
-        
-        //updates when value changes in firebase
-        handle = ref?.child(USER_PATH + "/active").observe(.childChanged, with: { (snapshot) in
-            let categoryName = snapshot.key
-            self.timeOf[categoryName] = snapshot.value as? Int
-            self.updateChart()
-        })
         
         // self.navigationController?.isNavigationBarHidden = true;
         

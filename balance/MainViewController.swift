@@ -27,7 +27,7 @@ let colors : [Int] = [0x1AEEEE, 0xEE1AEE, 0x1AEE84, 0xEEEE1A, 0x900C3F, 0x808B96
 
 class MainViewController: UIViewController {
     
-    let categoryNames = ["Work", "Health", "Social", "Sleep", "Hobbies"]
+    let categoryNames = ["Work", "Health", "Social", "Sleep", "Chores"]
     
     var ref:DatabaseReference?
 
@@ -69,10 +69,7 @@ class MainViewController: UIViewController {
         while i < 5 {
             ref?.child(USER_PATH + "/categories").child(categoryNames[i]).setValue(["Color" : colors[i],
                                                                        "Name" : categoryNames[i],
-                                                                       "Tasks" : "",
-                                                                       "Active" : ""])
-            ref?.child(USER_PATH + "/active").child(categoryNames[i]).setValue(0)
-            ref?.child(USER_PATH + "/selected").setValue("")
+                                                                       "Tasks" : ""])
             i += 1
         }
     }
