@@ -200,7 +200,13 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         if(balanceTimer.timeRemainingInTask <= 0) {
             taskFinished()
         }
-        
+        //update label above chart
+        if balanceTimer.taskSelected == "Unscheduled" {
+            selectedTaskName.text = "Select a Task"
+        }
+        else {
+            selectedTaskName.text = balanceTimer.taskSelected
+        }
         var categories : [PieChartDataEntry] = Array()
         
         //get times of categories
@@ -233,6 +239,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         categoryPosition[String(position)] = "Completed"
         
         let chartDataSet = PieChartDataSet(entries: categories, label: nil)
+        chartDataSet.selectionShift = 0
         let chartData = PieChartData(dataSet: chartDataSet)
         var categoryColor : [NSUIColor] = []
         for cat in active_categories {
@@ -327,16 +334,16 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         circleView.rotationEnabled = true
         circleView.isUserInteractionEnabled = true
         circleView.legend.enabled = false
-        
+        //circleView.highlightPerTapEnabled = false
         view.addSubview(circleView)
         
         let horizontalCenter = NSLayoutConstraint(item: circleView, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: 0)
         
         let verticalCenter = NSLayoutConstraint(item: circleView, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1.0, constant: 0)
         
-        let width = NSLayoutConstraint(item: circleView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1.0, constant: 400)
+        let width = NSLayoutConstraint(item: circleView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1.0, constant: 350)
         
-        let height = NSLayoutConstraint(item: circleView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1.0, constant: 400)
+        let height = NSLayoutConstraint(item: circleView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1.0, constant: 350)
         
         let constraints: [NSLayoutConstraint] = [horizontalCenter, verticalCenter, width, height]
         NSLayoutConstraint.activate(constraints)
