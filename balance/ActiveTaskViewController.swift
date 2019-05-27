@@ -43,6 +43,8 @@ class ActiveTaskViewController: UIViewController,
         cell?.textLabel!.text = tasks[indexPath.row]
         cell?.detailTextLabel?.text = String(times[tasks[indexPath.row]]!)
         cell?.accessoryType = .disclosureIndicator
+        cell?.backgroundColor = color
+        cell?.textLabel?.textColor = .white
         return cell ?? cell2
     }
     
@@ -189,6 +191,8 @@ class ActiveTaskViewController: UIViewController,
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.backgroundColor = color
+        tableView.separatorColor = UIColor.black.withAlphaComponent(0.4)
         self.view.addSubview(tableView)
         
         //create cancel button
@@ -201,7 +205,7 @@ class ActiveTaskViewController: UIViewController,
         cancelButton.tintColor = .black
         
         self.navigationController?.isNavigationBarHidden = false
-        self.view.addSubview(cancelButton)
+        //self.view.addSubview(cancelButton)
 
     }
     

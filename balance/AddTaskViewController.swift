@@ -20,6 +20,8 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
     var path:String!
     var isOld:Bool = false
     
+    let secondaryColor = UIColor.black.withAlphaComponent(0.4)
+    
     func setupView() {
         //initial positions
         let screensize: CGRect = UIScreen.main.bounds
@@ -31,20 +33,20 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
         //create cancel button
         let cancelButton = UIButton(type: .custom)
         cancelButton.setTitle("Cancel", for: .normal)
-        cancelButton.setTitleColor(.black, for: .normal)
+        cancelButton.setTitleColor(secondaryColor, for: .normal)
         cancelButton.frame = CGRect(x: 10, y: 0, width: 60, height: 60)
-        cancelButton.tintColor = .black
+        cancelButton.tintColor = secondaryColor
         cancelButton.addTarget(self, action: #selector(AddCategoryViewController.CancelClicked), for: .touchUpInside)
-        cancelButton.tintColor = .black
+        cancelButton.tintColor = secondaryColor
         
         //create save button
         let saveButton = UIButton(type: .custom)
         saveButton.setTitle("Save", for: .normal)
-        saveButton.setTitleColor(.black, for: .normal)
+        saveButton.setTitleColor(secondaryColor, for: .normal)
         saveButton.frame = CGRect(x: width - 70, y: 0, width: 60, height: 60)
-        saveButton.tintColor = .black
+        saveButton.tintColor = secondaryColor
         saveButton.addTarget(self, action:#selector(AddCategoryViewController.SaveClicked), for: .touchUpInside)
-        cancelButton.tintColor = .black
+        cancelButton.tintColor = secondaryColor
         
         //title ("New Task" by default)
         let title = UILabel(frame: CGRect(x: (width/2 - 100), y: 0, width: 200, height: 80))
@@ -66,13 +68,14 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
         let label = UILabel()
         label.frame = CGRect(x:20, y: Int(height/4) - 40, width: 100, height: 20)
         label.text = "Duration"
-        label.textColor = .black
+        label.textColor = secondaryColor
         view.addSubview(label)
         
         
         timePicker = UIDatePicker(frame: CGRect(x: 0, y: Int(height/4), width: Int(width), height: Int(height/4)))
-        timePicker.backgroundColor = .white
+        timePicker.backgroundColor = color
         timePicker.datePickerMode = .countDownTimer
+        timePicker.tintColor = .white
         
         view.addSubview(timePicker)
         
