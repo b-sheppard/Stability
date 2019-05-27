@@ -106,7 +106,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     //==========================================
     
     @objc func addButtonTapped() {
-        print("Go to Task")
+        navigationController?.navigationBar.barTintColor = gray
         let taskViewController = TaskViewController()
         navigationController?.pushViewController(taskViewController, animated: true)
     }
@@ -375,6 +375,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         
         view.backgroundColor = .white
         self.navigationItem.rightBarButtonItem = addTaskButton
+        self.navigationItem.rightBarButtonItem?.tintColor = gray
         
         fetchData()
         setupView()

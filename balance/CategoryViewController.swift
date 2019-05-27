@@ -87,6 +87,9 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
         cell.textLabel!.text = tasks[indexPath.row]
+        cell.textLabel!.textColor = .white
+        cell.textLabel!.font = UIFont(name:"Futura", size: 30)
+        cell.backgroundColor = color
         cell.accessoryType = .disclosureIndicator
         return cell
     }
@@ -110,19 +113,22 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     var path:String!
     var color:UIColor!
     
+    let secondaryColor = UIColor.black.withAlphaComponent(0.4)
+    //let secondaryColor = UIColor.white
+    
     var ref:DatabaseReference?
     var handle:DatabaseHandle?
     var tableView: UITableView!
     
     @objc func homeButtonTapped() {
         let  vc =  self.navigationController?.viewControllers.filter({$0 is HomeViewController}).first
-        
+        navigationController?.navigationBar.barTintColor = .white
         self.navigationController?.popToViewController(vc!, animated: true)
     }
     //create right bar item
     let homeButton: UIBarButtonItem = {
         let barButtonItem = UIBarButtonItem(title: "Add Task", style: .plain, target: self, action: #selector(homeButtonTapped))
-        barButtonItem.tintColor = .red
+        barButtonItem.tintColor = .white
         return barButtonItem
     }()
     
@@ -190,6 +196,8 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.backgroundColor = color
+        tableView.separatorColor = secondaryColor
         self.view.addSubview(tableView)
         
         //delete button
@@ -214,7 +222,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         
         button.setTitle("+", for: .normal)
         button.titleLabel?.font = UIFont(name:"Futura", size: 80)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(secondaryColor, for: .normal)
         button.backgroundColor = color //current color
         button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         self.view.addSubview(button)
@@ -228,9 +236,10 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
                                          style: .plain,
                                          target: self,
                                          action: #selector(TaskViewController.homeButtonTapped))
-        homeButton.tintColor = .red
+        homeButton.tintColor = secondaryColor
         self.navigationItem.rightBarButtonItem = homeButton
-    
+
+        navigationController?.navigationBar.barTintColor = color
         ref = Database.database().reference()
         
         path = self.name + "/Tasks/"

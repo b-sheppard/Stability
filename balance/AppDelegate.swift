@@ -16,6 +16,7 @@ var uirealm = try! Realm() // realm file
 var firstTime = true
 var balanceTimer = BalanceTimer() // custom timer
 let USER_PATH = "Users" // path to user
+let white = 15790320
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -25,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
-        
+                
         let mainNavigationController = MainNavigationController()
         mainNavigationController.title = "MainNG"
         
@@ -33,7 +34,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let mainViewController = MainViewController() //plus
         let taskViewController = TaskViewController() // task
         let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
-        //mainViewController.title = "ADD A TASK"
         
        // mainNavigationController.viewControllers = [mainViewController]
  
@@ -73,6 +73,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         window?.rootViewController = mainNavigationController
+        
+        // removes shadow
+        UINavigationBar.appearance().shadowImage = UIImage()
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+        UINavigationBar.appearance().tintColor = UIColor.black.withAlphaComponent(0.4)
         
         return true
     }

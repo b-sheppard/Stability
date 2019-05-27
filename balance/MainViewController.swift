@@ -23,11 +23,14 @@ extension UIViewController {
 }
 
 //[blue, pink, green, yellow, brown, gray]
-let colors : [Int] = [0x1AEEEE, 0xEE1AEE, 0x1AEE84, 0xEEEE1A, 0x900C3F, 0x808B96]
+//let colors : [Int] = [0x1AEEEE, 0xEE1AEE, 0x1AEE84, 0xEEEE1A, 0x900C3F, 0x808B96]
+
+//["yellow", "red", "blue","green", "pink", "purple", "blue","gray"]
+let colors : [Int] = [16777040,16727110,3978495,0x1AEE84,16751560,10178805, 65535,10660016]
 
 class MainViewController: UIViewController {
     
-    let categoryNames = ["Work", "Health", "Social", "Sleep", "Chores"]
+    let categoryNames = ["Work", "Health", "Social", "Sleep", "Chores", "FOO", "BAR","BAZ"]
     
     var ref:DatabaseReference?
 
@@ -46,7 +49,7 @@ class MainViewController: UIViewController {
         mainButton.addTarget(self, action: #selector(MainViewController.buttonTapped), for: .touchUpInside)
         mainButton.setTitle("+", for: .normal)
         mainButton.titleLabel?.font = UIFont(name:"Futura", size: 60)
-        mainButton.setTitleColor(UIColor(hex: colors[5]), for: .normal)
+        mainButton.setTitleColor(UIColor(hex: colors[7]), for: .normal)
         mainButton.backgroundColor = .white
         
         view.addSubview(mainButton)
@@ -66,7 +69,7 @@ class MainViewController: UIViewController {
     func createDatabase() {
         //add category to database
         var i = 0
-        while i < 5 {
+        while i < colors.count {
             ref?.child(USER_PATH + "/categories").child(categoryNames[i]).setValue(["Color" : colors[i],
                                                                        "Name" : categoryNames[i],
                                                                        "Tasks" : ""])
@@ -78,8 +81,9 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         
         ref = Database.database().reference()
+        navigationController?.isNavigationBarHidden = true
 
-        view.backgroundColor = UIColor(hex: colors[5])
+        view.backgroundColor = UIColor(hex: colors[7])
         addButton()
         createDatabase()
         

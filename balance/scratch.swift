@@ -9,6 +9,25 @@
 import Foundation
 import Firebase
 import RealmSwift
+
+/*let colors = [
+ r255 g60 b70,
+ r60 g180 b255,
+ r200 g130 b250,
+ r255 g155 b200,
+ r162 g168 b176,
+ r255 g255 b80,
+ r155 g80 b245
+ ]
+ 16727110
+ 3978495
+ 13140730
+ 16751560
+ 10660016
+ 16777040
+ 10178805
+ 
+*/
 /*
 func updateLocalDatabase() {
     let ref = Database.database().reference()

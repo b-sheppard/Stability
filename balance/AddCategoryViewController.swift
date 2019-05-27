@@ -16,13 +16,14 @@ class AddCategoryViewController: UIViewController, UITextFieldDelegate {
     var ref:DatabaseReference?
     var categoryTextField:UITextField!
 
-    lazy var colors = ["blue", "red", "yellow",
-                       "purple", "pink", "green",
-                       "orange", "brown"]
+    lazy var colors = ["yellow", "red", "blue",
+                       "green", "pink", "gray",
+                       "purple", "blue"]
     
-    lazy var colors_int = [65535, 16728064, 16760576,
+    lazy var colors_int = [16777040,16727110,3978495,0x1AEE84,16751560,10660016,10178805, 65535]
+    /*lazy var colors_int = [65535, 16728064, 16760576,
                            8388863, 16741363, 7602058,
-                           16743027, 16034113]
+                           16743027, 16034113]*/
     var colorPicked: Int = 0
     
     
@@ -137,7 +138,7 @@ class AddCategoryViewController: UIViewController, UITextFieldDelegate {
             
             button.setTitle(colors[i], for: .normal)
             button.titleLabel?.font = UIFont(name:"Futura", size: 30)
-            button.setTitleColor(UIColor.black.withAlphaComponent(0.6), for: .normal)
+            button.setTitleColor(UIColor.black.withAlphaComponent(0.4), for: .normal)
             button.backgroundColor = NSUIColor(hex: colors_int[i])
             
             button.addTarget(self, action: #selector(buttonTapped(sender:)),

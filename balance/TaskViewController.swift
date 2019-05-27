@@ -13,11 +13,11 @@ import RealmSwift
 
 class TaskViewController: UIViewController, UITextFieldDelegate {
     
-    let gray = UIColor(hex: colors[5])
+    let gray = UIColor(hex: colors[7])
     
     let MAX_CATEGORIES = 9;
     var categoryNames:[String] = ["+"]
-    var categoryColors:[Int] = [colors[5]]
+    var categoryColors:[Int] = [colors[7]]
     var scrollView: UIScrollView!
     
     var ref:DatabaseReference?
@@ -26,7 +26,7 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
     // go to homeview
     @objc public func homeButtonTapped() {
         let  vc =  self.navigationController?.viewControllers.filter({$0 is HomeViewController}).first
-        
+        navigationController?.navigationBar.barTintColor = .white
         self.navigationController?.popToViewController(vc!, animated: true)
     } // homeButtonTapped()
 
@@ -107,7 +107,7 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
             }
             let button = UIButton(type: .custom)
             let x_pos = (5 + CGFloat(col % 3)*scrollWidth/3)
-            let y_pos = (row)*scrollHeight/4
+            let y_pos = (row)*scrollHeight/4 - 5
             button.frame = CGRect(x: x_pos, y: y_pos - 50, width: 110, height: 110)
             button.layer.cornerRadius = 0.5 * button.bounds.size.width
             button.clipsToBounds = true
@@ -143,11 +143,12 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
         let screenHeight = screensize.height
         let taskTextField = UITextField(frame: CGRect(x: 20, y: screenHeight/8,
                                                       width: screenWidth - 40, height: 60))
-        taskTextField.backgroundColor = .white
+        taskTextField.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         taskTextField.borderStyle = .roundedRect
         taskTextField.placeholder = "this does nothing... for now"
-        taskTextField.font = UIFont.systemFont(ofSize: 20.0);
+        taskTextField.font = UIFont(name:"Futura", size: 20);
         taskTextField.keyboardAppearance = .dark
+        taskTextField.textColor = .white
         
         view.addSubview(taskTextField)
     } //createTextField()
@@ -159,6 +160,7 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationController?.isNavigationBarHidden = false
         //updateLocalDatabase()
         
         ref = Database.database().reference()
@@ -188,6 +190,7 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
         })
 
         view.backgroundColor = gray
+
         self.hideKeyboardWhenTappedAround()
         self.createTextField()
         
@@ -197,10 +200,9 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
                                          style: .plain,
                                          target: self,
                                          action: #selector(TaskViewController.homeButtonTapped))
-        homeButton.tintColor = .red
+        homeButton.tintColor = UIColor.black.withAlphaComponent(0.4)
         self.navigationItem.rightBarButtonItem = homeButton
         self.navigationItem.setHidesBackButton(true, animated: false)
         
     } // viewDidLoad()
-    
 } // class TaskViewController()
