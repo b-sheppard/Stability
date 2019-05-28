@@ -31,6 +31,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     var selected = "Unscheduled"
     var mainButton: UIButton!
     var selectedTaskName = UILabel()
+    var descriptionLabel = UILabel()
     
     //timer variables
     var timer: Timer?
@@ -51,6 +52,8 @@ class HomeViewController: UIViewController, ChartViewDelegate {
 
         if !checkStatus!.timerRunning && balanceTimer.categoryStaged != "" {
             mainButton.setTitle("STOP", for: .normal)
+            descriptionLabel.textColor = gray
+
             //stop unscheduled timer
             let timeRemaining = balanceTimer.stopScheduled()
             
@@ -78,6 +81,8 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             balanceTimer.startScheduled()
         }
         else if checkStatus!.timerRunning {
+            descriptionLabel.textColor = white
+
             mainButton.setTitle("START", for: .normal)
             let timeRemaining = balanceTimer.stopScheduled()
 
@@ -207,7 +212,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         }
         //update label above chart
         if balanceTimer.taskSelected == "Unscheduled" {
-            selectedTaskName.text = "Select a Task"
+            selectedTaskName.text = "Select a Category"
         }
         else {
             selectedTaskName.text = balanceTimer.taskSelected
@@ -219,6 +224,12 @@ class HomeViewController: UIViewController, ChartViewDelegate {
 
         //print(active_categories)
         for cat in active_categories {
+            if cat.name == "Unscheduled" {
+                self.colorOf[cat.name] = gray
+            }
+            else {
+                self.colorOf[cat.name] = NSUIColor(hex:cat.color)
+            }
             let dataEntry = PieChartDataEntry(value: Double(cat.duration), label: nil)
             if cat.name == balanceTimer.categorySelected {
                 dataEntry.value = Double(balanceTimer.timeRemaining)
@@ -248,7 +259,6 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         let chartData = PieChartData(dataSet: chartDataSet)
         var categoryColor : [NSUIColor] = []
         for cat in active_categories {
-            updateColor(category: cat.name)
             categoryColor.append(colorOf[cat.name] ?? NSUIColor(hex: 0000000))
         }
         categoryColor.append(gold)
@@ -297,7 +307,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             mainButton.setTitle("START", for: .normal)
         }
         mainButton.titleLabel?.font = UIFont(name:"Futura", size: 60)
-        mainButton.setTitleColor(.black, for: .normal)
+        mainButton.setTitleColor(gray, for: .normal)
         mainButton.backgroundColor = white
         
         view.addSubview(mainButton)
@@ -314,19 +324,35 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         NSLayoutConstraint.activate(constraints)
     }
     
-    //creates label
+    // creates label
     func addLabel() {
         let screensize: CGRect = UIScreen.main.bounds
         selectedTaskName.frame = CGRect(x: screensize.width/2, y: 50, width: 300, height: 50)
         selectedTaskName.center.x = screensize.width/2
-        selectedTaskName.center.y = screensize.height/7
+        selectedTaskName.center.y = 7*screensize.height/8
         selectedTaskName.backgroundColor = white
-        selectedTaskName.text = "Select a task"
+        selectedTaskName.text = "Select a Category"
         selectedTaskName.textAlignment = .center
-        selectedTaskName.textColor = .black
+        selectedTaskName.textColor = gray
+        selectedTaskName.font = UIFont(name: "Futura", size: 20)
         
         view.addSubview(selectedTaskName)
         
+    }
+    
+    // creates label with description on "hold to end"
+    func addDescription() {
+        let screensize: CGRect = UIScreen.main.bounds
+        descriptionLabel.frame = CGRect(x: screensize.width/2, y: 50, width: 300, height: 50)
+        descriptionLabel.center.x = screensize.width/2
+        descriptionLabel.center.y = screensize.height/8
+        descriptionLabel.backgroundColor = white
+        descriptionLabel.text = "Hold STOP to finish task"
+        descriptionLabel.textAlignment = .center
+        descriptionLabel.textColor = white
+        descriptionLabel.font = UIFont(name: "Futura", size: 20)
+        
+        view.addSubview(descriptionLabel)
     }
     // gathers active tasks from Realm
     func fetchData() {
@@ -394,8 +420,9 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         setupView()
         addButton()
         addLabel()
+        addDescription()
         
-        selectedTaskName.text = "Select a task"
+        selectedTaskName.text = "Select a Category"
         
         timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: #selector(self.updateChart), userInfo: nil, repeats: true)
     }

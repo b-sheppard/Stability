@@ -18,7 +18,7 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
     var ref:DatabaseReference?
     var taskTextField:UITextField!
     var timePicker: UIDatePicker!
-    var taskName:String = "New Task"
+    var taskName:String = "Add a Task"
     var path:String!
     var isOld:Bool = false
     
@@ -50,10 +50,12 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
         saveButton.addTarget(self, action:#selector(AddCategoryViewController.SaveClicked), for: .touchUpInside)
         cancelButton.tintColor = secondaryColor
         
-        //title ("New Task" by default)
-        let title = UILabel(frame: CGRect(x: (width/2 - 100), y: 0, width: 200, height: 80))
+        //title ("Add Task" by default)
+        let title = UILabel(frame: CGRect(x: (width/2 - 100), y: -10, width: 200, height: 80))
         title.text = taskName
         title.textAlignment = .center
+        title.font = UIFont(name: "Futura", size: 20)
+        title.textColor = secondaryColor
         
         
         self.navigationController?.isNavigationBarHidden = true
@@ -68,16 +70,18 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
         let height = screensize.height
         
         let label = UILabel()
-        label.frame = CGRect(x:20, y: Int(height/4) - 40, width: 100, height: 20)
+        label.frame = CGRect(x:20, y: Int(height/4) - 20, width: 100, height: 20)
         label.text = "Duration"
         label.textColor = secondaryColor
+        label.font = UIFont(name: "Futura", size: 20)
         view.addSubview(label)
         
         
         timePicker = UIDatePicker(frame: CGRect(x: 0, y: Int(height/4), width: Int(width), height: Int(height/4)))
         timePicker.backgroundColor = color
         timePicker.datePickerMode = .countDownTimer
-        timePicker.tintColor = white
+        timePicker.setValue(white, forKeyPath: "textColor")
+        timePicker.setValue(false, forKey: "highlightsToday")
         
         view.addSubview(timePicker)
         
@@ -121,10 +125,12 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
         let screenHeight = screensize.height
         
         taskTextField = UITextField(frame: CGRect(x: 20, y: screenHeight/10, width: screenWidth - 40, height: 60))
-        taskTextField.backgroundColor = white
+        taskTextField.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         taskTextField.borderStyle = .roundedRect
+        //let str = NSAttributedString(string: "Give your task a name...", attributes: [NSAttributedString.Key.foregroundColor: white])
         taskTextField.placeholder = "Give your task a name..."
-        taskTextField.font = UIFont.systemFont(ofSize: 20.0);
+        taskTextField.font = UIFont(name: "Futura", size: 20)
+        taskTextField.textColor = white
         taskTextField.keyboardAppearance = .dark
         view.addSubview(taskTextField)
     }

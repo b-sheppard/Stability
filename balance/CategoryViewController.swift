@@ -53,6 +53,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
                 categoryToAdd.duration = newCategoryTime
                 //categoryToAdd.duration = 5
                 categoryToAdd.name = self.name
+                categoryToAdd.color = self.color.rgb()!
                 try! uirealm.write {
                     uirealm.add(categoryToAdd)
                     unscheduled!.duration -= newCategoryTime
@@ -204,7 +205,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         //delete button
         let deleteButton = UIButton(type: .custom)
         let x_pos = width/2
-        let y_pos = height - 70
+        let y_pos = height - 80
         deleteButton.frame = CGRect(x: x_pos - 150, y: y_pos, width: 300, height:60)
         deleteButton.clipsToBounds = true
         deleteButton.setTitle("Delete Category", for: .normal)
