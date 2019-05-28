@@ -41,12 +41,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             mainNavigationController.viewControllers = [homeViewController, mainViewController]
             UserDefaults.standard.set(true, forKey: "launchedBefore")
             
-            //Add the unscheduled timer
-            /*let unscheduled = Task()
-            unscheduled.duration = 3600
-            unscheduled.name = "Unscheduled"
-            unscheduled.category = "Unscheduled"*/
-            
             let unscheduled = Category()
             //unscheduled.duration = 3600
             unscheduled.duration = 86400
@@ -77,6 +71,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().shadowImage = UIImage()
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
         UINavigationBar.appearance().tintColor = UIColor.black.withAlphaComponent(0.4)
+
+        // font
+        let attributes = [NSAttributedString.Key.font : UIFont(name: "Futura", size: 20)!, NSAttributedString.Key.foregroundColor : UIColor.black.withAlphaComponent(0.4)]
+        UINavigationBar.appearance().titleTextAttributes = attributes
         
         return true
     }
@@ -85,7 +83,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
         
-        print("----WRITING TO REALM----\n")
+        print("------------WRITING TO REALM------------\n")
         let checkStatus = uirealm.objects(TimerStatus.self).first
         
         let predicate = NSPredicate(format: "name = %@", balanceTimer.categorySelected)

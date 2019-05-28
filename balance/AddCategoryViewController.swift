@@ -16,6 +16,9 @@ class AddCategoryViewController: UIViewController, UITextFieldDelegate {
     var ref:DatabaseReference?
     var categoryTextField:UITextField!
 
+    let white = UIColor(hex:15460841)
+    let gray = UIColor(hex:5263695)
+    
     lazy var colors = ["yellow",
                        "red",
                        "blue",
@@ -52,20 +55,16 @@ class AddCategoryViewController: UIViewController, UITextFieldDelegate {
         //create cancel button
         let cancelButton = UIButton(type: .custom)
         cancelButton.setTitle("Cancel", for: .normal)
-        cancelButton.setTitleColor(.black, for: .normal)
+        cancelButton.setTitleColor(UIColor.black.withAlphaComponent(0.4), for: .normal)
         cancelButton.frame = CGRect(x: 10, y: 0, width: 60, height: 60)
-        cancelButton.tintColor = .black
         cancelButton.addTarget(self, action: #selector(AddCategoryViewController.CancelClicked), for: .touchUpInside)
-        cancelButton.tintColor = .black
         
         //create save button
         let saveButton = UIButton(type: .custom)
         saveButton.setTitle("Save", for: .normal)
-        saveButton.setTitleColor(.black, for: .normal)
+        saveButton.setTitleColor(UIColor.black.withAlphaComponent(0.4), for: .normal)
         saveButton.frame = CGRect(x: width - 70, y: 0, width: 60, height: 60)
-        saveButton.tintColor = .black
         saveButton.addTarget(self, action:#selector(AddCategoryViewController.SaveClicked), for: .touchUpInside)
-        cancelButton.tintColor = .black
         
         self.navigationController?.isNavigationBarHidden = true
         self.view.addSubview(cancelButton)
@@ -105,10 +104,11 @@ class AddCategoryViewController: UIViewController, UITextFieldDelegate {
         let screenHeight = screensize.height
         
         categoryTextField = UITextField(frame: CGRect(x: 20, y: screenHeight/10, width: screenWidth - 40, height: 60))
-        categoryTextField.backgroundColor = .white
+        categoryTextField.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         categoryTextField.borderStyle = .roundedRect
         categoryTextField.placeholder = "Type category name..."
-        categoryTextField.font = UIFont.systemFont(ofSize: 20.0);
+        categoryTextField.font = UIFont(name: "Futura", size: 20)
+        categoryTextField.textColor = white
         categoryTextField.keyboardAppearance = .dark
         view.addSubview(categoryTextField)
     }
@@ -173,7 +173,7 @@ class AddCategoryViewController: UIViewController, UITextFieldDelegate {
         addButtons()
         
         self.view.layer.cornerRadius = 10.0
-        view.backgroundColor = .white
+        view.backgroundColor = white
         self.hideKeyboardWhenTappedAround()
     }
 }
