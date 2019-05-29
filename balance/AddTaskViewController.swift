@@ -80,7 +80,7 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
         timePicker = UIDatePicker(frame: CGRect(x: 0, y: Int(height/4), width: Int(width), height: Int(height/4)))
         timePicker.backgroundColor = color
         timePicker.datePickerMode = .countDownTimer
-        timePicker.setValue(white, forKeyPath: "textColor")
+        timePicker.setValue(gray, forKeyPath: "textColor")
         timePicker.setValue(false, forKey: "highlightsToday")
         
         view.addSubview(timePicker)

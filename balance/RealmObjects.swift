@@ -52,3 +52,45 @@ class Category : Object {
     @objc dynamic var color = 0
 }
 
+extension Task {
+    func deleteTask() {
+        balanceTimer.stopScheduled()
+        let unscheduled = uirealm.objects(Category.self).filter("name = 'Unscheduled'").first!
+        let unscheduledTask = uirealm.objects(Task.self).filter("name = 'Unscheduled'").first!
+        
+        let Cpredicate = NSPredicate(format: "name = %@", self.category)
+        let category = uirealm.objects(Category.self).filter(Cpredicate).first
+        let newTime = category!.duration - self.duration
+        
+        //edge case if task is active
+        if balanceTimer.categorySelected == "Unscheduled" {
+            try! uirealm.write {
+                unscheduled.duration = balanceTimer.timeRemaining
+                unscheduledTask.duration = balanceTimer.timeRemaining
+            }
+        }
+        if newTime == 0 {
+            try! uirealm.write {
+                unscheduled.duration += self.duration
+                unscheduledTask.duration += self.duration
+                uirealm.delete(category!)
+                uirealm.delete(self)
+            }
+        }
+        else {
+            try! uirealm.write {
+                category!.duration = newTime
+                unscheduled.duration += self.duration
+                unscheduledTask.duration += self.duration
+                uirealm.delete(self)
+            }
+        }
+        
+        balanceTimer.timeRemaining = unscheduled.duration
+        balanceTimer.timeRemainingInTask = unscheduledTask.duration
+        balanceTimer.categoryStaged = ""
+        balanceTimer.categorySelected = "Unscheduled"
+        balanceTimer.taskSelected = "Unscheduled"
+        balanceTimer.startScheduled()
+    }
+}
