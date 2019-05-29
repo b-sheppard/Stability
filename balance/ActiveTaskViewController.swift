@@ -130,13 +130,6 @@ class ActiveTaskViewController: UIViewController,
         tableView.reloadData()
     }
     
-    //destroy view
-    @objc func CancelClicked() {
-        self.navigationController?.isNavigationBarHidden = false
-        self.view.removeFromSuperview()
-        self.removeFromParent()
-    }
-    
     func addDescription() {
         let screensize: CGRect = UIScreen.main.bounds
         descriptionLabel.frame = CGRect(x: screensize.width/2, y: screensize.height,
@@ -171,17 +164,7 @@ class ActiveTaskViewController: UIViewController,
         tableView.separatorColor = UIColor.black.withAlphaComponent(0.4)
         self.view.addSubview(tableView)
         
-        //create cancel button
-        let cancelButton = UIButton(type: .custom)
-        cancelButton.setTitle("Cancel", for: .normal)
-        cancelButton.setTitleColor(.black, for: .normal)
-        cancelButton.frame = CGRect(x: 10, y: 0, width: 60, height: 60)
-        cancelButton.tintColor = .black
-        cancelButton.addTarget(self, action: #selector(AddCategoryViewController.CancelClicked), for: .touchUpInside)
-        cancelButton.tintColor = .black
-        
         self.navigationController?.isNavigationBarHidden = false
-        //self.view.addSubview(cancelButton)
 
     }
     
