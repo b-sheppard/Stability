@@ -198,6 +198,15 @@ class TaskViewController: UIViewController {
                 unscheduledTask!.duration = balanceTimer.timeRemainingInTask
             }
         }
+        
+        if unscheduled!.duration < taskValue {
+            let alert = UIAlertController(title: "ERROR", message: "Not enough free time to add this task", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Fix Schedule", style: UIAlertAction.Style.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            self.taskSearchField.text = ""
+            return
+        }
+        
         // category doesn't exist
         if(runningCategory == nil) {
             let categoryToAdd = Category()
