@@ -10,8 +10,9 @@ import Foundation
 import UIKit
 import FirebaseDatabase
 import RealmSwift
+import SearchTextField
 
-class TaskViewController: UIViewController, UITextFieldDelegate {
+class TaskViewController: UIViewController {
     
     let white = UIColor(hex:15460841)
     let gray = UIColor(hex:5263695)
@@ -20,6 +21,10 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
     var categoryNames:[String] = ["+"]
     var categoryColors:[Int] = [colors[7]]
     var scrollView: UIScrollView!
+    var taskSearchField: SearchTextField!
+    var tasks = [Task]()
+    var taskNames = [String]()
+    var catColors = [String:Int]() // used in searchfield
     
     var ref:DatabaseReference?
     var handle:DatabaseHandle?
@@ -138,22 +143,116 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
     } // createScrollView()
     
     //create newTask textfield and keyboard
-    func createTextField() {
+    func setupSearchField() {
         let screensize: CGRect = UIScreen.main.bounds
         let screenWidth = screensize.width
         let screenHeight = screensize.height
-        let taskTextField = UITextField(frame: CGRect(x: 20, y: screenHeight/8,
-                                                      width: screenWidth - 40, height: 60))
-        taskTextField.backgroundColor = UIColor.black.withAlphaComponent(0.2)
-        taskTextField.borderStyle = .roundedRect
-        taskTextField.placeholder = "this does nothing... for now"
-        taskTextField.font = UIFont(name:"Futura", size: 20);
-        taskTextField.keyboardAppearance = .dark
-        taskTextField.textColor = white
         
-        view.addSubview(taskTextField)
-    } //createTextField()
+        taskSearchField = SearchTextField(frame: CGRect(x: 20, y: screenHeight/10, width: screenWidth - 40, height: 60))
+        taskSearchField.backgroundColor = .white
+        taskSearchField.borderStyle = .roundedRect
+        taskSearchField.placeholder = "Search For a Task..."
+        taskSearchField.font = UIFont(name: "Futura", size: 25)
+        taskSearchField.textColor = gray
+        taskSearchField.keyboardAppearance = .dark
+        taskSearchField.inlineMode = true
+        
+        taskSearchField.itemSelectionHandler = {filteredResults, itemPosition in
+            let item = filteredResults[itemPosition]
+            self.taskSearchField.text = item.title
+            //print(self.taskSearchField.text)
+            self.addTask(taskName:self.taskSearchField.text!)
+        }
+        view.addSubview(taskSearchField)
+    }
     
+    func addTask(taskName:String) {
+        let taskPos = taskNames.firstIndex(of: taskName)!
+        let task = tasks[taskPos]
+        let categoryName = task.category
+        let taskValue = task.duration
+        let taskName = task.name
+        //REALM
+        let predicate = NSPredicate(format: "name = %@", categoryName)
+        let unscheduled = uirealm.objects(Category.self).filter("name = 'Unscheduled'").first
+        let unscheduledTask = uirealm.objects(Task.self).filter("name = 'Unscheduled'").first
+        let runningCategory = uirealm.objects(Category.self).filter(predicate).first
+        var newCategoryTime = taskValue
+        
+        // add task to realm
+        let Tpredicate = NSPredicate(format: "name = %@", taskName)
+        let doesExist = uirealm.objects(Task.self).filter(Tpredicate).first
+        let newTask = Task()
+        if(doesExist != nil) { print("Task already active") }
+        else {
+            newTask.category = categoryName
+            newTask.name = taskName
+            newTask.duration = taskValue
+            //   newTask.duration = 5
+        }
+        
+        // edge case if timer isn't running
+        if balanceTimer.categorySelected == "Unscheduled" {
+            try! uirealm.write {
+                unscheduled!.duration = balanceTimer.timeRemaining
+                unscheduledTask!.duration = balanceTimer.timeRemainingInTask
+            }
+        }
+        // category doesn't exist
+        if(runningCategory == nil) {
+            let categoryToAdd = Category()
+            categoryToAdd.duration = newCategoryTime
+            //categoryToAdd.duration = 5
+            categoryToAdd.name = categoryName
+            categoryToAdd.color = catColors[categoryToAdd.name]!
+            try! uirealm.write {
+                uirealm.add(categoryToAdd)
+                unscheduled!.duration -= newCategoryTime
+                unscheduledTask!.duration -= newCategoryTime
+                
+                //add task
+                uirealm.add(newTask)
+            }
+        }
+            // category exists
+        else {
+            try! uirealm.write {
+                unscheduled!.duration -= newCategoryTime
+                unscheduledTask!.duration -= newCategoryTime
+                newCategoryTime += runningCategory!.duration
+                runningCategory!.duration = newCategoryTime
+                
+                // add task
+                uirealm.add(newTask)
+            }
+        }
+        // edge case if timer isn't running
+        if balanceTimer.categorySelected == "Unscheduled" {
+            balanceTimer.timeRemaining = unscheduled!.duration
+            balanceTimer.timeRemainingInTask = unscheduledTask!.duration
+        }
+    }
+    //fetches all tasks from firebase
+    func fetchData() {
+        //adds task data to an array
+        ref?.child(USER_PATH + "/categories").observeSingleEvent(of: .value, with: { (snapshot) in
+            for case let category as DataSnapshot in snapshot.children {
+                let cat = category.childSnapshot(forPath: "Tasks") as DataSnapshot
+                let catName = category.childSnapshot(forPath: "Name").value as! String
+                let catColor = category.childSnapshot(forPath: "Color").value as! Int
+                self.catColors[catName] = catColor
+                for case let tasksInCategory as DataSnapshot in cat.children {
+                    let toAdd = Task()
+                    toAdd.category = catName as! String
+                    toAdd.duration = tasksInCategory.value as! Int
+                    toAdd.name = tasksInCategory.key as! String
+                    self.tasks.append(toAdd)
+                    self.taskNames.append(toAdd.name)
+                    self.taskSearchField.filterStrings(self.taskNames)
+                }
+            }
+        })
+    }
     override func viewDidDisappear(_ animated: Bool) {
         self.navigationController?.isNavigationBarHidden = false
     } // viewDidDisappear()
@@ -165,6 +264,7 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
         //updateLocalDatabase()
         
         ref = Database.database().reference()
+        fetchData()
         
         // updates category list if new category added
         handle = ref?.child(USER_PATH + "/categories").observe(.childAdded, with: { (snapshot) in
@@ -193,7 +293,7 @@ class TaskViewController: UIViewController, UITextFieldDelegate {
         view.backgroundColor = white
 
         self.hideKeyboardWhenTappedAround()
-        self.createTextField()
+        self.setupSearchField()
         
         self.title = "New Task"
         //creates right bar item

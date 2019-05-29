@@ -146,6 +146,22 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     func deleteCategory() {
         ref?.child(USER_PATH).child("categories").child(name).removeValue()
         
+        //delete active tasks
+        let tasksPred = NSPredicate(format: "category = %@", self.name)
+        let tasksToDelete = uirealm.objects(Task.self).filter(tasksPred)
+        for task in tasksToDelete {
+            task.deleteTask()
+        }
+        
+        //delete category
+        let predicate = NSPredicate(format: "name = %@", self.name)
+        let categoryToDelete = uirealm.objects(Category.self).filter(predicate).first
+        if categoryToDelete != nil {
+            try! uirealm.write {
+                uirealm.delete(categoryToDelete!)
+            }
+        }
+        
         navigationController?.popViewController(animated: true)
     }
     

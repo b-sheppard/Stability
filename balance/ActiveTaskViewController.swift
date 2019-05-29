@@ -120,41 +120,12 @@ class ActiveTaskViewController: UIViewController,
     }
     //delete task from database (and subtract value from active
     func deleteTask(task:String) {
-        //updates active times
-        //deletes reference of active tasks
-        //ref?.child(USER_PATH + "/categories").child(name).child("Active").child(task).removeValue()
-        
-        //print(uirealm.objects(Task.self))
         let Tpredicate = NSPredicate(format: "name = %@", task)
         let toDelete = uirealm.objects(Task.self).filter(Tpredicate).first!
         
-        let unscheduled = uirealm.objects(Category.self).filter("name = 'Unscheduled'").first!
-        let unscheduledTask = uirealm.objects(Task.self).filter("name = 'Unscheduled'").first!
-        
-        let Cpredicate = NSPredicate(format: "name = %@", toDelete.category)
-        let category = uirealm.objects(Category.self).filter(Cpredicate).first
-        let newTime = category!.duration - toDelete.duration
-        
-        //edge case if task is active
-        if balanceTimer.categorySelected == "Unscheduled" {
-            try! uirealm.write {
-                unscheduled.duration = balanceTimer.timeRemaining
-                unscheduledTask.duration = balanceTimer.timeRemaining
-            }
-        }
-        print("add ", toDelete.duration)
-        try! uirealm.write {
-            category!.duration = newTime
-            unscheduled.duration += toDelete.duration
-            unscheduledTask.duration += toDelete.duration
-            uirealm.delete(toDelete)
-        }
-        
-        if balanceTimer.categorySelected == "Unscheduled" {
-            balanceTimer.timeRemaining = unscheduled.duration
-            balanceTimer.timeRemainingInTask = unscheduledTask.duration
-        }
-        
+        toDelete.deleteTask()
+        let predicate = NSPredicate(format: "category = %@", self.name)
+        let activeTasks = uirealm.objects(Task.self).filter(predicate)
         fetchData()
         tableView.reloadData()
     }
@@ -162,7 +133,6 @@ class ActiveTaskViewController: UIViewController,
     //destroy view
     @objc func CancelClicked() {
         self.navigationController?.isNavigationBarHidden = false
-        print("cancel")
         self.view.removeFromSuperview()
         self.removeFromParent()
     }

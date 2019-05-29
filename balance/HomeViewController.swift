@@ -44,8 +44,24 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     //==========================================
     //          SCHEDULED TIMER
     //==========================================
+    
     @objc public func longPress() {
-        
+        descriptionLabel.textColor = white
+        if balanceTimer.categorySelected != "Unscheduled" {
+            let predicate = NSPredicate(format: "name = %@", balanceTimer.taskSelected)
+            let toDelete = uirealm.objects(Task.self).filter(predicate).first!
+            toDelete.deleteTask()
+            
+            descriptionLabel.textColor = white
+            mainButton.setTitle("START", for: .normal)
+            let checkStatus = uirealm.objects(TimerStatus.self).first
+
+            try! uirealm.write {
+                checkStatus?.timerRunning = false
+            }
+            fetchData()
+            updateChart()
+        }
     }
     @objc public func startTapped() {
         let checkStatus = uirealm.objects(TimerStatus.self).first
@@ -302,9 +318,12 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         //mainButton.addTarget(self, action: #selector(HomeViewController.startTapped), for: .touchUpInside)
         if(checkStatus!.timerRunning) {
             mainButton.setTitle("STOP", for: .normal)
+            descriptionLabel.textColor = gray
         }
         else {
             mainButton.setTitle("START", for: .normal)
+            descriptionLabel.textColor = white
+
         }
         mainButton.titleLabel?.font = UIFont(name:"Futura", size: 60)
         mainButton.setTitleColor(gray, for: .normal)
@@ -357,6 +376,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     // gathers active tasks from Realm
     func fetchData() {
         let activeCategories = uirealm.objects(Category.self)
+       // print(activeCategories)
         active_categories.removeAll()
         for cat in activeCategories {
             active_categories.append(cat)
@@ -423,13 +443,17 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         addDescription()
         
         selectedTaskName.text = "Select a Category"
-        
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: #selector(self.updateChart), userInfo: nil, repeats: true)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         fetchData()
         updateChart()
+        
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: #selector(self.updateChart), userInfo: nil, repeats: true)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        timer?.invalidate()
     }
     
     //===========================================================

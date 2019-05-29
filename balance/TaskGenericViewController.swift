@@ -9,14 +9,30 @@
 import Foundation
 import UIKit
 import FirebaseDatabase
+import SearchTextField
 
 class TaskGenericViewController: UIViewController, UITextFieldDelegate {
     var color:UIColor!
     var ref:DatabaseReference?
     var taskTextField:UITextField!
+    var taskSearchField: SearchTextField!
     var timePicker: UIDatePicker!
     var taskName:String!
     var path:String!
+    
+    func setupSearchField() {
+        let screensize: CGRect = UIScreen.main.bounds
+        let screenWidth = screensize.width
+        let screenHeight = screensize.height
+        
+        taskSearchField = SearchTextField(frame: CGRect(x: 20, y: screenHeight/10, width: screenWidth - 40, height: 60))
+        taskSearchField.backgroundColor = .white
+        taskSearchField.borderStyle = .roundedRect
+        taskSearchField.placeholder = "Give your task a name..."
+        taskSearchField.font = UIFont.systemFont(ofSize: 20.0);
+        taskSearchField.keyboardAppearance = .dark
+        view.addSubview(taskSearchField)
+    }
     
     func setupView() {
         //initial positions
@@ -127,7 +143,8 @@ class TaskGenericViewController: UIViewController, UITextFieldDelegate {
         ref = Database.database().reference()
         
         setupView()
-        createTextField()
+        //createTextField()
+        setupSearchField()
         setupPicker()
         
         self.view.layer.cornerRadius = 10.0
