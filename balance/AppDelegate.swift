@@ -42,7 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UserDefaults.standard.set(true, forKey: "launchedBefore")
             
             let unscheduled = Category()
-            //unscheduled.duration = 3600
+            //unscheduled.duration = 3680
             unscheduled.duration = 86400
             unscheduled.name = "Unscheduled"
             
@@ -61,7 +61,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         else {
-            mainNavigationController.viewControllers = [homeViewController, taskViewController]
+            mainNavigationController.viewControllers = [homeViewController]
         }
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
@@ -107,6 +107,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             checkStatus?.timerRunning = timerRunning
             checkStatus?.currentCategory = balanceTimer.categorySelected
             checkStatus?.currentTask = balanceTimer.taskSelected
+            checkStatus?.tasksCompleted = balanceTimer.tasksCompleted
             runningCategory!.duration = secondsLeft
             runningCategory!.name = balanceTimer.categorySelected
             runningTask!.duration = balanceTimer.timeRemainingInTask
@@ -154,6 +155,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         balanceTimer.timeRemainingInTask = runningTask!.duration
         balanceTimer.taskSelected = runningTask!.name
         balanceTimer.timeRemainingInTask -= Int(timeInactive)
+        
+        //num tasks completed
+        balanceTimer.tasksCompleted = checkStatus!.tasksCompleted
 
         balanceTimer.startScheduled()
         //print(uirealm.objects(Category.self))

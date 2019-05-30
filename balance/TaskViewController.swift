@@ -162,6 +162,7 @@ class TaskViewController: UIViewController {
             self.taskSearchField.text = item.title
             //print(self.taskSearchField.text)
             self.addTask(taskName:self.taskSearchField.text!)
+            self.taskSearchField.text = ""
         }
         view.addSubview(taskSearchField)
     }
