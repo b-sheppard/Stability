@@ -11,6 +11,7 @@ import RealmSwift
 
 class BalanceTimer : Object {
     var secondsCompleted = 0.0
+    var tasksCompleted = 0
     
     var timeRemaining = 0
     var timeRemainingInTask = 0
@@ -27,6 +28,7 @@ class BalanceTimer : Object {
             print("!!!!!!!ERROR!!!!!!!!!\n")
         }
         else {
+            print("created timer")
             taskTimer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: #selector(self.updateScheduled), userInfo: nil, repeats: true)
         }
     }
@@ -36,10 +38,6 @@ class BalanceTimer : Object {
         return timeRemaining
     }
     @objc public func updateScheduled() {
-        if(timeRemaining == 0 || timeRemainingInTask == 0) {
-            stopScheduled()
-            taskFinished = true
-        }
         secondsCompleted += 1
         secondsRunning += 1
         timeRemaining -= 1

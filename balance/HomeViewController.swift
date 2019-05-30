@@ -30,6 +30,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     var colorOf: Dictionary = [String:NSUIColor]()
     var selected = "Unscheduled"
     var mainButton: UIButton!
+    var restartButton: UIButton!
     var selectedTaskName = UILabel()
     var descriptionLabel = UILabel()
     
@@ -176,7 +177,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     }
     @objc func taskFinished() {
         // task has finished
-        // print(balanceTimer.timeRemaining)
+        balanceTimer.tasksCompleted += 1
         let unscheduled = uirealm.objects(Category.self).filter("name = 'Unscheduled'").first!
         let checkStatus = uirealm.objects(TimerStatus.self).first!
         
@@ -215,16 +216,136 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         balanceTimer.taskSelected = "Unscheduled"
         
         //balanceTimer.startScheduled()
-        balanceTimer.taskFinished = false
         mainButton.setTitle("START", for: .normal)
         fetchData()
     }
+    // time exceeds 24 hours
+    @objc func restartAllTimers() {
+        // restart balance timer
+        balanceTimer.categorySelected = "Unscheduled"
+        balanceTimer.categoryStaged = ""
+        balanceTimer.tasksCompleted = 0
+        balanceTimer.secondsCompleted = 0
+        balanceTimer.secondsRunning = 0
+        balanceTimer.timeRemaining = 86400
+        balanceTimer.timeRemainingInTask = 86400
+        balanceTimer.taskSelected = "Unscheduled"
+        selectedTaskName.text = "Select a Task"
 
+        let unscheduled = Category()
+        unscheduled.duration = 86400
+        unscheduled.name = "Unscheduled"
+        
+        let unscheduledTask = Task()
+        unscheduledTask.duration = unscheduled.duration
+        unscheduledTask.name = unscheduled.name
+        unscheduledTask.category = "Unscheduled"
+        
+        let categoriesToDelete = uirealm.objects(Category.self)
+        let tasksToDelete = uirealm.objects(Task.self)
+        try! uirealm.write {
+            uirealm.delete(categoriesToDelete)
+            uirealm.delete(tasksToDelete)
+            uirealm.add(unscheduled)
+            uirealm.add(unscheduledTask)
+        }
+        
+        let test = uirealm.objects(Task.self)
+        print(test)
+        
+        self.view.backgroundColor = white
+        circleView.backgroundColor = white
+        selectedTaskName.backgroundColor = white
+        descriptionLabel.backgroundColor = white
+        mainButton.backgroundColor = white
+        restartButton.removeFromSuperview()
+        fetchData()
+        balanceTimer.startScheduled()
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: #selector(self.updateChart), userInfo: nil, repeats: true)
+    }
+    @objc func restartButtonTapped() {
+        selectedTaskName.text = "Select a Task"
+        self.view.backgroundColor = white
+        circleView.backgroundColor = white
+        selectedTaskName.backgroundColor = white
+        descriptionLabel.backgroundColor = white
+        mainButton.backgroundColor = white
+        restartButton.removeFromSuperview()
+        fetchData()
+        balanceTimer.startScheduled()
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: #selector(self.updateChart), userInfo: nil, repeats: true)
+    }
     
+    // Displayed when tasks are over
+    func addRestartButton() {
+        restartButton = UIButton()
+        let screensize: CGRect = UIScreen.main.bounds
+        restartButton.frame = CGRect(x: screensize.width/2, y: 50,
+                                     width: screensize.width - 50, height: 80)
+        restartButton.layer.cornerRadius = 5
+        restartButton.center.x = screensize.width/2
+        restartButton.setTitle("KEEP GOING", for: .normal)
+        restartButton.titleLabel?.font = UIFont(name:"Futura", size: 40)
+        restartButton.setTitleColor(gray, for: .normal)
+        restartButton.backgroundColor = gold
+        restartButton.addTarget(self, action:#selector(HomeViewController.restartButtonTapped),
+                                for: .touchUpInside)
+        self.view.backgroundColor = gray
+        circleView.backgroundColor = gray
+        selectedTaskName.backgroundColor = gray
+        descriptionLabel.backgroundColor = gray
+        mainButton.backgroundColor = gray
+        self.view.addSubview(restartButton)
+        
+        //make circle gold
+        balanceTimer.tasksCompleted = 0
+        active_categories.removeAll()
+        let completed = Category()
+        completed.color = gold.rgb()!
+        completed.duration = 86400
+        completed.name = "Completed"
+        active_categories.append(completed)
+    }
+
+    func fixSchedule() {
+        // schedule cannot be fixed
+        if balanceTimer.secondsRunning >= 86400 {
+            timer?.invalidate()
+            selectedTaskName.text = "BALANCE NOT ACHIEVED"
+            balanceTimer.stopScheduled()
+            addRestartButton()
+            restartButton.setTitle("Restart", for: .normal)
+            restartButton.addTarget(self, action:#selector(HomeViewController.restartAllTimers),
+                                    for: .touchUpInside)
+            return
+        }
+        else {
+            timer?.invalidate()
+            navigationController?.navigationBar.barTintColor = gray
+            let scheduleFixer = FixScheduleView()
+            navigationController?.pushViewController(scheduleFixer, animated: true)
+        }
+        
+    }
     @objc func updateChart() {
         //print(balanceTimer.timeRemainingInTask)
-        if(balanceTimer.timeRemainingInTask <= 0) {
-            taskFinished()
+        if balanceTimer.timeRemainingInTask < 0 {
+            if balanceTimer.categorySelected == "Unscheduled" {
+                fixSchedule()
+                return
+            }
+            else {
+                taskFinished()
+            }
+        }
+        //user finished all tasks: Display "balance achieved
+        if balanceTimer.tasksCompleted > 0 && active_categories.count == 1 {
+            selectedTaskName.text = "BALANCE ACHIEVED"
+            balanceTimer.stopScheduled()
+            timer?.invalidate()
+            addRestartButton()
+            updateChart()
+            return
         }
         //update label above chart
         if balanceTimer.taskSelected == "Unscheduled" {
@@ -450,6 +571,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         updateChart()
         
         timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: #selector(self.updateChart), userInfo: nil, repeats: true)
+        print("created timer")
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -460,8 +582,13 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     //           OBSERVERS
     //===========================================================
     @objc func appBecameActive() {
-        if(balanceTimer.timeRemainingInTask <= 0) {
-            taskFinished()
+        if balanceTimer.timeRemainingInTask <= 0 {
+            if balanceTimer.categorySelected == "Unscheduled" {
+                fixSchedule()
+            }
+            else {
+                taskFinished()
+            }
         }
     } //appBecameActive()
     

@@ -30,7 +30,7 @@ extension UIViewController {
 let colors = [14596161,
               16463424,
               2390944,
-              12120806,
+              0x1AEE84,
               16746716,
               8354991,
               65535,
@@ -41,7 +41,7 @@ class MainViewController: UIViewController {
     let white = UIColor(hex:15460841)
     let gray = UIColor(hex:5263695)
     
-    let categoryNames = ["Work", "Health", "Social", "Sleep", "Chores", "FOO", "BAR","BAZ"]
+    let categoryNames = ["Sleep", "Code", "Work", "School", "Chores", "1", "2","3"]
     
     var ref:DatabaseReference?
 
