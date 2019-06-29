@@ -1,11 +1,11 @@
 # Balance
 
-A convenient day-planner for procrastinators.
+A convenient day-planner for time management.
 
 ## Getting Started
 
 Here is a brief summary of what will be needed to run Balance. 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+These instructions will get you a copy of the project running on your local machine for development and testing purposes.
 
 ### Prerequisites
 
