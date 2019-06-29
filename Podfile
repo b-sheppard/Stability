@@ -11,6 +11,7 @@ target 'balance' do
     pod 'SearchTextField'
     pod 'Firebase'
     pod 'Firebase/Database'
+    pod 'FirebaseUI/Auth'
     pod 'Firebase/Core'
     pod 'RealmSwift'
     pod 'SwiftLint'
