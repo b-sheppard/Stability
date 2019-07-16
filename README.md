@@ -33,4 +33,4 @@ pod install
 ```
 
 ### Note
-If more information is required to get started, please make an issue for what else is needed.
+If more information is required to get started, please make an issue for what else is needed. If you choose to work on an issue, please assign yourself to that issue.
