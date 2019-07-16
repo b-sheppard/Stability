@@ -23,10 +23,14 @@ This could change in the future.
 pod 'Charts'
 pod 'SearchTextField'
 pod 'Firebase'
+pod 'Firebase/Auth'
 pod 'SwiftLint'
 ```
 
-Once the repo has been downloaded, inside the directory of balance, type the command 
+Once the repo has been downloaded type the following comamnd in the balance directory:
 ```
 pod install
 ```
+
+### Note
+If more information is required to get started, please make an issue for what else is needed.
