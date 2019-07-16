@@ -17,6 +17,7 @@
 		5121E88E229CCC7A00BBD928 /* BalanceSearchField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5121E88D229CCC7A00BBD928 /* BalanceSearchField.swift */; };
 		5121E892229F6C8D00BBD928 /* FixScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5121E891229F6C8D00BBD928 /* FixScheduleView.swift */; };
 		513C8FF0219D363600785705 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513C8FEF219D363600785705 /* CategoryViewController.swift */; };
+		514830BA22D69A36000BFA5F /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514830B922D69A36000BFA5F /* LoginViewController.swift */; };
 		514F52712197FC590091FA83 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 514F52702197FC590091FA83 /* GoogleService-Info.plist */; };
 		516B679C21A28284008BDCF4 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516B679B21A28284008BDCF4 /* HomeViewController.swift */; };
 		516B679E21A28B94008BDCF4 /* NSUIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516B679D21A28B94008BDCF4 /* NSUIColor+Hex.swift */; };
@@ -64,6 +65,7 @@
 		5121E88D229CCC7A00BBD928 /* BalanceSearchField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceSearchField.swift; sourceTree = "<group>"; };
 		5121E891229F6C8D00BBD928 /* FixScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixScheduleView.swift; sourceTree = "<group>"; };
 		513C8FEF219D363600785705 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
+		514830B922D69A36000BFA5F /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		514F52702197FC590091FA83 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		516B679B21A28284008BDCF4 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		516B679D21A28B94008BDCF4 /* NSUIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSUIColor+Hex.swift"; sourceTree = "<group>"; };
@@ -159,6 +161,8 @@
 		518256A4210FA94500A0788D /* balance */ = {
 			isa = PBXGroup;
 			children = (
+				51050C372155E76F005A13DC /* MainViewController.swift */,
+				514830B922D69A36000BFA5F /* LoginViewController.swift */,
 				518256A5210FA94500A0788D /* AppDelegate.swift */,
 				518256A7210FA94500A0788D /* ViewController.swift */,
 				5121E88D229CCC7A00BBD928 /* BalanceSearchField.swift */,
@@ -167,7 +171,6 @@
 				518256B4210FA94600A0788D /* Info.plist */,
 				518256AC210FA94500A0788D /* balance.xcdatamodeld */,
 				51050C352155E736005A13DC /* MainNavigationController.swift */,
-				51050C372155E76F005A13DC /* MainViewController.swift */,
 				51050C392155E7D5005A13DC /* TaskViewController.swift */,
 				51B207FB219F91B300563A9F /* AddTaskViewController.swift */,
 				518F4C5821AB34DF00E4EBA7 /* TaskGenericViewController.swift */,
@@ -470,6 +473,7 @@
 				5121E88E229CCC7A00BBD928 /* BalanceSearchField.swift in Sources */,
 				513C8FF0219D363600785705 /* CategoryViewController.swift in Sources */,
 				5121E892229F6C8D00BBD928 /* FixScheduleView.swift in Sources */,
+				514830BA22D69A36000BFA5F /* LoginViewController.swift in Sources */,
 				51F5C56921DDBBEF00627E15 /* ActiveTaskViewController.swift in Sources */,
 				510FCB8F2281355B00841B48 /* BalanceTimer.swift in Sources */,
 				516B679C21A28284008BDCF4 /* HomeViewController.swift in Sources */,

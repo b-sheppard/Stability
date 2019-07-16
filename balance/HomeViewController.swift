@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import FirebaseDatabase
 import Charts
+import FirebaseAuth
 
 
 class HomeViewController: UIViewController, ChartViewDelegate {
@@ -174,6 +175,17 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             //go to new view
             navigationController?.pushViewController(categoryView, animated: false)
         }
+    }
+    @objc func signOut() {
+        do {
+            try Auth.auth().signOut()
+        }
+        catch let signOutError as NSError {
+            print ("Error signing out: %@", signOutError)
+        }
+        
+        let login = LoginViewController()
+        navigationController?.pushViewController(login, animated: false)
     }
     @objc func taskFinished() {
         // task has finished
@@ -552,10 +564,16 @@ class HomeViewController: UIViewController, ChartViewDelegate {
                                          style: .plain,
                                          target: self,
                                          action: #selector(HomeViewController.addButtonTapped))
+        let signOutButton = UIBarButtonItem(title: "Sign Out",
+                                            style: .plain,
+                                            target: self,
+                                            action: #selector(HomeViewController.signOut))
         
         view.backgroundColor = white
         self.navigationItem.rightBarButtonItem = addTaskButton
         self.navigationItem.rightBarButtonItem?.tintColor = gray
+        self.navigationItem.leftBarButtonItem = signOutButton
+        self.navigationItem.leftBarButtonItem?.tintColor = .red
         
         fetchData()
         setupView()
