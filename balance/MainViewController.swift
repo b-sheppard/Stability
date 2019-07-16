@@ -97,7 +97,5 @@ class MainViewController: UIViewController {
         view.backgroundColor = gray
         addButton()
         createDatabase()
-        
-        firstTime = false
     }
 }

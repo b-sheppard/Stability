@@ -13,9 +13,8 @@ import FirebaseDatabase
 import RealmSwift
 
 var uirealm = try! Realm() // realm file
-var firstTime = true
 var balanceTimer = BalanceTimer() // custom timer
-let USER_PATH = "Users" // path to user
+var USER_PATH = Auth.auth().currentUser?.uid ?? "error"
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -30,15 +29,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         mainNavigationController.title = "MainNG"
         
         
-        let mainViewController = MainViewController() //plus
-        let taskViewController = TaskViewController() // task
+        //let mainViewController = MainViewController() //plus
+        let loginViewController = LoginViewController()
         let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
         
        // mainNavigationController.viewControllers = [mainViewController]
  
         let homeViewController = HomeViewController()
         if !launchedBefore {
-            mainNavigationController.viewControllers = [homeViewController, mainViewController]
+            mainNavigationController.viewControllers = [homeViewController, loginViewController]
             UserDefaults.standard.set(true, forKey: "launchedBefore")
             
             let unscheduled = Category()
@@ -61,7 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         else {
-            mainNavigationController.viewControllers = [homeViewController]
+            mainNavigationController.viewControllers = [homeViewController, loginViewController]
         }
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
