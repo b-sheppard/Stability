@@ -176,16 +176,9 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             navigationController?.pushViewController(categoryView, animated: false)
         }
     }
-    @objc func signOut() {
-        do {
-            try Auth.auth().signOut()
-        }
-        catch let signOutError as NSError {
-            print ("Error signing out: %@", signOutError)
-        }
-        
-        let login = LoginViewController()
-        navigationController?.pushViewController(login, animated: false)
+    @objc func goToProfile() {
+        let profile = ProfileViewController()
+        navigationController?.pushViewController(profile, animated: false)
     }
     @objc func taskFinished() {
         // task has finished
@@ -564,15 +557,15 @@ class HomeViewController: UIViewController, ChartViewDelegate {
                                          style: .plain,
                                          target: self,
                                          action: #selector(HomeViewController.addButtonTapped))
-        let signOutButton = UIBarButtonItem(title: "Sign Out",
+        let profileButton = UIBarButtonItem(title: "Profile",
                                             style: .plain,
                                             target: self,
-                                            action: #selector(HomeViewController.signOut))
+                                            action: #selector(HomeViewController.goToProfile))
         
         view.backgroundColor = white
         self.navigationItem.rightBarButtonItem = addTaskButton
         self.navigationItem.rightBarButtonItem?.tintColor = gray
-        self.navigationItem.leftBarButtonItem = signOutButton
+        self.navigationItem.leftBarButtonItem = profileButton
         self.navigationItem.leftBarButtonItem?.tintColor = .red
         
         fetchData()
