@@ -67,7 +67,6 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     }
     @objc public func startTapped() {
         let checkStatus = uirealm.objects(TimerStatus.self).first
-
         if !checkStatus!.timerRunning && balanceTimer.categoryStaged != "" {
             mainButton.setTitle("STOP", for: .normal)
             descriptionLabel.textColor = gray
@@ -216,7 +215,6 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         
         balanceTimer.timeRemaining = secondsOvertime
         balanceTimer.timeRemainingInTask = secondsOvertime
-        balanceTimer.secondsRunning = 0
         balanceTimer.categorySelected = "Unscheduled"
         balanceTimer.taskSelected = "Unscheduled"
         
@@ -225,20 +223,25 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         fetchData()
     }
     // time exceeds 24 hours
-    @objc func restartAllTimers() {
+    func restartAllTimers() {
         // restart balance timer
         balanceTimer.categorySelected = "Unscheduled"
         balanceTimer.categoryStaged = ""
         balanceTimer.tasksCompleted = 0
-        balanceTimer.secondsCompleted = 0
-        balanceTimer.secondsRunning = 0
-        balanceTimer.timeRemaining = 86400
-        balanceTimer.timeRemainingInTask = 86400
+        // find time interval of user set time
+        let date = Date()
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: date)
+        let minute = calendar.component(.minute, from: date)
+        let timeInterval = 3600*(hour - balanceTimer.hourStarted) + 60*(minute - balanceTimer.minuteStarted)
+        balanceTimer.timeRemaining = 86400 - timeInterval
+        balanceTimer.timeRemainingInTask = 86400 - timeInterval
+        balanceTimer.secondsCompleted = Double(timeInterval)
         balanceTimer.taskSelected = "Unscheduled"
         selectedTaskName.text = "Select a Task"
 
         let unscheduled = Category()
-        unscheduled.duration = 86400
+        unscheduled.duration = 86400 - timeInterval
         unscheduled.name = "Unscheduled"
         
         let unscheduledTask = Task()
@@ -255,18 +258,14 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             uirealm.add(unscheduledTask)
         }
         
-        let test = uirealm.objects(Task.self)
-        print(test)
-        
         self.view.backgroundColor = white
         circleView.backgroundColor = white
         selectedTaskName.backgroundColor = white
         descriptionLabel.backgroundColor = white
         mainButton.backgroundColor = white
-        restartButton.removeFromSuperview()
         fetchData()
-        balanceTimer.startScheduled()
         timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: #selector(self.updateChart), userInfo: nil, repeats: true)
+        balanceTimer.startScheduled()
     }
     @objc func restartButtonTapped() {
         selectedTaskName.text = "Select a Task"
@@ -314,14 +313,13 @@ class HomeViewController: UIViewController, ChartViewDelegate {
 
     func fixSchedule() {
         // schedule cannot be fixed
-        if balanceTimer.secondsRunning >= 86400 {
+        print(balanceTimer.secondsCompleted)
+        if balanceTimer.secondsCompleted >= 86400 {
             timer?.invalidate()
             selectedTaskName.text = "BALANCE NOT ACHIEVED"
+            selectedTaskName.textColor = white
             balanceTimer.stopScheduled()
-            addRestartButton()
-            restartButton.setTitle("Restart", for: .normal)
-            restartButton.addTarget(self, action:#selector(HomeViewController.restartAllTimers),
-                                    for: .touchUpInside)
+            restartAllTimers()
             return
         }
         else {
@@ -582,7 +580,6 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         updateChart()
         
         timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: #selector(self.updateChart), userInfo: nil, repeats: true)
-        print("created timer")
     }
     
     override func viewDidDisappear(_ animated: Bool) {

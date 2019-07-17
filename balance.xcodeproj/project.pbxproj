@@ -165,7 +165,6 @@
 			children = (
 				51050C372155E76F005A13DC /* MainViewController.swift */,
 				518F4C5821AB34DF00E4EBA7 /* TaskGenericViewController.swift */,
-				51DECAC322DE486D00A8A4D3 /* ProfileViewController.swift */,
 				518256A5210FA94500A0788D /* AppDelegate.swift */,
 				518256A7210FA94500A0788D /* ViewController.swift */,
 				5121E88D229CCC7A00BBD928 /* BalanceSearchField.swift */,
@@ -187,6 +186,7 @@
 				5121E88B2299AD9500BBD928 /* ActiveCategories.swift */,
 				5121E891229F6C8D00BBD928 /* FixScheduleView.swift */,
 				514830B922D69A36000BFA5F /* LoginViewController.swift */,
+				51DECAC322DE486D00A8A4D3 /* ProfileViewController.swift */,
 			);
 			path = balance;
 			sourceTree = "<group>";
