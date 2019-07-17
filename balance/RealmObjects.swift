@@ -39,6 +39,8 @@ class TimerStatus : Object {
     @objc dynamic var currentCategory = "Unscheduled"
     @objc dynamic var currentTask = "Unscheduled"
     @objc dynamic var tasksCompleted = 0
+    @objc dynamic var hourStarted = 0
+    @objc dynamic var minuteStarted = 0
 }
 
 class Task : Object {

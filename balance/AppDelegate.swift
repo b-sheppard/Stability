@@ -41,7 +41,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UserDefaults.standard.set(true, forKey: "launchedBefore")
             
             let unscheduled = Category()
+            let status = TimerStatus() // timer status
+            
             //unscheduled.duration = 3680
+            let curTime = Date()
+            let calendar = Calendar.current
+            balanceTimer.hourStarted = calendar.component(.hour, from: curTime)
+            balanceTimer.minuteStarted = calendar.component(.minute, from: curTime)
+            
             unscheduled.duration = 86400
             unscheduled.name = "Unscheduled"
             
@@ -50,7 +57,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             unscheduledTask.name = unscheduled.name
             unscheduledTask.category = "Unscheduled"
             
-            let status = TimerStatus() // timer status
 
             // REALM
             try! uirealm.write() {
@@ -107,6 +113,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             checkStatus?.currentCategory = balanceTimer.categorySelected
             checkStatus?.currentTask = balanceTimer.taskSelected
             checkStatus?.tasksCompleted = balanceTimer.tasksCompleted
+            checkStatus?.hourStarted = balanceTimer.hourStarted
+            checkStatus?.minuteStarted = balanceTimer.minuteStarted
             runningCategory!.duration = secondsLeft
             runningCategory!.name = balanceTimer.categorySelected
             runningTask!.duration = balanceTimer.timeRemainingInTask
@@ -127,13 +135,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         print("----------------ACTIVE-------------------\n")
-        /*let predicate = NSPredicate(format: "name = %@", status.currentTask)
-        tanDogs = realm.objects(Dog.self).filter(predicate)*/
-       
-        /*
-        let predicate = NSPredicate(format: "name = %@", active)
-        let runningTask = realm.objects(Task.self).filter(predicate).first
-        */
+
         let checkStatus = uirealm.objects(TimerStatus.self).first
         
         let predicate = NSPredicate(format: "name = %@", checkStatus!.currentCategory)
@@ -150,13 +152,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         balanceTimer.categorySelected = runningCategory!.name
         balanceTimer.timeRemaining -= Int(timeInactive)
         
-        //task time
+        // task time
         balanceTimer.timeRemainingInTask = runningTask!.duration
         balanceTimer.taskSelected = runningTask!.name
         balanceTimer.timeRemainingInTask -= Int(timeInactive)
         
-        //num tasks completed
+        // num tasks completed
         balanceTimer.tasksCompleted = checkStatus!.tasksCompleted
+        
+        // start time of day
+        if balanceTimer.hourStarted == 0 && balanceTimer.minuteStarted == 0 {
+            balanceTimer.hourStarted = checkStatus!.hourStarted
+            balanceTimer.minuteStarted = checkStatus!.minuteStarted
+        }
 
         balanceTimer.startScheduled()
         //print(uirealm.objects(Category.self))

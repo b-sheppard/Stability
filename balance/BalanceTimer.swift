@@ -10,12 +10,13 @@ import Foundation
 import RealmSwift
 
 class BalanceTimer : Object {
+    var hourStarted = 0
+    var minuteStarted = 0
     var secondsCompleted = 0.0
     var tasksCompleted = 0
     
     var timeRemaining = 0
     var timeRemainingInTask = 0
-    var secondsRunning = 0
     var categorySelected = ""
     var categoryStaged = ""
     var taskSelected = ""
@@ -28,7 +29,6 @@ class BalanceTimer : Object {
             print("!!!!!!!ERROR!!!!!!!!!\n")
         }
         else {
-            print("created timer")
             taskTimer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: #selector(self.updateScheduled), userInfo: nil, repeats: true)
         }
     }
@@ -39,7 +39,6 @@ class BalanceTimer : Object {
     }
     @objc public func updateScheduled() {
         secondsCompleted += 1
-        secondsRunning += 1
         timeRemaining -= 1
         timeRemainingInTask -= 1
     }
