@@ -72,7 +72,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             descriptionLabel.textColor = gray
 
             //stop unscheduled timer
-            let timeRemaining = balanceTimer.stopScheduled()
+            balanceTimer.stopScheduled()
             
             //update time remaining
             let predicate = NSPredicate(format: "name = %@", balanceTimer.categorySelected)
@@ -101,7 +101,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             descriptionLabel.textColor = white
 
             mainButton.setTitle("START", for: .normal)
-            let timeRemaining = balanceTimer.stopScheduled()
+            balanceTimer.stopScheduled()
 
             // current time remaining
             let PREDICATE = NSPredicate(format: "name = %@",balanceTimer.categorySelected)

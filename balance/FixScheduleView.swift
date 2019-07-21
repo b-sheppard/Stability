@@ -31,7 +31,7 @@ UITableViewDelegate, UITableViewDataSource {
         let cell2 = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
         
         let cellIdentifier = "Cell"
-        var cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? UITableViewCell
+        var cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier)
         if cell == nil {
             cell = UITableViewCell(style: UITableViewCell.CellStyle.value2, reuseIdentifier: cellIdentifier)
         }
