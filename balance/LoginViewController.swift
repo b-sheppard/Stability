@@ -27,7 +27,7 @@ class LoginViewController: UIViewController {
         Auth.auth().createUser(withEmail: username.text!, password: password.text!){ (user, error) in
             if error == nil {
                 USER_PATH = Auth.auth().currentUser?.uid ?? "error"
-                self.createDatabase()
+                //self.createDatabase()
                 let taskViewController = TaskViewController()
                 self.navigationController?.pushViewController(taskViewController, animated: true)
             }
@@ -90,6 +90,7 @@ class LoginViewController: UIViewController {
         view.addSubview(login)
     }
     
+    // Used for debugging (adds existing categories)
     func createDatabase() {
         //add category to database
         var i = 0
