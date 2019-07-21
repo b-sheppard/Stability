@@ -377,7 +377,8 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             if cat.duration == 0 {
                 dataEntry.value = 0
             }
-            else if cat.duration <= 3600 {
+            // should fix category display issue when 3600 is still displayed when no active task exists
+            else if cat.duration <= 3600 && cat.duration > 0 {
                 dataEntry.value = 3600.0
             }
             dataEntry.x = Double(position)
