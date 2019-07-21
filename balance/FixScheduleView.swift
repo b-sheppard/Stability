@@ -111,7 +111,7 @@ UITableViewDelegate, UITableViewDataSource {
         self.view.addSubview(addTaskView.view)
         addTaskView.didMove(toParent: self)
     }
-    //delete task from database (and subtract value from active
+    //delete task from database (and subtract value from active)
     func deleteTask(task:String) {
         let Tpredicate = NSPredicate(format: "name = %@", task)
         let toDelete = uirealm.objects(Task.self).filter(Tpredicate).first!
@@ -120,6 +120,12 @@ UITableViewDelegate, UITableViewDataSource {
         toDelete.deleteTask()
         let predicate = NSPredicate(format: "category = %@", catName)
         let activeTasks = uirealm.objects(Task.self).filter(predicate)
+        // deleted last task in a category
+        if activeTasks.count == 0 {
+            try! uirealm.write {
+                uirealm.delete(activeTasks)
+            }
+        }
         fetchData()
         tableView.reloadData()
     }

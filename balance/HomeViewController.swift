@@ -374,11 +374,11 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             if cat.name == balanceTimer.categorySelected {
                 dataEntry.value = Double(balanceTimer.timeRemaining)
             }
-            if cat.duration == 0 {
+            if cat.duration <= 0 {
                 dataEntry.value = 0
             }
             // should fix category display issue when 3600 is still displayed when no active task exists
-            else if cat.duration <= 3600 && cat.duration > 0 {
+            else if cat.duration <= 3600 && cat.duration > 0 && cat.name != "Unscheduled" {
                 dataEntry.value = 3600.0
             }
             dataEntry.x = Double(position)
