@@ -16,7 +16,7 @@ class LoginViewController: UIViewController {
     let gray = UIColor(hex:5263695)
     let width = UIScreen.main.bounds.width
     let height = UIScreen.main.bounds.height
-    let categoryNames = ["Sleep", "Code", "Work", "School", "Chores", "1", "2","3"]
+    let categoryNames = ["Sleep"]
 
     
     let username = UITextField()
@@ -27,7 +27,7 @@ class LoginViewController: UIViewController {
         Auth.auth().createUser(withEmail: username.text!, password: password.text!){ (user, error) in
             if error == nil {
                 USER_PATH = Auth.auth().currentUser?.uid ?? "error"
-                //self.createDatabase()
+                self.createDatabase()
                 let taskViewController = TaskViewController()
                 self.navigationController?.pushViewController(taskViewController, animated: true)
             }
@@ -94,7 +94,7 @@ class LoginViewController: UIViewController {
     func createDatabase() {
         //add category to database
         var i = 0
-        while i < colors.count {
+        while i < categoryNames.count {
             ref?.child(USER_PATH + "/categories").child(categoryNames[i]).setValue(["Color" : colors[i],
                                                                                     "Name" : categoryNames[i],
                                                                                     "Tasks" : ""])

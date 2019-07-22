@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "518256A1210FA94500A0788D"
-               BuildableName = "balance.app"
-               BlueprintName = "balance"
-               ReferencedContainer = "container:balance.xcodeproj">
+               BuildableName = "Stability.app"
+               BlueprintName = "Stability"
+               ReferencedContainer = "container:Stability.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "518256B8210FA94600A0788D"
-               BuildableName = "balanceTests.xctest"
-               BlueprintName = "balanceTests"
-               ReferencedContainer = "container:balance.xcodeproj">
+               BuildableName = "StabilityTests.xctest"
+               BlueprintName = "StabilityTests"
+               ReferencedContainer = "container:Stability.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "518256C3210FA94600A0788D"
-               BuildableName = "balanceUITests.xctest"
-               BlueprintName = "balanceUITests"
-               ReferencedContainer = "container:balance.xcodeproj">
+               BuildableName = "StabilityUITests.xctest"
+               BlueprintName = "StabilityUITests"
+               ReferencedContainer = "container:Stability.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -53,9 +53,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "518256A1210FA94500A0788D"
-            BuildableName = "balance.app"
-            BlueprintName = "balance"
-            ReferencedContainer = "container:balance.xcodeproj">
+            BuildableName = "Stability.app"
+            BlueprintName = "Stability"
+            ReferencedContainer = "container:Stability.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -76,9 +76,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "518256A1210FA94500A0788D"
-            BuildableName = "balance.app"
-            BlueprintName = "balance"
-            ReferencedContainer = "container:balance.xcodeproj">
+            BuildableName = "Stability.app"
+            BlueprintName = "Stability"
+            ReferencedContainer = "container:Stability.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -95,9 +95,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "518256A1210FA94500A0788D"
-            BuildableName = "balance.app"
-            BlueprintName = "balance"
-            ReferencedContainer = "container:balance.xcodeproj">
+            BuildableName = "Stability.app"
+            BlueprintName = "Stability"
+            ReferencedContainer = "container:Stability.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
