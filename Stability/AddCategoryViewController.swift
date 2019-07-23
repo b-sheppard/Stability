@@ -18,7 +18,7 @@ class AddCategoryViewController: UIViewController, UITextFieldDelegate {
 
     let white = UIColor(hex:15460841)
     let gray = UIColor(hex:5263695)
-    
+    // green: 8BB174
     lazy var colors = ["YLW",
                        "RED",
                        "BLU",

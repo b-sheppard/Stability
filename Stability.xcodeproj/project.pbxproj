@@ -24,10 +24,11 @@
 		517B48842256D76A00544647 /* scratch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517B48832256D76A00544647 /* scratch.swift */; };
 		518256A6210FA94500A0788D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518256A5210FA94500A0788D /* AppDelegate.swift */; };
 		518256A8210FA94500A0788D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518256A7210FA94500A0788D /* ViewController.swift */; };
-		518256B0210FA94500A0788D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 518256AF210FA94500A0788D /* Assets.xcassets */; };
 		518256BE210FA94600A0788D /* balanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518256BD210FA94600A0788D /* balanceTests.swift */; };
 		518256C9210FA94600A0788D /* balanceUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518256C8210FA94600A0788D /* balanceUITests.swift */; };
 		518F4C5921AB34DF00E4EBA7 /* TaskGenericViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518F4C5821AB34DF00E4EBA7 /* TaskGenericViewController.swift */; };
+		5197514C22E681700077E1CE /* StabilityIcons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5197514B22E681700077E1CE /* StabilityIcons.xcassets */; };
+		5197514E22E689460077E1CE /* StabilityLaunchIcons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5197514D22E689460077E1CE /* StabilityLaunchIcons.xcassets */; };
 		51B207FC219F91B300563A9F /* AddTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B207FB219F91B300563A9F /* AddTaskViewController.swift */; };
 		51CEA7EC22E551F300217CE5 /* Stability.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 51CEA7EA22E551F300217CE5 /* Stability.xcdatamodeld */; };
 		51DECAC422DE486D00A8A4D3 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DECAC322DE486D00A8A4D3 /* ProfileViewController.swift */; };
@@ -78,7 +79,6 @@
 		518256A2210FA94500A0788D /* Stability.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stability.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		518256A5210FA94500A0788D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		518256A7210FA94500A0788D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		518256AF210FA94500A0788D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		518256B4210FA94600A0788D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		518256B9210FA94600A0788D /* StabilityTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StabilityTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		518256BD210FA94600A0788D /* balanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = balanceTests.swift; sourceTree = "<group>"; };
@@ -87,6 +87,8 @@
 		518256C8210FA94600A0788D /* balanceUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = balanceUITests.swift; sourceTree = "<group>"; };
 		518256CA210FA94600A0788D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		518F4C5821AB34DF00E4EBA7 /* TaskGenericViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskGenericViewController.swift; sourceTree = "<group>"; };
+		5197514B22E681700077E1CE /* StabilityIcons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = StabilityIcons.xcassets; path = "../Stability icons/StabilityIcons.xcassets"; sourceTree = "<group>"; };
+		5197514D22E689460077E1CE /* StabilityLaunchIcons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = StabilityLaunchIcons.xcassets; path = "../Stability Launch Icons/StabilityLaunchIcons.xcassets"; sourceTree = "<group>"; };
 		51B207FB219F91B300563A9F /* AddTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewController.swift; sourceTree = "<group>"; };
 		51CEA7EB22E551F300217CE5 /* balance.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = balance.xcdatamodel; sourceTree = "<group>"; };
 		51DECAC322DE486D00A8A4D3 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -138,6 +140,8 @@
 		51825699210FA94500A0788D = {
 			isa = PBXGroup;
 			children = (
+				5197514D22E689460077E1CE /* StabilityLaunchIcons.xcassets */,
+				5197514B22E681700077E1CE /* StabilityIcons.xcassets */,
 				518256A4210FA94500A0788D /* balance */,
 				518256BC210FA94600A0788D /* balanceTests */,
 				518256C7210FA94600A0788D /* balanceUITests */,
@@ -166,7 +170,6 @@
 				518256A5210FA94500A0788D /* AppDelegate.swift */,
 				518256A7210FA94500A0788D /* ViewController.swift */,
 				5121E88D229CCC7A00BBD928 /* BalanceSearchField.swift */,
-				518256AF210FA94500A0788D /* Assets.xcassets */,
 				514F52702197FC590091FA83 /* GoogleService-Info.plist */,
 				518256B4210FA94600A0788D /* Info.plist */,
 				51050C352155E736005A13DC /* MainNavigationController.swift */,
@@ -332,8 +335,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				518256B0210FA94500A0788D /* Assets.xcassets in Resources */,
+				5197514C22E681700077E1CE /* StabilityIcons.xcassets in Resources */,
 				514F52712197FC590091FA83 /* GoogleService-Info.plist in Resources */,
+				5197514E22E689460077E1CE /* StabilityLaunchIcons.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -642,6 +646,7 @@
 			baseConfigurationReference = 07598AA1079041CEF6B6054A /* Pods-Stability.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N8Y3UV695H;
 				INFOPLIST_FILE = Stability/Info.plist;
@@ -661,6 +666,7 @@
 			baseConfigurationReference = 9CA0E0D3CBDD3547BAF011DB /* Pods-Stability.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N8Y3UV695H;
 				INFOPLIST_FILE = Stability/Info.plist;
