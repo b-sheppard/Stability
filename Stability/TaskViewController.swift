@@ -184,7 +184,10 @@ class TaskViewController: UIViewController {
         let Tpredicate = NSPredicate(format: "name = %@", taskName)
         let doesExist = uirealm.objects(Task.self).filter(Tpredicate).first
         let newTask = Task()
-        if(doesExist != nil) { print("Task already active") }
+        if(doesExist != nil) {
+            // shake view
+            shakeTextField()
+        }
         else {
             newTask.category = categoryName
             newTask.name = taskName
@@ -200,9 +203,17 @@ class TaskViewController: UIViewController {
             }
         }
         
+        // edge case if timer isn't running
+        if balanceTimer.categorySelected == "Unscheduled" {
+            try! uirealm.write {
+                unscheduled!.duration = balanceTimer.timeRemaining
+                unscheduledTask!.duration = balanceTimer.timeRemainingInTask
+            }
+        }
+        
         if unscheduled!.duration < taskValue {
-            let alert = UIAlertController(title: "ERROR", message: "Not enough free time to add this task", preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: "Fix Schedule", style: UIAlertAction.Style.default, handler: nil))
+            let alert = UIAlertController(title: "Unable to add task", message: "Not enough time available", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Continue", style: UIAlertAction.Style.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
             self.taskSearchField.text = ""
             return
@@ -241,6 +252,19 @@ class TaskViewController: UIViewController {
             balanceTimer.timeRemaining = unscheduled!.duration
             balanceTimer.timeRemainingInTask = unscheduledTask!.duration
         }
+    }
+    
+    func shakeTextField() {
+        let animation = CABasicAnimation(keyPath: "position")
+        animation.duration = 0.07
+        animation.repeatCount = 4
+        //animation.autoreverses = true
+        animation.fromValue = NSValue(cgPoint: CGPoint(x: taskSearchField.center.x - 5,
+                                                       y: taskSearchField.center.y))
+        animation.toValue = NSValue(cgPoint: CGPoint(x: taskSearchField.center.x + 5,
+                                                     y: taskSearchField.center.y))
+        
+        taskSearchField.layer.add(animation, forKey: "position")
     }
     //fetches all tasks from firebase
     func fetchData() {

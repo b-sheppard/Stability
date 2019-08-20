@@ -16,7 +16,16 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     
     //cell is tapped
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //adds selected number of active minutes to the total
+        let dynamicView = DynamicTaskViewController()
+        dynamicView.color = color
+        dynamicView.taskName = tasks[indexPath.row]
+        dynamicView.category = name
+        navigationController?.pushViewController(dynamicView, animated: true)
+        
+        // fades out selection
+        self.tableView.deselectRow(at: indexPath, animated: true)
+        
+        /*//adds selected number of active minutes to the total
         self.ref?.child(USER_PATH + "/categories/" + self.path).child(self.tasks[indexPath.row])
             .observeSingleEvent(of: .value, with: {(snapshot) in
             let taskValue = snapshot.value! as! Int
@@ -87,7 +96,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
                 balanceTimer.timeRemaining = unscheduled!.duration
                 balanceTimer.timeRemainingInTask = unscheduledTask!.duration
             }
-        })
+        })*/
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -124,7 +133,6 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     var color:UIColor!
     
     let secondaryColor = UIColor.black.withAlphaComponent(0.4)
-    //let secondaryColor = UIColor.white
     
     var ref:DatabaseReference?
     var handle:DatabaseHandle?

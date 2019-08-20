@@ -65,6 +65,7 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
     }
     
     func setupPicker() {
+        
         let screensize: CGRect = UIScreen.main.bounds
         let width = screensize.width
         let height = screensize.height
@@ -76,12 +77,17 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
         label.font = UIFont(name: "Futura", size: 20)
         view.addSubview(label)
         
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm"
+        let dateString = "01:00"
+        let date = dateFormatter.date(from:dateString)
         
         timePicker = UIDatePicker(frame: CGRect(x: 0, y: Int(height/4), width: Int(width), height: Int(height/4)))
         timePicker.backgroundColor = color
         timePicker.datePickerMode = .countDownTimer
         timePicker.setValue(gray, forKeyPath: "textColor")
         timePicker.setValue(false, forKey: "highlightsToday")
+        timePicker.setDate(date ?? Date(), animated: false)
         
         view.addSubview(timePicker)
         

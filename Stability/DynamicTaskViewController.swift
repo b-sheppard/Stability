@@ -1,38 +1,27 @@
 //
-//  TaskGenericViewController.swift
+//  DynamicTaskViewController.swift
 //  balance
 //
-//  Created by Ben Sheppard on 11/25/18.
+//  Created by Ben Sheppard on 07/24/19.
 //  Copyright © 2018 Orb Mentality. All rights reserved.
 //
 
 import Foundation
 import UIKit
 import FirebaseDatabase
-import SearchTextField
 
-class TaskGenericViewController: UIViewController, UITextFieldDelegate {
+class DynamicTaskViewController: UIViewController, UITextFieldDelegate {
     var color:UIColor!
     var ref:DatabaseReference?
     var taskTextField:UITextField!
-    var taskSearchField: SearchTextField!
     var timePicker: UIDatePicker!
     var taskName:String!
-    var path:String!
+    var taskValue:Int!
+    var category:String!
     
-    func setupSearchField() {
-        let screensize: CGRect = UIScreen.main.bounds
-        let screenWidth = screensize.width
-        let screenHeight = screensize.height
-        
-        taskSearchField = SearchTextField(frame: CGRect(x: 20, y: screenHeight/10, width: screenWidth - 40, height: 60))
-        taskSearchField.backgroundColor = .white
-        taskSearchField.borderStyle = .roundedRect
-        taskSearchField.placeholder = "Give your task a name..."
-        taskSearchField.font = UIFont.systemFont(ofSize: 20.0);
-        taskSearchField.keyboardAppearance = .dark
-        view.addSubview(taskSearchField)
-    }
+    let white = UIColor(hex:15460841)
+    let gray = UIColor(hex:5263695)
+    let secondaryColor = UIColor.black.withAlphaComponent(0.4)
     
     func setupView() {
         //initial positions
@@ -41,38 +30,36 @@ class TaskGenericViewController: UIViewController, UITextFieldDelegate {
         let height = screensize.height
         
         self.view.frame = CGRect(x: 0, y: 40, width: width, height: height)
-        
         //create cancel button
         let cancelButton = UIButton(type: .custom)
         cancelButton.setTitle("Cancel", for: .normal)
-        cancelButton.setTitleColor(.black, for: .normal)
-        cancelButton.frame = CGRect(x: 10, y: 0, width: 60, height: 60)
-        cancelButton.tintColor = .black
+        cancelButton.setTitleColor(gray, for: .normal)
+        cancelButton.frame = CGRect(x: 10, y: 10, width: 60, height: 60)
+        cancelButton.tintColor = gray
         cancelButton.addTarget(self, action: #selector(AddCategoryViewController.CancelClicked), for: .touchUpInside)
-        cancelButton.tintColor = .black
+        cancelButton.tintColor = gray
         
         //create save button
         let saveButton = UIButton(type: .custom)
         saveButton.setTitle("Save", for: .normal)
-        saveButton.setTitleColor(.black, for: .normal)
-        saveButton.frame = CGRect(x: width - 70, y: 0, width: 60, height: 60)
-        saveButton.tintColor = .black
+        saveButton.setTitleColor(gray, for: .normal)
+        saveButton.frame = CGRect(x: width - 70, y: 10, width: 60, height: 60)
+        saveButton.tintColor = gray
         saveButton.addTarget(self, action:#selector(AddCategoryViewController.SaveClicked), for: .touchUpInside)
         cancelButton.tintColor = .black
-        
-        //title ("New Task" by default)
-        let title = UILabel(frame: CGRect(x: (width/2 - 100), y: 0, width: 200, height: 80))
-        title.text = taskName
-        title.textAlignment = .center
         
         
         self.navigationController?.isNavigationBarHidden = true
         self.view.addSubview(cancelButton)
         self.view.addSubview(saveButton)
-        self.view.addSubview(title)
     }
     
     func setupPicker() {
+        // setup default picker time (1 hour)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm"
+        let dateString = "01:00"
+        let date = dateFormatter.date(from:dateString)
         let screensize: CGRect = UIScreen.main.bounds
         let width = screensize.width
         let height = screensize.height
@@ -80,14 +67,14 @@ class TaskGenericViewController: UIViewController, UITextFieldDelegate {
         let label = UILabel()
         label.frame = CGRect(x:20, y: Int(height/4) - 30, width: 100, height: 20)
         label.text = "Duration"
-        label.textColor = .black
+        label.textColor = gray
         view.addSubview(label)
         
         
         timePicker = UIDatePicker(frame: CGRect(x: 0, y: Int(height/4), width: Int(width), height: Int(height/4)))
-        timePicker.backgroundColor = .white
+        timePicker.backgroundColor = color
         timePicker.datePickerMode = .countDownTimer
-        
+        timePicker.setDate(date ?? Date(), animated: false)
         view.addSubview(timePicker)
         
     }
@@ -96,9 +83,7 @@ class TaskGenericViewController: UIViewController, UITextFieldDelegate {
     //destroy view
     @objc func CancelClicked() {
         self.navigationController?.isNavigationBarHidden = false
-        print("cancel")
-        self.view.removeFromSuperview()
-        self.removeFromParent()
+        navigationController?.popViewController(animated: true)
     }
     //save category
     @objc func SaveClicked() {
@@ -108,18 +93,21 @@ class TaskGenericViewController: UIViewController, UITextFieldDelegate {
             print("can't get text!!!")
             return
         }
-        if text != "" {
-            print("Add " + text)
+        if text != taskName {
+            print(taskName!)
+            // Remove old node
+            ref?.child(USER_PATH + "/categories").child(category!).child("Tasks").child(taskName!).removeValue()
+            
+            // Add new node
             let date = timePicker.date
             let components = Calendar.current.dateComponents([.hour, .minute], from: date)
             let hour = components.value(for: .hour)!
             let minute = components.value(for: .minute)!
             
-            ref?.child(USER_PATH + "/categories").child(path).child(text).setValue(60*hour + minute)
-            taskTextField.text = ""
+            ref?.child(USER_PATH + "/categories").child(category!).child("Tasks").child(text).setValue(3600*hour + 60*minute)
+            taskTextField.text = text
         }
-        self.view.removeFromSuperview()
-        self.removeFromParent()
+        navigationController?.popViewController(animated: true)
     }
     
     //create newTask textfield and keyboard
@@ -129,10 +117,12 @@ class TaskGenericViewController: UIViewController, UITextFieldDelegate {
         let screenHeight = screensize.height
         
         taskTextField = UITextField(frame: CGRect(x: 20, y: screenHeight/10, width: screenWidth - 40, height: 60))
-        taskTextField.backgroundColor = .white
+        taskTextField.backgroundColor = color
         taskTextField.borderStyle = .roundedRect
-        taskTextField.placeholder = "Give your task a name..."
-        taskTextField.font = UIFont.systemFont(ofSize: 20.0);
+        taskTextField.text = taskName
+        taskTextField.textAlignment = .center
+        taskTextField.textColor = secondaryColor
+        taskTextField.font = UIFont(name:"Futura", size:20)
         taskTextField.keyboardAppearance = .dark
         view.addSubview(taskTextField)
     }
@@ -142,12 +132,11 @@ class TaskGenericViewController: UIViewController, UITextFieldDelegate {
         
         ref = Database.database().reference()
         
+        print(taskValue)
         setupView()
-        //createTextField()
-        setupSearchField()
+        createTextField()
         setupPicker()
         
-        self.view.layer.cornerRadius = 10.0
         view.backgroundColor = color
         self.hideKeyboardWhenTappedAround()
     }
