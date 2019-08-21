@@ -28,6 +28,7 @@
 		518256C9210FA94600A0788D /* balanceUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518256C8210FA94600A0788D /* balanceUITests.swift */; };
 		518F4C5921AB34DF00E4EBA7 /* DynamicTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518F4C5821AB34DF00E4EBA7 /* DynamicTaskViewController.swift */; };
 		51B207FC219F91B300563A9F /* AddTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B207FB219F91B300563A9F /* AddTaskViewController.swift */; };
+		51B5F4DE230C8CF90073D42B /* AnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B5F4DD230C8CF90073D42B /* AnimationController.swift */; };
 		51CEA7EC22E551F300217CE5 /* Stability.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 51CEA7EA22E551F300217CE5 /* Stability.xcdatamodeld */; };
 		51DECAC422DE486D00A8A4D3 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DECAC322DE486D00A8A4D3 /* ProfileViewController.swift */; };
 		51F5C56921DDBBEF00627E15 /* ActiveTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F5C56821DDBBEF00627E15 /* ActiveTaskViewController.swift */; };
@@ -86,6 +87,7 @@
 		518256CA210FA94600A0788D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		518F4C5821AB34DF00E4EBA7 /* DynamicTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicTaskViewController.swift; sourceTree = "<group>"; };
 		51B207FB219F91B300563A9F /* AddTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewController.swift; sourceTree = "<group>"; };
+		51B5F4DD230C8CF90073D42B /* AnimationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationController.swift; sourceTree = "<group>"; };
 		51CEA7EB22E551F300217CE5 /* balance.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = balance.xcdatamodel; sourceTree = "<group>"; };
 		51DECAC322DE486D00A8A4D3 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		51F5C56821DDBBEF00627E15 /* ActiveTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveTaskViewController.swift; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 				514830B922D69A36000BFA5F /* LoginViewController.swift */,
 				51DECAC322DE486D00A8A4D3 /* ProfileViewController.swift */,
 				518F4C5821AB34DF00E4EBA7 /* DynamicTaskViewController.swift */,
+				51B5F4DD230C8CF90073D42B /* AnimationController.swift */,
 			);
 			name = balance;
 			path = Stability;
@@ -478,6 +481,7 @@
 				51CEA7EC22E551F300217CE5 /* Stability.xcdatamodeld in Sources */,
 				51F5C56921DDBBEF00627E15 /* ActiveTaskViewController.swift in Sources */,
 				510FCB8F2281355B00841B48 /* BalanceTimer.swift in Sources */,
+				51B5F4DE230C8CF90073D42B /* AnimationController.swift in Sources */,
 				516B679C21A28284008BDCF4 /* HomeViewController.swift in Sources */,
 				51050C382155E76F005A13DC /* MainViewController.swift in Sources */,
 				5121E88C2299AD9500BBD928 /* ActiveCategories.swift in Sources */,

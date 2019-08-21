@@ -11,7 +11,11 @@ import UIKit
 import FirebaseDatabase
 import Charts
 
-class AddCategoryViewController: UIViewController, UITextFieldDelegate {
+class AddCategoryViewController: UIViewController, UITextFieldDelegate,
+UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
+    
+    let animation = AnimationController()
+    
     let MAX_COLORS = 9;
     var ref:DatabaseReference?
     var categoryTextField:UITextField!
@@ -21,23 +25,23 @@ class AddCategoryViewController: UIViewController, UITextFieldDelegate {
     // green: 8BB174
     lazy var colors = ["YLW",
                        "RED",
-                       "BLU",
-                       "MNT",
-                       "PNK",
-                       "PPL",
-                       "BLE",
-                       "ONG",
-                        "ORN"]
+                       "BLUE",
+                       "TEAL",
+                       "PINK",
+                       "VIO",
+                       "BLUE",
+                       "ORG",
+                       "GRN"]
     
     var colors_int = [14596161,
                       16463424,
-                      2390944,
-                      12120806,
-                      16746716,
-                      8354991,
-                      65535,
-                      16754334,
-                      16746513]
+                      38099,
+                      3131322,
+                      16739771,
+                      8007788,
+                      4022498,
+                      16748544,
+                      4306490]
     /*lazy var colors_int = [65535, 16728064, 16760576,
                            8388863, 16741363, 7602058,
                            16743027, 16034113]*/
@@ -50,7 +54,7 @@ class AddCategoryViewController: UIViewController, UITextFieldDelegate {
         let width = screensize.width
         let height = screensize.height
         
-        self.view.frame = CGRect(x: 0, y: height/20, width: width, height: height)
+        self.view.frame = CGRect(x: 0, y: height, width: width, height: 3*height/4 + 10)
         
         //create cancel button
         let cancelButton = UIButton(type: .custom)
@@ -73,14 +77,11 @@ class AddCategoryViewController: UIViewController, UITextFieldDelegate {
     //destroy view
     @objc func CancelClicked() {
         self.navigationController?.isNavigationBarHidden = false
-        print("cancel")
-        self.view.removeFromSuperview()
-        self.removeFromParent()
+        self.animHide()
     }
     //save category
     @objc func SaveClicked() {
         self.navigationController?.isNavigationBarHidden = false
-        print("save")
         //save to database
         guard let text = self.categoryTextField.text else {
             print("can't get text!!!")
@@ -93,8 +94,7 @@ class AddCategoryViewController: UIViewController, UITextFieldDelegate {
                                                            "Tasks" : ""])
             categoryTextField.text = ""
         }
-        self.view.removeFromSuperview()
-        self.removeFromParent()
+        self.animHide()
     }
     
     //create newTask textfield and keyboard
@@ -104,7 +104,9 @@ class AddCategoryViewController: UIViewController, UITextFieldDelegate {
         let screenHeight = screensize.height
         
         categoryTextField = UITextField(frame: CGRect(x: 20, y: screenHeight/10, width: screenWidth - 40, height: 60))
-        categoryTextField.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        categoryTextField.backgroundColor = UIColor.black.withAlphaComponent(0.1)
+        categoryTextField.layer.borderWidth = 0.0
+        //categoryTextField.backgroundColor = white
         categoryTextField.borderStyle = .roundedRect
         categoryTextField.placeholder = "Type category name..."
         categoryTextField.font = UIFont(name: "Futura", size: 20)
@@ -173,7 +175,30 @@ class AddCategoryViewController: UIViewController, UITextFieldDelegate {
         addButtons()
         
         self.view.layer.cornerRadius = 10.0
-        view.backgroundColor = white
+        view.backgroundColor = gray
         self.hideKeyboardWhenTappedAround()
+    }
+}
+
+extension UIViewController {
+    func animShow(){
+        UIView.animate(withDuration: 0.33, delay: 0, options: [.curveEaseInOut],
+                       animations: {
+                        self.view.center.y -= self.view.bounds.height - 10
+                        self.view.layoutIfNeeded()
+        }, completion: nil)
+        self.view.isHidden = false
+    }
+    func animHide(){
+        UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseInOut],
+                       animations: {
+                        self.view.center.y += self.view.bounds.height
+                        self.view.layoutIfNeeded()
+                        
+        },  completion: {(_ completed: Bool) -> Void in
+            self.view.isHidden = true
+            self.view.removeFromSuperview()
+            self.removeFromParent()
+        })
     }
 }

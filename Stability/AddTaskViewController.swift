@@ -30,7 +30,7 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
         let width = screensize.width
         let height = screensize.height
         
-        self.view.frame = CGRect(x: 0, y: 40, width: width, height: height)
+        self.view.frame = CGRect(x: 0, y: height, width: width, height: height - 10)
         
         //create cancel button
         let cancelButton = UIButton(type: .custom)
@@ -88,6 +88,7 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
         timePicker.setValue(gray, forKeyPath: "textColor")
         timePicker.setValue(false, forKey: "highlightsToday")
         timePicker.setDate(date ?? Date(), animated: false)
+        timePicker.setValue(secondaryColor, forKeyPath: "textColor")
         
         view.addSubview(timePicker)
         
@@ -98,8 +99,7 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
     @objc func CancelClicked() {
         self.navigationController?.isNavigationBarHidden = false
         print("cancel")
-        self.view.removeFromSuperview()
-        self.removeFromParent()
+        self.animHide()
     }
     
     //save category
@@ -120,8 +120,7 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
             ref?.child(USER_PATH + "/categories").child(path).child(text).setValue(3600*hour + 60*minute)
             taskTextField.text = ""
         }
-        self.view.removeFromSuperview()
-        self.removeFromParent()
+        self.animHide()
     }
     
     //create newTask textfield and keyboard
@@ -131,7 +130,7 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
         let screenHeight = screensize.height
         
         taskTextField = UITextField(frame: CGRect(x: 20, y: screenHeight/10, width: screenWidth - 40, height: 60))
-        taskTextField.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        taskTextField.backgroundColor = UIColor.black.withAlphaComponent(0.1)
         taskTextField.borderStyle = .roundedRect
         //let str = NSAttributedString(string: "Give your task a name...", attributes: [NSAttributedString.Key.foregroundColor: white])
         taskTextField.placeholder = "Give your task a name..."

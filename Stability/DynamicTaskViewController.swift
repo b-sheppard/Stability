@@ -33,21 +33,18 @@ class DynamicTaskViewController: UIViewController, UITextFieldDelegate {
         //create cancel button
         let cancelButton = UIButton(type: .custom)
         cancelButton.setTitle("Cancel", for: .normal)
-        cancelButton.setTitleColor(gray, for: .normal)
+        cancelButton.setTitleColor(secondaryColor, for: .normal)
         cancelButton.frame = CGRect(x: 10, y: 10, width: 60, height: 60)
-        cancelButton.tintColor = gray
         cancelButton.addTarget(self, action: #selector(AddCategoryViewController.CancelClicked), for: .touchUpInside)
-        cancelButton.tintColor = gray
+        cancelButton.tintColor = secondaryColor
         
         //create save button
         let saveButton = UIButton(type: .custom)
         saveButton.setTitle("Save", for: .normal)
-        saveButton.setTitleColor(gray, for: .normal)
+        saveButton.setTitleColor(secondaryColor, for: .normal)
         saveButton.frame = CGRect(x: width - 70, y: 10, width: 60, height: 60)
-        saveButton.tintColor = gray
-        saveButton.addTarget(self, action:#selector(AddCategoryViewController.SaveClicked), for: .touchUpInside)
-        cancelButton.tintColor = .black
-        
+        saveButton.tintColor = secondaryColor
+        saveButton.addTarget(self, action:#selector(AddCategoryViewController.SaveClicked), for: .touchUpInside)        
         
         self.navigationController?.isNavigationBarHidden = true
         self.view.addSubview(cancelButton)
@@ -67,7 +64,7 @@ class DynamicTaskViewController: UIViewController, UITextFieldDelegate {
         let label = UILabel()
         label.frame = CGRect(x:20, y: Int(height/4) - 30, width: 100, height: 20)
         label.text = "Duration"
-        label.textColor = gray
+        label.textColor = secondaryColor
         view.addSubview(label)
         
         
@@ -75,6 +72,8 @@ class DynamicTaskViewController: UIViewController, UITextFieldDelegate {
         timePicker.backgroundColor = color
         timePicker.datePickerMode = .countDownTimer
         timePicker.setDate(date ?? Date(), animated: false)
+        timePicker.setValue(secondaryColor, forKeyPath: "textColor")
+
         view.addSubview(timePicker)
         
     }

@@ -28,6 +28,7 @@ class TaskViewController: UIViewController {
     
     var ref:DatabaseReference?
     var handle:DatabaseHandle?
+    var scrollViewAdded = false
     
     // go to homeview
     @objc public func homeButtonTapped() {
@@ -64,6 +65,7 @@ class TaskViewController: UIViewController {
         //add the view as a child
         self.addChild(addCategoryViewController)
         self.view.addSubview(addCategoryViewController.view)
+        addCategoryViewController.animShow()
         addCategoryViewController.didMove(toParent: self)
     } // addCategoryView
     
@@ -139,7 +141,10 @@ class TaskViewController: UIViewController {
             col += 1
             buttonCount += 1
         }
-        view.addSubview(scrollView)
+        // insert view behind addCategoryView
+        view.insertSubview(scrollView, at: 0)
+        
+        
     } // createScrollView()
     
     //create newTask textfield and keyboard
@@ -187,20 +192,13 @@ class TaskViewController: UIViewController {
         if(doesExist != nil) {
             // shake view
             shakeTextField()
+            return
         }
         else {
             newTask.category = categoryName
             newTask.name = taskName
             newTask.duration = taskValue
             //   newTask.duration = 5
-        }
-        
-        // edge case if timer isn't running
-        if balanceTimer.categorySelected == "Unscheduled" {
-            try! uirealm.write {
-                unscheduled!.duration = balanceTimer.timeRemaining
-                unscheduledTask!.duration = balanceTimer.timeRemainingInTask
-            }
         }
         
         // edge case if timer isn't running
@@ -256,7 +254,7 @@ class TaskViewController: UIViewController {
     
     func shakeTextField() {
         let animation = CABasicAnimation(keyPath: "position")
-        animation.duration = 0.07
+        animation.duration = 0.1
         animation.repeatCount = 4
         //animation.autoreverses = true
         animation.fromValue = NSValue(cgPoint: CGPoint(x: taskSearchField.center.x - 5,
@@ -287,18 +285,22 @@ class TaskViewController: UIViewController {
             }
         })
     }
+    
     override func viewDidDisappear(_ animated: Bool) {
         self.navigationController?.isNavigationBarHidden = false
     } // viewDidDisappear()
     
+    override func viewDidAppear(_ animated: Bool) {
+        fetchData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.isNavigationBarHidden = false
-        //updateLocalDatabase()
-        
+        navigationController?.isNavigationBarHidden = false        
         ref = Database.database().reference()
         fetchData()
+        createScrollView()
         
         // updates category list if new category added
         handle = ref?.child(USER_PATH + "/categories").observe(.childAdded, with: { (snapshot) in
@@ -309,6 +311,7 @@ class TaskViewController: UIViewController {
             if let color = snapshot.childSnapshot(forPath: "/Color").value as? Int {
                 self.categoryColors.insert(color, at: 0)
             }
+            self.scrollView.removeFromSuperview()
             self.createScrollView()
         })
         
@@ -320,6 +323,7 @@ class TaskViewController: UIViewController {
                     self.categoryColors.remove(at: position)
                     print(item + " category removed")
                 }
+                self.scrollView.removeFromSuperview()
                 self.createScrollView()
             }
         })
@@ -336,7 +340,7 @@ class TaskViewController: UIViewController {
                                          target: self,
                                          action: #selector(TaskViewController.homeButtonTapped))
         homeButton.tintColor = UIColor.black.withAlphaComponent(0.4)
-        self.navigationItem.rightBarButtonItem = homeButton
+        self.navigationItem.leftBarButtonItem = homeButton
         self.navigationItem.setHidesBackButton(true, animated: false)
         
     } // viewDidLoad()

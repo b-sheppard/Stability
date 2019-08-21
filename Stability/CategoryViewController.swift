@@ -207,6 +207,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         
         self.addChild(addTaskView)
         self.view.addSubview(addTaskView.view)
+        addTaskView.animShow()
         addTaskView.didMove(toParent: self)
     }
     //delete task from database
