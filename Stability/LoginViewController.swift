@@ -106,7 +106,7 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         
         if Auth.auth().currentUser?.uid != nil {
-            print(Auth.auth().currentUser?.uid)
+            print(Auth.auth().currentUser?.uid ?? "Cannot find uid")
             let homeViewController = HomeViewController()
             self.navigationController?.pushViewController(homeViewController, animated: true)
         }

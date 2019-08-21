@@ -275,9 +275,9 @@ class TaskViewController: UIViewController {
                 self.catColors[catName] = catColor
                 for case let tasksInCategory as DataSnapshot in cat.children {
                     let toAdd = Task()
-                    toAdd.category = catName as! String
+                    toAdd.category = catName 
                     toAdd.duration = tasksInCategory.value as! Int
-                    toAdd.name = tasksInCategory.key as! String
+                    toAdd.name = tasksInCategory.key 
                     self.tasks.append(toAdd)
                     self.taskNames.append(toAdd.name)
                     self.taskSearchField.filterStrings(self.taskNames)

@@ -1,15 +1,15 @@
 //
-//  balanceTests.swift
-//  balanceTests
+//  stabilityTests.swift
+//  stabilityTests
 //
 //  Created by Ben Sheppard on 7/30/18.
 //  Copyright © 2018 Orb Mentality. All rights reserved.
 //
 
 import XCTest
-@testable import balance
+@testable import Stability
 
-class balanceTests: XCTestCase {
+class stabilityTests: XCTestCase {
     
     override func setUp() {
         super.setUp()

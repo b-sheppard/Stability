@@ -8,7 +8,7 @@
 
 import XCTest
 
-class balanceUITests: XCTestCase {
+class stabilityUITests: XCTestCase {
         
     override func setUp() {
         super.setUp()

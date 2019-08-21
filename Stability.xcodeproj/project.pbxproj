@@ -24,8 +24,8 @@
 		517B48842256D76A00544647 /* scratch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517B48832256D76A00544647 /* scratch.swift */; };
 		518256A6210FA94500A0788D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518256A5210FA94500A0788D /* AppDelegate.swift */; };
 		518256A8210FA94500A0788D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518256A7210FA94500A0788D /* ViewController.swift */; };
-		518256BE210FA94600A0788D /* balanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518256BD210FA94600A0788D /* balanceTests.swift */; };
-		518256C9210FA94600A0788D /* balanceUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518256C8210FA94600A0788D /* balanceUITests.swift */; };
+		518256BE210FA94600A0788D /* stabilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518256BD210FA94600A0788D /* stabilityTests.swift */; };
+		518256C9210FA94600A0788D /* stabilityUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518256C8210FA94600A0788D /* stabilityUITests.swift */; };
 		518F4C5921AB34DF00E4EBA7 /* DynamicTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518F4C5821AB34DF00E4EBA7 /* DynamicTaskViewController.swift */; };
 		51B207FC219F91B300563A9F /* AddTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B207FB219F91B300563A9F /* AddTaskViewController.swift */; };
 		51B5F4DE230C8CF90073D42B /* AnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B5F4DD230C8CF90073D42B /* AnimationController.swift */; };
@@ -80,10 +80,10 @@
 		518256A7210FA94500A0788D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		518256B4210FA94600A0788D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		518256B9210FA94600A0788D /* StabilityTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StabilityTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		518256BD210FA94600A0788D /* balanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = balanceTests.swift; sourceTree = "<group>"; };
+		518256BD210FA94600A0788D /* stabilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = stabilityTests.swift; sourceTree = "<group>"; };
 		518256BF210FA94600A0788D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		518256C4210FA94600A0788D /* StabilityUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StabilityUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		518256C8210FA94600A0788D /* balanceUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = balanceUITests.swift; sourceTree = "<group>"; };
+		518256C8210FA94600A0788D /* stabilityUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = stabilityUITests.swift; sourceTree = "<group>"; };
 		518256CA210FA94600A0788D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		518F4C5821AB34DF00E4EBA7 /* DynamicTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicTaskViewController.swift; sourceTree = "<group>"; };
 		51B207FB219F91B300563A9F /* AddTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewController.swift; sourceTree = "<group>"; };
@@ -138,9 +138,9 @@
 		51825699210FA94500A0788D = {
 			isa = PBXGroup;
 			children = (
-				518256A4210FA94500A0788D /* balance */,
-				518256BC210FA94600A0788D /* balanceTests */,
-				518256C7210FA94600A0788D /* balanceUITests */,
+				518256A4210FA94500A0788D /* stability */,
+				518256BC210FA94600A0788D /* stabilityTests */,
+				518256C7210FA94600A0788D /* stabilityUITests */,
 				518256A3210FA94500A0788D /* Products */,
 				930A25449998BC081BBA6994 /* Pods */,
 				24FB2947116E9536EC617482 /* Frameworks */,
@@ -157,7 +157,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		518256A4210FA94500A0788D /* balance */ = {
+		518256A4210FA94500A0788D /* stability */ = {
 			isa = PBXGroup;
 			children = (
 				51CEA7EA22E551F300217CE5 /* Stability.xcdatamodeld */,
@@ -185,26 +185,26 @@
 				518F4C5821AB34DF00E4EBA7 /* DynamicTaskViewController.swift */,
 				51B5F4DD230C8CF90073D42B /* AnimationController.swift */,
 			);
-			name = balance;
+			name = stability;
 			path = Stability;
 			sourceTree = "<group>";
 		};
-		518256BC210FA94600A0788D /* balanceTests */ = {
+		518256BC210FA94600A0788D /* stabilityTests */ = {
 			isa = PBXGroup;
 			children = (
-				518256BD210FA94600A0788D /* balanceTests.swift */,
+				518256BD210FA94600A0788D /* stabilityTests.swift */,
 				518256BF210FA94600A0788D /* Info.plist */,
 			);
-			path = balanceTests;
+			path = stabilityTests;
 			sourceTree = "<group>";
 		};
-		518256C7210FA94600A0788D /* balanceUITests */ = {
+		518256C7210FA94600A0788D /* stabilityUITests */ = {
 			isa = PBXGroup;
 			children = (
-				518256C8210FA94600A0788D /* balanceUITests.swift */,
+				518256C8210FA94600A0788D /* stabilityUITests.swift */,
 				518256CA210FA94600A0788D /* Info.plist */,
 			);
-			path = balanceUITests;
+			path = stabilityUITests;
 			sourceTree = "<group>";
 		};
 		930A25449998BC081BBA6994 /* Pods */ = {
@@ -293,7 +293,7 @@
 				TargetAttributes = {
 					518256A1210FA94500A0788D = {
 						CreatedOnToolsVersion = 9.4.1;
-						LastSwiftMigration = 1020;
+						LastSwiftMigration = 1030;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 0;
@@ -498,7 +498,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				518256BE210FA94600A0788D /* balanceTests.swift in Sources */,
+				518256BE210FA94600A0788D /* stabilityTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -506,7 +506,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				518256C9210FA94600A0788D /* balanceUITests.swift in Sources */,
+				518256C9210FA94600A0788D /* stabilityUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -657,7 +657,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bensheppard.stability;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -677,7 +677,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bensheppard.stability;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -690,13 +690,13 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N8Y3UV695H;
-				INFOPLIST_FILE = balanceTests/Info.plist;
+				INFOPLIST_FILE = stabilityTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.orbmentality.balanceTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.orbmentality.stabilityTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -712,13 +712,13 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N8Y3UV695H;
-				INFOPLIST_FILE = balanceTests/Info.plist;
+				INFOPLIST_FILE = stabilityTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.orbmentality.balanceTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.orbmentality.stabilityTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -733,17 +733,17 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N8Y3UV695H;
-				INFOPLIST_FILE = balanceUITests/Info.plist;
+				INFOPLIST_FILE = stabilityUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.orbmentality.balanceUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.orbmentality.stabilityUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = balance;
+				TEST_TARGET_NAME = stability;
 			};
 			name = Debug;
 		};
@@ -754,17 +754,17 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N8Y3UV695H;
-				INFOPLIST_FILE = balanceUITests/Info.plist;
+				INFOPLIST_FILE = stabilityUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.orbmentality.balanceUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.orbmentality.stabilityUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = balance;
+				TEST_TARGET_NAME = stability;
 			};
 			name = Release;
 		};
