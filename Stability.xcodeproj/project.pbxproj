@@ -26,10 +26,9 @@
 		518256A8210FA94500A0788D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518256A7210FA94500A0788D /* ViewController.swift */; };
 		518256BE210FA94600A0788D /* balanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518256BD210FA94600A0788D /* balanceTests.swift */; };
 		518256C9210FA94600A0788D /* balanceUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518256C8210FA94600A0788D /* balanceUITests.swift */; };
-		518F4C5921AB34DF00E4EBA7 /* TaskGenericViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518F4C5821AB34DF00E4EBA7 /* TaskGenericViewController.swift */; };
-		5197514C22E681700077E1CE /* StabilityIcons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5197514B22E681700077E1CE /* StabilityIcons.xcassets */; };
-		5197514E22E689460077E1CE /* StabilityLaunchIcons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5197514D22E689460077E1CE /* StabilityLaunchIcons.xcassets */; };
+		518F4C5921AB34DF00E4EBA7 /* DynamicTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518F4C5821AB34DF00E4EBA7 /* DynamicTaskViewController.swift */; };
 		51B207FC219F91B300563A9F /* AddTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B207FB219F91B300563A9F /* AddTaskViewController.swift */; };
+		51B5F4DE230C8CF90073D42B /* AnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B5F4DD230C8CF90073D42B /* AnimationController.swift */; };
 		51CEA7EC22E551F300217CE5 /* Stability.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 51CEA7EA22E551F300217CE5 /* Stability.xcdatamodeld */; };
 		51DECAC422DE486D00A8A4D3 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DECAC322DE486D00A8A4D3 /* ProfileViewController.swift */; };
 		51F5C56921DDBBEF00627E15 /* ActiveTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F5C56821DDBBEF00627E15 /* ActiveTaskViewController.swift */; };
@@ -86,10 +85,9 @@
 		518256C4210FA94600A0788D /* StabilityUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StabilityUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		518256C8210FA94600A0788D /* balanceUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = balanceUITests.swift; sourceTree = "<group>"; };
 		518256CA210FA94600A0788D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		518F4C5821AB34DF00E4EBA7 /* TaskGenericViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskGenericViewController.swift; sourceTree = "<group>"; };
-		5197514B22E681700077E1CE /* StabilityIcons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = StabilityIcons.xcassets; path = "../Stability icons/StabilityIcons.xcassets"; sourceTree = "<group>"; };
-		5197514D22E689460077E1CE /* StabilityLaunchIcons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = StabilityLaunchIcons.xcassets; path = "../Stability Launch Icons/StabilityLaunchIcons.xcassets"; sourceTree = "<group>"; };
+		518F4C5821AB34DF00E4EBA7 /* DynamicTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicTaskViewController.swift; sourceTree = "<group>"; };
 		51B207FB219F91B300563A9F /* AddTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewController.swift; sourceTree = "<group>"; };
+		51B5F4DD230C8CF90073D42B /* AnimationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationController.swift; sourceTree = "<group>"; };
 		51CEA7EB22E551F300217CE5 /* balance.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = balance.xcdatamodel; sourceTree = "<group>"; };
 		51DECAC322DE486D00A8A4D3 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		51F5C56821DDBBEF00627E15 /* ActiveTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveTaskViewController.swift; sourceTree = "<group>"; };
@@ -140,8 +138,6 @@
 		51825699210FA94500A0788D = {
 			isa = PBXGroup;
 			children = (
-				5197514D22E689460077E1CE /* StabilityLaunchIcons.xcassets */,
-				5197514B22E681700077E1CE /* StabilityIcons.xcassets */,
 				518256A4210FA94500A0788D /* balance */,
 				518256BC210FA94600A0788D /* balanceTests */,
 				518256C7210FA94600A0788D /* balanceUITests */,
@@ -166,7 +162,6 @@
 			children = (
 				51CEA7EA22E551F300217CE5 /* Stability.xcdatamodeld */,
 				51050C372155E76F005A13DC /* MainViewController.swift */,
-				518F4C5821AB34DF00E4EBA7 /* TaskGenericViewController.swift */,
 				518256A5210FA94500A0788D /* AppDelegate.swift */,
 				518256A7210FA94500A0788D /* ViewController.swift */,
 				5121E88D229CCC7A00BBD928 /* BalanceSearchField.swift */,
@@ -187,6 +182,8 @@
 				5121E891229F6C8D00BBD928 /* FixScheduleView.swift */,
 				514830B922D69A36000BFA5F /* LoginViewController.swift */,
 				51DECAC322DE486D00A8A4D3 /* ProfileViewController.swift */,
+				518F4C5821AB34DF00E4EBA7 /* DynamicTaskViewController.swift */,
+				51B5F4DD230C8CF90073D42B /* AnimationController.swift */,
 			);
 			name = balance;
 			path = Stability;
@@ -297,6 +294,11 @@
 					518256A1210FA94500A0788D = {
 						CreatedOnToolsVersion = 9.4.1;
 						LastSwiftMigration = 1020;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 0;
+							};
+						};
 					};
 					518256B8210FA94600A0788D = {
 						CreatedOnToolsVersion = 9.4.1;
@@ -335,9 +337,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5197514C22E681700077E1CE /* StabilityIcons.xcassets in Resources */,
 				514F52712197FC590091FA83 /* GoogleService-Info.plist in Resources */,
-				5197514E22E689460077E1CE /* StabilityLaunchIcons.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -481,10 +481,11 @@
 				51CEA7EC22E551F300217CE5 /* Stability.xcdatamodeld in Sources */,
 				51F5C56921DDBBEF00627E15 /* ActiveTaskViewController.swift in Sources */,
 				510FCB8F2281355B00841B48 /* BalanceTimer.swift in Sources */,
+				51B5F4DE230C8CF90073D42B /* AnimationController.swift in Sources */,
 				516B679C21A28284008BDCF4 /* HomeViewController.swift in Sources */,
 				51050C382155E76F005A13DC /* MainViewController.swift in Sources */,
 				5121E88C2299AD9500BBD928 /* ActiveCategories.swift in Sources */,
-				518F4C5921AB34DF00E4EBA7 /* TaskGenericViewController.swift in Sources */,
+				518F4C5921AB34DF00E4EBA7 /* DynamicTaskViewController.swift in Sources */,
 				516B679E21A28B94008BDCF4 /* NSUIColor+Hex.swift in Sources */,
 				517B48842256D76A00544647 /* scratch.swift in Sources */,
 				51DECAC422DE486D00A8A4D3 /* ProfileViewController.swift in Sources */,

@@ -28,6 +28,7 @@ class TaskViewController: UIViewController {
     
     var ref:DatabaseReference?
     var handle:DatabaseHandle?
+    var scrollViewAdded = false
     
     // go to homeview
     @objc public func homeButtonTapped() {
@@ -64,6 +65,7 @@ class TaskViewController: UIViewController {
         //add the view as a child
         self.addChild(addCategoryViewController)
         self.view.addSubview(addCategoryViewController.view)
+        addCategoryViewController.animShow()
         addCategoryViewController.didMove(toParent: self)
     } // addCategoryView
     
@@ -139,7 +141,10 @@ class TaskViewController: UIViewController {
             col += 1
             buttonCount += 1
         }
-        view.addSubview(scrollView)
+        // insert view behind addCategoryView
+        view.insertSubview(scrollView, at: 0)
+        
+        
     } // createScrollView()
     
     //create newTask textfield and keyboard
@@ -184,7 +189,11 @@ class TaskViewController: UIViewController {
         let Tpredicate = NSPredicate(format: "name = %@", taskName)
         let doesExist = uirealm.objects(Task.self).filter(Tpredicate).first
         let newTask = Task()
-        if(doesExist != nil) { print("Task already active") }
+        if(doesExist != nil) {
+            // shake view
+            shakeTextField()
+            return
+        }
         else {
             newTask.category = categoryName
             newTask.name = taskName
@@ -201,8 +210,8 @@ class TaskViewController: UIViewController {
         }
         
         if unscheduled!.duration < taskValue {
-            let alert = UIAlertController(title: "ERROR", message: "Not enough free time to add this task", preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: "Fix Schedule", style: UIAlertAction.Style.default, handler: nil))
+            let alert = UIAlertController(title: "Unable to add task", message: "Not enough time available", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Continue", style: UIAlertAction.Style.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
             self.taskSearchField.text = ""
             return
@@ -242,6 +251,19 @@ class TaskViewController: UIViewController {
             balanceTimer.timeRemainingInTask = unscheduledTask!.duration
         }
     }
+    
+    func shakeTextField() {
+        let animation = CABasicAnimation(keyPath: "position")
+        animation.duration = 0.1
+        animation.repeatCount = 4
+        //animation.autoreverses = true
+        animation.fromValue = NSValue(cgPoint: CGPoint(x: taskSearchField.center.x - 5,
+                                                       y: taskSearchField.center.y))
+        animation.toValue = NSValue(cgPoint: CGPoint(x: taskSearchField.center.x + 5,
+                                                     y: taskSearchField.center.y))
+        
+        taskSearchField.layer.add(animation, forKey: "position")
+    }
     //fetches all tasks from firebase
     func fetchData() {
         //adds task data to an array
@@ -263,18 +285,22 @@ class TaskViewController: UIViewController {
             }
         })
     }
+    
     override func viewDidDisappear(_ animated: Bool) {
         self.navigationController?.isNavigationBarHidden = false
     } // viewDidDisappear()
     
+    override func viewDidAppear(_ animated: Bool) {
+        fetchData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.isNavigationBarHidden = false
-        //updateLocalDatabase()
-        
+        navigationController?.isNavigationBarHidden = false        
         ref = Database.database().reference()
         fetchData()
+        createScrollView()
         
         // updates category list if new category added
         handle = ref?.child(USER_PATH + "/categories").observe(.childAdded, with: { (snapshot) in
@@ -285,6 +311,7 @@ class TaskViewController: UIViewController {
             if let color = snapshot.childSnapshot(forPath: "/Color").value as? Int {
                 self.categoryColors.insert(color, at: 0)
             }
+            self.scrollView.removeFromSuperview()
             self.createScrollView()
         })
         
@@ -296,6 +323,7 @@ class TaskViewController: UIViewController {
                     self.categoryColors.remove(at: position)
                     print(item + " category removed")
                 }
+                self.scrollView.removeFromSuperview()
                 self.createScrollView()
             }
         })
@@ -312,7 +340,7 @@ class TaskViewController: UIViewController {
                                          target: self,
                                          action: #selector(TaskViewController.homeButtonTapped))
         homeButton.tintColor = UIColor.black.withAlphaComponent(0.4)
-        self.navigationItem.rightBarButtonItem = homeButton
+        self.navigationItem.leftBarButtonItem = homeButton
         self.navigationItem.setHidesBackButton(true, animated: false)
         
     } // viewDidLoad()

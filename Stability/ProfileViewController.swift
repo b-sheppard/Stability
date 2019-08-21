@@ -18,6 +18,12 @@ class ProfileViewController: UIViewController {
     
     let startPicker = UIDatePicker()
     
+    
+    @objc func backTapped(){
+        
+        navigationController?.popToRootViewController(animated: true)
+    }
+    
     @objc func signoutUser() {
         do {
             try Auth.auth().signOut()
@@ -113,6 +119,8 @@ class ProfileViewController: UIViewController {
         startPicker.tintColor = .red
         startPicker.datePickerMode = .time
         startPicker.setDate(date ?? Date(), animated: false)
+        startPicker.setValue(gray, forKeyPath: "textColor")
+
         
         view.addSubview(startPicker)
     }
@@ -120,6 +128,10 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.barTintColor = white
+        navigationItem.hidesBackButton = true
+        
+        let backButton = UIBarButtonItem(title: "Home", style: .plain, target: self, action: #selector(backTapped))
+        navigationItem.rightBarButtonItem = backButton
         
         view.backgroundColor = white
         

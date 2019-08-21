@@ -177,7 +177,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     }
     @objc func goToProfile() {
         let profile = ProfileViewController()
-        navigationController?.pushViewController(profile, animated: false)
+        navigationController?.pushViewController(profile, animated: true)
     }
     @objc func taskFinished() {
         // task has finished
@@ -550,7 +550,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         super.viewDidLoad()
         ref = Database.database().reference()
         
-        // self.navigationController?.isNavigationBarHidden = true;
+        self.navigationController?.isNavigationBarHidden = false;
         
         let addTaskButton = UIBarButtonItem(title: "Add Task",
                                          style: .plain,
