@@ -237,7 +237,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         //delete button
         let deleteButton = UIButton(type: .custom)
         let x_pos = width/2
-        let y_pos = height - 80
+        let y_pos = 85*height/100
         deleteButton.frame = CGRect(x: x_pos - 150, y: y_pos, width: 300, height:60)
         deleteButton.clipsToBounds = true
         deleteButton.setTitle("Delete Category", for: .normal)

@@ -79,7 +79,7 @@ class ProfileViewController: UIViewController {
     
     func addSignoutButton() {
         let x_pos = width/2
-        let y_pos = height - 80
+        let y_pos = 85*height/100
         
         let signout = UIButton()
         signout.frame = CGRect(x: x_pos - 150, y: y_pos, width: 300, height: 60)
