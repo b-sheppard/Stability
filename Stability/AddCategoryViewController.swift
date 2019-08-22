@@ -29,7 +29,7 @@ UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
                        "TEAL",
                        "PINK",
                        "VIO",
-                       "BLUE",
+                       "NAVY",
                        "ORG",
                        "GRN"]
     
