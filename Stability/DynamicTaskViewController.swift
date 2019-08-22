@@ -29,12 +29,12 @@ class DynamicTaskViewController: UIViewController, UITextFieldDelegate {
         let width = screensize.width
         let height = screensize.height
         
-        self.view.frame = CGRect(x: 0, y: 40, width: width, height: height)
+        self.view.frame = CGRect(x: 0, y: 0, width: width, height: height)
         //create cancel button
         let cancelButton = UIButton(type: .custom)
         cancelButton.setTitle("Cancel", for: .normal)
         cancelButton.setTitleColor(secondaryColor, for: .normal)
-        cancelButton.frame = CGRect(x: 10, y: 10, width: 60, height: 60)
+        cancelButton.frame = CGRect(x: 10, y: 3*height/100, width: 60, height: 60)
         cancelButton.addTarget(self, action: #selector(AddCategoryViewController.CancelClicked), for: .touchUpInside)
         cancelButton.tintColor = secondaryColor
         
@@ -42,7 +42,7 @@ class DynamicTaskViewController: UIViewController, UITextFieldDelegate {
         let saveButton = UIButton(type: .custom)
         saveButton.setTitle("Save", for: .normal)
         saveButton.setTitleColor(secondaryColor, for: .normal)
-        saveButton.frame = CGRect(x: width - 70, y: 10, width: 60, height: 60)
+        saveButton.frame = CGRect(x: width - 70, y: 3*height/100, width: 60, height: 60)
         saveButton.tintColor = secondaryColor
         saveButton.addTarget(self, action:#selector(AddCategoryViewController.SaveClicked), for: .touchUpInside)        
         

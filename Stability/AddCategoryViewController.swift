@@ -190,7 +190,7 @@ extension UIViewController {
         self.view.isHidden = false
     }
     func animHide(){
-        UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseInOut],
+        UIView.animate(withDuration: 0.33, delay: 0, options: [.curveEaseInOut],
                        animations: {
                         self.view.center.y += self.view.bounds.height
                         self.view.layoutIfNeeded()

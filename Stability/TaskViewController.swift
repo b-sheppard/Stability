@@ -114,7 +114,7 @@ class TaskViewController: UIViewController {
                 row += 2
             }
             let button = UIButton(type: .custom)
-            let x_pos = (5 + CGFloat(col % 3)*scrollWidth/3)
+            let x_pos = (7 + CGFloat(col % 3)*scrollWidth/3)
             let y_pos = (row)*scrollHeight/4 - 5
             button.frame = CGRect(x: x_pos, y: y_pos - 50, width: 110, height: 110)
             button.layer.cornerRadius = 0.5 * button.bounds.size.width
@@ -131,6 +131,11 @@ class TaskViewController: UIViewController {
                 button.setTitle(category, for: .normal)
                 button.titleLabel?.font = UIFont(name:"Futura", size: 30)
                 button.setTitleColor(UIColor.black.withAlphaComponent(0.6), for: .normal)
+                // fit button title to size
+                button.titleLabel?.adjustsFontSizeToFitWidth = true
+                button.titleLabel?.numberOfLines = 1
+                button.titleLabel?.minimumScaleFactor = 0.1
+                button.clipsToBounds = true
                 //button color
                 let buttonColor = UIColor(hex: categoryColors[buttonCount])
                 button.backgroundColor = buttonColor
@@ -153,7 +158,7 @@ class TaskViewController: UIViewController {
         let screenWidth = screensize.width
         let screenHeight = screensize.height
         
-        taskSearchField = SearchTextField(frame: CGRect(x: 20, y: screenHeight/10, width: screenWidth - 40, height: 60))
+        taskSearchField = SearchTextField(frame: CGRect(x: 20, y: screenHeight/10 + 20, width: screenWidth - 40, height: 60))
         taskSearchField.backgroundColor = .white
         taskSearchField.borderStyle = .roundedRect
         taskSearchField.placeholder = "Search For a Task..."

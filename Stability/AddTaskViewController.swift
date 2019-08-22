@@ -30,7 +30,7 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
         let width = screensize.width
         let height = screensize.height
         
-        self.view.frame = CGRect(x: 0, y: height, width: width, height: height - 10)
+        self.view.frame = CGRect(x: 0, y: height, width: width, height: 97*height/100)
         
         //create cancel button
         let cancelButton = UIButton(type: .custom)
