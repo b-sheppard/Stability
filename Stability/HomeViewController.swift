@@ -177,7 +177,12 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     }
     @objc func goToProfile() {
         let profile = ProfileViewController()
-        navigationController?.pushViewController(profile, animated: true)
+        let transition = CATransition()
+        transition.duration = 0.5
+        transition.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+        transition.type = CATransitionType.push
+        self.navigationController?.view.layer.add(transition, forKey: nil)
+        navigationController?.pushViewController(profile, animated: false)
     }
     @objc func taskFinished() {
         // task has finished
