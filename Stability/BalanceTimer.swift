@@ -15,15 +15,15 @@ class BalanceTimer : Object {
     var secondsCompleted = 0.0
     var tasksCompleted = 0
     
-    var timeRemaining = 0
-    var timeRemainingInTask = 0
-    var categorySelected = ""
-    var categoryStaged = ""
-    var taskSelected = ""
+    var timeRemaining = 0 // time left in category
+    var timeRemainingInTask = 0 // time left in task
+    var categorySelected = "" // name of category
+    var categoryStaged = "" // category to start
+    var taskSelected = "" // task to start
     var taskTimer: Timer?
     var taskFinished = false
     
-    // FUNCTIONS----------------------------------
+    // -----------------------------FUNCTIONS----------------------------------
     @objc public func startScheduled() {
         if(timeRemaining == 0) {
             print("!!!!!!!ERROR!!!!!!!!!\n")

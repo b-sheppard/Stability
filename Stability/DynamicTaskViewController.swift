@@ -93,7 +93,6 @@ class DynamicTaskViewController: UIViewController, UITextFieldDelegate {
             return
         }
         if text != taskName {
-            print(taskName!)
             // Remove old node
             ref?.child(USER_PATH + "/categories").child(category!).child("Tasks").child(taskName!).removeValue()
             
@@ -131,7 +130,6 @@ class DynamicTaskViewController: UIViewController, UITextFieldDelegate {
         
         ref = Database.database().reference()
         
-        print(taskValue)
         setupView()
         createTextField()
         setupPicker()
