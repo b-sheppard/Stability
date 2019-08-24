@@ -118,7 +118,7 @@ class ActiveTaskViewController: UIViewController,
         self.view.addSubview(addTaskView.view)
         addTaskView.didMove(toParent: self)
     }
-    //delete task from database (and subtract value from active
+    //delete task from database (and subtract value from active)
     func deleteTask(task:String) {
         let Tpredicate = NSPredicate(format: "name = %@", task)
         let toDelete = uirealm.objects(Task.self).filter(Tpredicate).first!
@@ -126,6 +126,7 @@ class ActiveTaskViewController: UIViewController,
         toDelete.deleteTask()
         let predicate = NSPredicate(format: "category = %@", self.name)
         let activeTasks = uirealm.objects(Task.self).filter(predicate)
+
         fetchData()
         tableView.reloadData()
     }
@@ -178,6 +179,10 @@ class ActiveTaskViewController: UIViewController,
         for task in activeTasks {
             self.times[task.name] = task.duration
             self.tasks.append(task.name)
+        }
+        if let rootViewController = navigationController?.viewControllers.first as? RootPageViewController {
+            let homeViewController = rootViewController.viewControllerList[1] as? HomeViewController
+            homeViewController?.fetchData()
         }
     }
     

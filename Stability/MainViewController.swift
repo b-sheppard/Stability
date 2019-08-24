@@ -92,7 +92,7 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         
         ref = Database.database().reference()
-        navigationController?.isNavigationBarHidden = true
+        //navigationController?.isNavigationBarHidden = true
 
         view.backgroundColor = gray
         addButton()

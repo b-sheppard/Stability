@@ -10,8 +10,10 @@ import Foundation
 import UIKit
 
 class MainNavigationController: UINavigationController {
+    let white = UIColor(hex:15460841)
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .green
+        view.backgroundColor = white
     }
 }

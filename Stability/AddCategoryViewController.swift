@@ -70,7 +70,7 @@ UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
         saveButton.frame = CGRect(x: width - 70, y: 0, width: 60, height: 60)
         saveButton.addTarget(self, action:#selector(AddCategoryViewController.SaveClicked), for: .touchUpInside)
         
-        self.navigationController?.isNavigationBarHidden = true
+        //self.navigationController?.isNavigationBarHidden = true
         self.view.addSubview(cancelButton)
         self.view.addSubview(saveButton)
     }

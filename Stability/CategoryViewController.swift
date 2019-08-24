@@ -138,17 +138,6 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     var handle:DatabaseHandle?
     var tableView: UITableView!
     
-    @objc func homeButtonTapped() {
-        let  vc =  self.navigationController?.viewControllers.filter({$0 is HomeViewController}).first
-        navigationController?.navigationBar.barTintColor = white
-        self.navigationController?.popToViewController(vc!, animated: true)
-    }
-    //create right bar item
-    let homeButton: UIBarButtonItem = {
-        let barButtonItem = UIBarButtonItem(title: "Add Task", style: .plain, target: self, action: #selector(homeButtonTapped))
-        return barButtonItem
-    }()
-    
     @objc func buttonTapped() {
         deleteCategory()
     }
@@ -266,13 +255,6 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let homeButton = UIBarButtonItem(title: "Home",
-                                         style: .plain,
-                                         target: self,
-                                         action: #selector(TaskViewController.homeButtonTapped))
-        homeButton.tintColor = secondaryColor
-        self.navigationItem.rightBarButtonItem = homeButton
-
         navigationController?.navigationBar.barTintColor = color
         ref = Database.database().reference()
         

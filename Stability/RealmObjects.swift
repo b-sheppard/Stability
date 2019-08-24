@@ -65,13 +65,14 @@ extension Task {
         let category = uirealm.objects(Category.self).filter(Cpredicate).first
         let newTime = category!.duration - self.duration
         
-        //edge case if task is active
+        //edge case if task is active -> update unscheduled time locally
         if balanceTimer.categorySelected == "Unscheduled" {
             try! uirealm.write {
                 unscheduled.duration = balanceTimer.timeRemaining
                 unscheduledTask.duration = balanceTimer.timeRemaining
             }
         }
+        // remove category and task locally
         if newTime == 0 {
             try! uirealm.write {
                 unscheduled.duration += self.duration
@@ -80,6 +81,7 @@ extension Task {
                 uirealm.delete(self)
             }
         }
+        // update unscheduled time remaining
         else {
             try! uirealm.write {
                 category!.duration = newTime
