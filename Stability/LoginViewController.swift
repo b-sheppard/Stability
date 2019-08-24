@@ -28,8 +28,7 @@ class LoginViewController: UIViewController {
             if error == nil {
                 USER_PATH = Auth.auth().currentUser?.uid ?? "error"
                 self.createDatabase()
-                let taskViewController = TaskViewController()
-                self.navigationController?.pushViewController(taskViewController, animated: true)
+                self.navigationController?.popViewController(animated: true)
             }
             else{
                 let alertController = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .alert)
@@ -45,8 +44,7 @@ class LoginViewController: UIViewController {
         Auth.auth().signIn(withEmail: username.text!, password: password.text!) { (user, error) in
             if error == nil{
                 USER_PATH = Auth.auth().currentUser?.uid ?? "error"
-                let homeViewController = HomeViewController()
-                self.navigationController?.pushViewController(homeViewController, animated: true)
+                self.navigationController?.popViewController(animated: true)
             }
             else {
                 let alertController = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .alert)
@@ -107,12 +105,10 @@ class LoginViewController: UIViewController {
         
         if Auth.auth().currentUser?.uid != nil {
             print(Auth.auth().currentUser?.uid ?? "Cannot find uid")
-            let homeViewController = HomeViewController()
-            self.navigationController?.pushViewController(homeViewController, animated: true)
+            self.navigationController?.popViewController(animated: true)
         }
         
         ref = Database.database().reference()
-        navigationController?.isNavigationBarHidden = true
         view.backgroundColor = white
         setupSignUpButton()
         setupLoginButton()

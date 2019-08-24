@@ -39,6 +39,7 @@
 		51781623230E018D00E95510 /* 1024x1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 51781611230E018D00E95510 /* 1024x1024.png */; };
 		51781624230E018D00E95510 /* 40x40.png in Resources */ = {isa = PBXBuildFile; fileRef = 51781612230E018D00E95510 /* 40x40.png */; };
 		51781627230E01BD00E95510 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51781626230E01BD00E95510 /* Images.xcassets */; };
+		5178162B230FABD500E95510 /* RootPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5178162A230FABD500E95510 /* RootPageViewController.swift */; };
 		517B488222531ADE00544647 /* RealmObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517B488122531ADE00544647 /* RealmObjects.swift */; };
 		517B48842256D76A00544647 /* scratch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517B48832256D76A00544647 /* scratch.swift */; };
 		518256A6210FA94500A0788D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518256A5210FA94500A0788D /* AppDelegate.swift */; };
@@ -111,6 +112,7 @@
 		51781611230E018D00E95510 /* 1024x1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1024x1024.png; sourceTree = "<group>"; };
 		51781612230E018D00E95510 /* 40x40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 40x40.png; sourceTree = "<group>"; };
 		51781626230E01BD00E95510 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Stability/Images.xcassets; sourceTree = "<group>"; };
+		5178162A230FABD500E95510 /* RootPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootPageViewController.swift; sourceTree = "<group>"; };
 		517B488122531ADE00544647 /* RealmObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmObjects.swift; sourceTree = "<group>"; };
 		517B48832256D76A00544647 /* scratch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = scratch.swift; sourceTree = "<group>"; };
 		518256A2210FA94500A0788D /* Stability.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stability.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -249,6 +251,7 @@
 				51DECAC322DE486D00A8A4D3 /* ProfileViewController.swift */,
 				518F4C5821AB34DF00E4EBA7 /* DynamicTaskViewController.swift */,
 				51B5F4DD230C8CF90073D42B /* AnimationController.swift */,
+				5178162A230FABD500E95510 /* RootPageViewController.swift */,
 			);
 			name = stability;
 			path = Stability;
@@ -572,6 +575,7 @@
 				518F4C5921AB34DF00E4EBA7 /* DynamicTaskViewController.swift in Sources */,
 				516B679E21A28B94008BDCF4 /* NSUIColor+Hex.swift in Sources */,
 				517B48842256D76A00544647 /* scratch.swift in Sources */,
+				5178162B230FABD500E95510 /* RootPageViewController.swift in Sources */,
 				51DECAC422DE486D00A8A4D3 /* ProfileViewController.swift in Sources */,
 				51B207FC219F91B300563A9F /* AddTaskViewController.swift in Sources */,
 				51050C3A2155E7D5005A13DC /* TaskViewController.swift in Sources */,

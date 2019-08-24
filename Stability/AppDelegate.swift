@@ -31,13 +31,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //let mainViewController = MainViewController() //plus
         let loginViewController = LoginViewController()
+        let rootViewController = RootPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
         
        // mainNavigationController.viewControllers = [mainViewController]
  
-        let homeViewController = HomeViewController()
+        //let rootViewController = RootPageViewController()
         if !launchedBefore {
-            mainNavigationController.viewControllers = [homeViewController, loginViewController]
+            mainNavigationController.viewControllers = [rootViewController, loginViewController]
             UserDefaults.standard.set(true, forKey: "launchedBefore")
             
             let unscheduled = Category()
@@ -66,7 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         else {
-            mainNavigationController.viewControllers = [homeViewController, loginViewController]
+            mainNavigationController.viewControllers = [rootViewController, loginViewController]
         }
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()

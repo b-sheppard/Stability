@@ -47,6 +47,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     //          SCHEDULED TIMER
     //==========================================
     
+    // removes currently running task and adds time back to unscheduled
     @objc public func longPress() {
         descriptionLabel.textColor = white
         if balanceTimer.categorySelected != "Unscheduled" {
@@ -65,6 +66,8 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             updateChart()
         }
     }
+    
+    // start a task if one is actually selected
     @objc public func startTapped() {
         let checkStatus = uirealm.objects(TimerStatus.self).first
         if !checkStatus!.timerRunning && balanceTimer.categoryStaged != "" {
@@ -133,9 +136,13 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     //==========================================
     
     @objc func addButtonTapped() {
-        navigationController?.navigationBar.barTintColor = gray
-        let taskViewController = TaskViewController()
-        navigationController?.pushViewController(taskViewController, animated: true)
+        if let rootViewController = navigationController?.viewControllers.first as? RootPageViewController {
+            let taskViewController = rootViewController.viewControllerList[2]
+            rootViewController.setViewControllers([taskViewController], direction: .forward, animated: true, completion: nil)
+        }
+        //navigationController?.navigationBar.barTintColor = gray
+        //let taskViewController = TaskViewController()
+        //navigationController?.pushViewController(taskViewController, animated: true)
     }
     
     
@@ -367,7 +374,6 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         //get times of categories
         var position = 0
 
-        //print(active_categories)
         for cat in active_categories {
             if cat.name == "Unscheduled" {
                 self.colorOf[cat.name] = gray
@@ -555,8 +561,8 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         super.viewDidLoad()
         ref = Database.database().reference()
         
-        self.navigationController?.isNavigationBarHidden = false;
-        
+        let width = UIScreen.main.bounds.width
+        let height = UIScreen.main.bounds.height
         let addTaskButton = UIBarButtonItem(title: "Add Task",
                                          style: .plain,
                                          target: self,
@@ -567,10 +573,12 @@ class HomeViewController: UIViewController, ChartViewDelegate {
                                             action: #selector(HomeViewController.goToProfile))
         
         view.backgroundColor = white
+
         self.navigationItem.rightBarButtonItem = addTaskButton
         self.navigationItem.rightBarButtonItem?.tintColor = gray
         self.navigationItem.leftBarButtonItem = profileButton
         self.navigationItem.leftBarButtonItem?.tintColor = .red
+
         
         fetchData()
         setupView()
@@ -585,7 +593,10 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         fetchData()
         updateChart()
         
+        
         timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: #selector(self.updateChart), userInfo: nil, repeats: true)
+        navigationController?.setToolbarHidden(true, animated: false)
+
     }
     
     override func viewDidDisappear(_ animated: Bool) {

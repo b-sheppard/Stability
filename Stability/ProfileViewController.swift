@@ -27,18 +27,15 @@ class ProfileViewController: UIViewController {
     let v3 = UIStackView() // year
     
     // baked-in categories
-    var categories = ["unscheduled",
-                      "cat 1", "cat 2", "cat 3",
+    var categories = ["cat 1", "cat 2", "cat 3",
                       "cat 4", "cat 5", "cat 6",
                       "cat 7", "cat 8", "cat 9"]
     // baked-in times
-    var times = ["like a billion",
-                 "100", "200", "300",
+    var times = ["100", "200", "300",
                  "400", "500", "600",
                  "700", "800", "900"]
     // baked-in colors
-    var colors_int = [5263695,
-                      14596161,
+    var colors_int = [14596161,
                       16463424,
                       38099,
                       3131322,
@@ -108,7 +105,7 @@ class ProfileViewController: UIViewController {
     
     func addDateButton() {
         let x_pos = width/2
-        let y_pos = height/4 - 70
+        let y_pos = height/2
         dateButton.frame = CGRect(x: x_pos - 150, y: y_pos, width: 300, height: 60)
         dateButton.clipsToBounds = true
         dateButton.setTitle("Set new start time", for: .normal)
@@ -127,7 +124,7 @@ class ProfileViewController: UIViewController {
         let dateString = String(balanceTimer.hourStarted) + ":" + String(balanceTimer.minuteStarted)
         
         let date = dateFormatter.date(from:dateString)        
-        startPicker.frame = CGRect(x: 0, y: height/4, width: width, height: height/4)
+        startPicker.frame = CGRect(x: 0, y: height/2 + 60, width: width, height: height/4)
         startPicker.backgroundColor = white
         startPicker.tintColor = .red
         startPicker.datePickerMode = .time
@@ -138,11 +135,27 @@ class ProfileViewController: UIViewController {
         view.addSubview(startPicker)
     }
     
-    func setupScrollView() {
-        let y_pos = height/2
-        let scroll_height = Int(45*height/100 - 30)
+    func addSignoutButton() {
+        let x_pos = width/2
+        let y_pos = 85*height/100
         
-        scrollView.frame = CGRect(x:0, y: y_pos, width: width, height: 46*height/100)
+        let signout = UIButton()
+        signout.frame = CGRect(x: x_pos - 150, y: y_pos, width: 300, height: 60)
+        signout.clipsToBounds = true
+        signout.setTitle("Signout", for: .normal)
+        signout.titleLabel?.font = UIFont(name:"Futura", size: 30)
+        signout.setTitleColor(white, for: .normal)
+        signout.backgroundColor = gray
+        signout.addTarget(self, action: #selector(signoutUser), for: .touchUpInside)
+        signout.layer.cornerRadius = 10
+        view.addSubview(signout)
+    }
+    
+    func setupScrollView() {
+        let y_pos = height/20
+        let scroll_height = Int(height/2 - height/10)
+        
+        scrollView.frame = CGRect(x:0, y: y_pos, width: width, height: height/2 - height/10)
         scrollView.backgroundColor = white
         scrollView.isUserInteractionEnabled = true
         scrollView.isScrollEnabled = true
@@ -151,17 +164,17 @@ class ProfileViewController: UIViewController {
         scrollView.showsHorizontalScrollIndicator = true
         scrollView.flashScrollIndicators()
         
-        v1.frame = CGRect(x: 0, y: 0, width: width, height: 200)
+        v1.frame = CGRect(x: 0, y: 30, width: width, height: 200)
         
         let v1timeframe = UILabel(frame:CGRect(x:0,
-                                               y: 45*height/100 - 30,
+                                               y: 0*height,
                                                width: width,
                                                height:30))
         v1timeframe.font = UIFont(name: "Futura", size: 22)
         v1timeframe.textAlignment = .center
         v1timeframe.text = "Total time spent"
         v1timeframe.textColor = gray
-        v1.addSubview(v1timeframe)
+        scrollView.addSubview(v1timeframe)
         
         for pos in 0...categories.count - 1 {
             let catName = UILabel(frame:CGRect(x: 0,
@@ -214,5 +227,6 @@ class ProfileViewController: UIViewController {
         addDateButton()
         addPicker()
         setupScrollView()
+        addSignoutButton()
     }
 }
