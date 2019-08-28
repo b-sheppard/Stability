@@ -49,7 +49,8 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     
     // removes currently running task and adds time back to unscheduled
     @objc public func longPress() {
-        descriptionLabel.textColor = white
+        descriptionLabel.textColor = white // makes help info invisible
+        // finds currently running task and removes it
         if balanceTimer.categorySelected != "Unscheduled" {
             let predicate = NSPredicate(format: "name = %@", balanceTimer.taskSelected)
             let toDelete = uirealm.objects(Task.self).filter(predicate).first!
@@ -129,31 +130,22 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             
         }
     }
- 
-    
     //==========================================
-    //          BUTTON FUNCTIONS
+    //          CHART FUNCTIONS
     //==========================================
     
-    @objc func addButtonTapped() {
+    // gets name of selected chart
+    func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
+        let c = categoryPosition[String(Int(entry.x))]!
+        goToCategory(category: c)
+    }
+    
+    // go to add task view when unscheduled or completed sections of pie chart are tapped
+    @objc func goToTaskView() {
         if let rootViewController = navigationController?.viewControllers.first as? RootPageViewController {
             let taskViewController = rootViewController.viewControllerList[2]
             rootViewController.setViewControllers([taskViewController], direction: .forward, animated: true, completion: nil)
         }
-        //navigationController?.navigationBar.barTintColor = gray
-        //let taskViewController = TaskViewController()
-        //navigationController?.pushViewController(taskViewController, animated: true)
-    }
-    
-    
-    
-    //==========================================
-    //          CHART FUNCTIONS
-    //==========================================
-    //gets name of selected chart
-    func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
-        let c = categoryPosition[String(Int(entry.x))]!
-        goToCategory(category: c)
     }
     
     //goes to active tasks in category
@@ -163,11 +155,11 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         
         //go to add task section if gray area is tapped
         if category == "Unscheduled" {
-            addButtonTapped()
+            goToTaskView()
         }
         //go to add task section if gold area is tapped
         else if category == "Completed" {
-            addButtonTapped()
+            goToTaskView()
         }
             
         else {
@@ -178,19 +170,11 @@ class HomeViewController: UIViewController, ChartViewDelegate {
                     categoryView.color = color
                 })
             
-            //go to new view
+            //go to list of active tasks
             navigationController?.pushViewController(categoryView, animated: false)
         }
     }
-    @objc func goToProfile() {
-        let profile = ProfileViewController()
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
-        transition.type = CATransitionType.push
-        self.navigationController?.view.layer.add(transition, forKey: nil)
-        navigationController?.pushViewController(profile, animated: false)
-    }
+    
     @objc func taskFinished() {
         // task has finished
         balanceTimer.tasksCompleted += 1
@@ -204,7 +188,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         var secondsOvertime = 0
         
         // last task in category finished
-        if(balanceTimer.timeRemaining <= 0) {
+        if balanceTimer.timeRemaining <= 0 {
             secondsOvertime = unscheduled.duration + balanceTimer.timeRemaining
             try! uirealm.write {
                 checkStatus.timerRunning = false
@@ -214,8 +198,8 @@ class HomeViewController: UIViewController, ChartViewDelegate {
                 uirealm.delete(taskToDelete)
             }
         }
-        // not last task in category
-        else if(balanceTimer.timeRemainingInTask <= 0) {
+        // not last task in category (keeps category)
+        else if balanceTimer.timeRemainingInTask <= 0 {
             secondsOvertime = unscheduled.duration + balanceTimer.timeRemainingInTask
             try! uirealm.write {
                 checkStatus.timerRunning = false
@@ -230,7 +214,6 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         balanceTimer.categorySelected = "Unscheduled"
         balanceTimer.taskSelected = "Unscheduled"
         
-        //balanceTimer.startScheduled()
         mainButton.setTitle("START", for: .normal)
         fetchData()
     }
@@ -246,6 +229,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         let hour = calendar.component(.hour, from: date)
         let minute = calendar.component(.minute, from: date)
         let timeInterval = 3600*(hour - balanceTimer.hourStarted) + 60*(minute - balanceTimer.minuteStarted)
+        
         balanceTimer.timeRemaining = 86400 - timeInterval
         balanceTimer.timeRemainingInTask = 86400 - timeInterval
         balanceTimer.secondsCompleted = Double(timeInterval)
@@ -279,6 +263,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: #selector(self.updateChart), userInfo: nil, repeats: true)
         balanceTimer.startScheduled()
     }
+    
     @objc func restartButtonTapped() {
         selectedTaskName.text = "Select a Task"
         self.view.backgroundColor = white
@@ -292,7 +277,8 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: #selector(self.updateChart), userInfo: nil, repeats: true)
     }
     
-    // Displayed when tasks are over
+    // Displayed a keep going option when all tasks are complete
+    // Could also be used as a restart in case something goes wrong
     func addRestartButton() {
         restartButton = UIButton()
         let screensize: CGRect = UIScreen.main.bounds
@@ -300,7 +286,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
                                      width: screensize.width - 50, height: 80)
         restartButton.layer.cornerRadius = 5
         restartButton.center.x = screensize.width/2
-        restartButton.setTitle("KEEP GOING", for: .normal)
+        restartButton.setTitle("Add more tasks", for: .normal)
         restartButton.titleLabel?.font = UIFont(name:"Futura", size: 40)
         restartButton.setTitleColor(gray, for: .normal)
         restartButton.backgroundColor = gold
@@ -323,17 +309,19 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         active_categories.append(completed)
     }
 
+    // Notify user when current schedule is no longer possible
     func fixSchedule() {
         // schedule cannot be fixed
         print(balanceTimer.secondsCompleted)
         if balanceTimer.secondsCompleted >= 86400 {
             timer?.invalidate()
-            selectedTaskName.text = "BALANCE NOT ACHIEVED"
+            selectedTaskName.text = "You are a failure."
             selectedTaskName.textColor = white
             balanceTimer.stopScheduled()
             restartAllTimers()
             return
         }
+        // gives user a chance to remove tasks and keep going
         else {
             timer?.invalidate()
             navigationController?.navigationBar.barTintColor = gray
@@ -342,20 +330,24 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         }
         
     }
+    
+    // main logic of how chart functions
     @objc func updateChart() {
-        //print(balanceTimer.timeRemainingInTask)
+        // timer is finished
         if balanceTimer.timeRemainingInTask < 0 {
+            // no more unscheduled time
             if balanceTimer.categorySelected == "Unscheduled" {
                 fixSchedule()
                 return
             }
+            // time in active task is finished
             else {
                 taskFinished()
             }
         }
-        //user finished all tasks: Display "balance achieved
+        // user finished all tasks: Display "balance achieved" (placeholder for now)
         if balanceTimer.tasksCompleted > 0 && active_categories.count == 1 {
-            selectedTaskName.text = "BALANCE ACHIEVED"
+            selectedTaskName.text = "All tasks finished!"
             balanceTimer.stopScheduled()
             timer?.invalidate()
             addRestartButton()
@@ -374,6 +366,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         //get times of categories
         var position = 0
 
+        // display all active categories on pie chart
         for cat in active_categories {
             if cat.name == "Unscheduled" {
                 self.colorOf[cat.name] = gray
@@ -385,10 +378,11 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             if cat.name == balanceTimer.categorySelected {
                 dataEntry.value = Double(balanceTimer.timeRemaining)
             }
+            // catches negative values of categories (shouldn't happen but what if)
             if cat.duration <= 0 {
                 dataEntry.value = 0
             }
-            // should fix category display issue when 3600 is still displayed when no active task exists
+            // ensures tasks less than an hour are still large enough on pie chart to select
             else if cat.duration <= 3600 && cat.duration > 0 && cat.name != "Unscheduled" {
                 dataEntry.value = 3600.0
             }
@@ -425,6 +419,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             self.colorOf[category] = gray
             return
         }
+        // get color of category from firebase
         ref?.child(USER_PATH + "/categories").child(category).child("Color")
             .observeSingleEvent(of: .value, with: { (snapshot) in
                 let color = NSUIColor(hex: snapshot.value! as! Int)
@@ -438,9 +433,9 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     func addButton() {
         let checkStatus = uirealm.objects(TimerStatus.self).first
         
-        //tap
+        // recognize a tap
         let tap = UITapGestureRecognizer(target: self, action: #selector(HomeViewController.startTapped))
-        //long press
+        // recognize a press (function called after 3 seconds)
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(HomeViewController.longPress))
         longPress.minimumPressDuration = 3
 
@@ -451,11 +446,13 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         mainButton.translatesAutoresizingMaskIntoConstraints = false
         mainButton.addGestureRecognizer(tap)
         mainButton.addGestureRecognizer(longPress)
-        //mainButton.addTarget(self, action: #selector(HomeViewController.startTapped), for: .touchUpInside)
+ 
+        // task has started
         if(checkStatus!.timerRunning) {
             mainButton.setTitle("STOP", for: .normal)
             descriptionLabel.textColor = gray
         }
+        // task has stopped
         else {
             mainButton.setTitle("START", for: .normal)
             descriptionLabel.textColor = white
@@ -467,14 +464,11 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         
         view.addSubview(mainButton)
         
-        let horizontalCenter = NSLayoutConstraint(item: mainButton, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: 0)
-        
-        let verticalCenter = NSLayoutConstraint(item: mainButton, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1.0, constant: 0)
-        
-        let width = NSLayoutConstraint(item: mainButton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1.0, constant: 200)
-        
-        let height = NSLayoutConstraint(item: mainButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1.0, constant: 200)
-        
+        // ensures button is at the center of screen for all devices
+        let horizontalCenter = NSLayoutConstraint(item: mainButton!, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: 0)
+        let verticalCenter = NSLayoutConstraint(item: mainButton!, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1.0, constant: 0)
+        let width = NSLayoutConstraint(item: mainButton!, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1.0, constant: 200)
+        let height = NSLayoutConstraint(item: mainButton!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1.0, constant: 200)
         let constraints: [NSLayoutConstraint] = [horizontalCenter, verticalCenter, width, height]
         NSLayoutConstraint.activate(constraints)
     }
@@ -502,7 +496,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         descriptionLabel.center.x = screensize.width/2
         descriptionLabel.center.y = screensize.height/8
         descriptionLabel.backgroundColor = white
-        descriptionLabel.text = "Hold STOP to finish task"
+        descriptionLabel.text = "Press and hold STOP for 3 seconds to finish task"
         descriptionLabel.textAlignment = .center
         descriptionLabel.textColor = white
         descriptionLabel.font = UIFont(name: "Futura", size: 20)
@@ -512,12 +506,10 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     // gathers active tasks from Realm
     func fetchData() {
         let activeCategories = uirealm.objects(Category.self)
-       // print(activeCategories)
         active_categories.removeAll()
         for cat in activeCategories {
             active_categories.append(cat)
         }
-        
         self.colorOf["Unscheduled"] = gray
     }
     
@@ -534,23 +526,17 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         circleView.rotationEnabled = true
         circleView.isUserInteractionEnabled = true
         circleView.legend.enabled = false
-        //circleView.highlightPerTapEnabled = false
         view.addSubview(circleView)
         
-        let horizontalCenter = NSLayoutConstraint(item: circleView, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: 0)
-        
-        let verticalCenter = NSLayoutConstraint(item: circleView, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1.0, constant: 0)
-        
-        let width = NSLayoutConstraint(item: circleView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1.0, constant: 350)
-        
-        let height = NSLayoutConstraint(item: circleView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1.0, constant: 350)
-        
+        // places circle in center for all devices
+        let horizontalCenter = NSLayoutConstraint(item: circleView!, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: 0)
+        let verticalCenter = NSLayoutConstraint(item: circleView!, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1.0, constant: 0)
+        let width = NSLayoutConstraint(item: circleView!, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1.0, constant: 350)
+        let height = NSLayoutConstraint(item: circleView!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1.0, constant: 350)
         let constraints: [NSLayoutConstraint] = [horizontalCenter, verticalCenter, width, height]
         NSLayoutConstraint.activate(constraints)
     
-        self.circleView.delegate = self
-        
-        //updateChart()
+        self.circleView.delegate = self // used to add customization for circle
     }
     
     
@@ -561,24 +547,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         super.viewDidLoad()
         ref = Database.database().reference()
         
-        let width = UIScreen.main.bounds.width
-        let height = UIScreen.main.bounds.height
-        let addTaskButton = UIBarButtonItem(title: "Add Task",
-                                         style: .plain,
-                                         target: self,
-                                         action: #selector(HomeViewController.addButtonTapped))
-        let profileButton = UIBarButtonItem(title: "Profile",
-                                            style: .plain,
-                                            target: self,
-                                            action: #selector(HomeViewController.goToProfile))
-        
         view.backgroundColor = white
-
-        self.navigationItem.rightBarButtonItem = addTaskButton
-        self.navigationItem.rightBarButtonItem?.tintColor = gray
-        self.navigationItem.leftBarButtonItem = profileButton
-        self.navigationItem.leftBarButtonItem?.tintColor = .red
-
         
         fetchData()
         setupView()
@@ -587,18 +556,19 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         addDescription()
         
         selectedTaskName.text = "Select a Category"
-    }
+    } // viewDidLoad()
 
     override func viewDidAppear(_ animated: Bool) {
         fetchData()
         updateChart()
         
-        
+        // update chart values when view is visible
         timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: #selector(self.updateChart), userInfo: nil, repeats: true)
         navigationController?.setToolbarHidden(true, animated: false)
 
     }
     
+    // stop updating chart when the view dissapears
     override func viewDidDisappear(_ animated: Bool) {
         timer?.invalidate()
     }

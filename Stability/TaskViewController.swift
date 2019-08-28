@@ -29,13 +29,6 @@ class TaskViewController: UIViewController {
     var ref:DatabaseReference?
     var handle:DatabaseHandle?
     var scrollViewAdded = false
-    
-    // go to homeview
-    @objc public func homeButtonTapped() {
-        let  vc =  self.navigationController?.viewControllers.filter({$0 is HomeViewController}).first
-        navigationController?.navigationBar.barTintColor = white
-        self.navigationController?.popToViewController(vc!, animated: true)
-    } // homeButtonTapped()
 
     // add new category
     @objc public func buttonTapped(sender: UIButton) {
@@ -79,19 +72,12 @@ class TaskViewController: UIViewController {
         navigationController?.pushViewController(categoryView, animated: true)
     } // categoryView()
     
-    func hideContentController(content: UIViewController) {
-        content.willMove(toParent: nil)
-        content.view.removeFromSuperview()
-        content.removeFromParent()
-    } // hideContentController()
-    
     //create scroll view and buttons
     func createScrollView() {
         
         let screensize: CGRect = UIScreen.main.bounds
         let screenWidth = screensize.width
         let screenHeight = screensize.height
-        
         let scrollWidth = screenWidth
         let scrollHeight = 2.75*screenHeight/8
         
@@ -99,13 +85,12 @@ class TaskViewController: UIViewController {
         scrollView.isScrollEnabled = true
         scrollView.isUserInteractionEnabled = true
         scrollView.backgroundColor = white
-        
         scrollView.showsHorizontalScrollIndicator = true;
         scrollView.showsVerticalScrollIndicator = true;
         
         scrollView.contentSize = CGSize(width: scrollWidth, height: scrollHeight * 2)
         
-        //add dynamic buttons
+        //add category buttons
         var col = 0
         var row:CGFloat = 1
         var buttonCount = 0
@@ -120,6 +105,7 @@ class TaskViewController: UIViewController {
             button.layer.cornerRadius = 0.5 * button.bounds.size.width
             button.clipsToBounds = true
             
+            // adds add category button at the end of the list
             if category == "+" {
                 button.setTitle(category, for: .normal)
                 button.titleLabel?.font = UIFont(name:"Futura", size: 80)
@@ -127,6 +113,7 @@ class TaskViewController: UIViewController {
                 button.backgroundColor = white //gray
                 button.addTarget(self, action: #selector(buttonTapped(sender:)), for: .touchUpInside)
             }
+            // adds all other categories
             else {
                 button.setTitle(category, for: .normal)
                 button.titleLabel?.font = UIFont(name:"Futura", size: 30)
@@ -167,23 +154,24 @@ class TaskViewController: UIViewController {
         taskSearchField.keyboardAppearance = .dark
         taskSearchField.inlineMode = true
         
+        // autocompletes search
         taskSearchField.itemSelectionHandler = {filteredResults, itemPosition in
             let item = filteredResults[itemPosition]
             self.taskSearchField.text = item.title
-            //print(self.taskSearchField.text)
             self.addTask(taskName:self.taskSearchField.text!)
             self.taskSearchField.text = ""
         }
         view.addSubview(taskSearchField)
     }
     
+    // add task from search to realm
     func addTask(taskName:String) {
         let taskPos = taskNames.firstIndex(of: taskName)!
         let task = tasks[taskPos]
         let categoryName = task.category
         let taskValue = task.duration
         let taskName = task.name
-        //REALM
+        
         let predicate = NSPredicate(format: "name = %@", categoryName)
         let unscheduled = uirealm.objects(Category.self).filter("name = 'Unscheduled'").first
         let unscheduledTask = uirealm.objects(Task.self).filter("name = 'Unscheduled'").first
@@ -194,8 +182,9 @@ class TaskViewController: UIViewController {
         let Tpredicate = NSPredicate(format: "name = %@", taskName)
         let doesExist = uirealm.objects(Task.self).filter(Tpredicate).first
         let newTask = Task()
-        if(doesExist != nil) {
-            // shake view
+        
+        // shake view if task already added
+        if doesExist != nil {
             shakeTextField()
             return
         }
@@ -203,7 +192,6 @@ class TaskViewController: UIViewController {
             newTask.category = categoryName
             newTask.name = taskName
             newTask.duration = taskValue
-            //   newTask.duration = 5
         }
         
         // edge case if timer isn't running
@@ -219,6 +207,7 @@ class TaskViewController: UIViewController {
             alert.addAction(UIAlertAction(title: "Continue", style: UIAlertAction.Style.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
             self.taskSearchField.text = ""
+            shakeTextField()
             return
         }
         
@@ -261,7 +250,6 @@ class TaskViewController: UIViewController {
         let animation = CABasicAnimation(keyPath: "position")
         animation.duration = 0.1
         animation.repeatCount = 4
-        //animation.autoreverses = true
         animation.fromValue = NSValue(cgPoint: CGPoint(x: taskSearchField.center.x - 5,
                                                        y: taskSearchField.center.y))
         animation.toValue = NSValue(cgPoint: CGPoint(x: taskSearchField.center.x + 5,
@@ -337,16 +325,5 @@ class TaskViewController: UIViewController {
 
         self.hideKeyboardWhenTappedAround()
         self.setupSearchField()
-        
-        self.title = "New Task"
-        //creates right bar item
-        let homeButton = UIBarButtonItem(title: "Home",
-                                         style: .plain,
-                                         target: self,
-                                         action: #selector(TaskViewController.homeButtonTapped))
-        homeButton.tintColor = UIColor.black.withAlphaComponent(0.4)
-        self.navigationItem.leftBarButtonItem = homeButton
-        self.navigationItem.setHidesBackButton(true, animated: false)
-        
     } // viewDidLoad()
 } // class TaskViewController()

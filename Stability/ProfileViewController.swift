@@ -46,7 +46,6 @@ class ProfileViewController: UIViewController {
                       4306490]
     
     @objc func backTapped(){
-        
         navigationController?.popToRootViewController(animated: true)
     }
     
@@ -57,7 +56,6 @@ class ProfileViewController: UIViewController {
         catch let signOutError as NSError {
             print ("Error signing out: %@", signOutError)
         }
-        
         let login = LoginViewController()
         navigationController?.pushViewController(login, animated: false)
     }
@@ -106,6 +104,7 @@ class ProfileViewController: UIViewController {
     func addDateButton() {
         let x_pos = width/2
         let y_pos = height/2
+        
         dateButton.frame = CGRect(x: x_pos - 150, y: y_pos, width: 300, height: 60)
         dateButton.clipsToBounds = true
         dateButton.setTitle("Set new start time", for: .normal)
@@ -122,8 +121,8 @@ class ProfileViewController: UIViewController {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat =  "HH:mm"
         let dateString = String(balanceTimer.hourStarted) + ":" + String(balanceTimer.minuteStarted)
+        let date = dateFormatter.date(from:dateString)
         
-        let date = dateFormatter.date(from:dateString)        
         startPicker.frame = CGRect(x: 0, y: height/2 + 60, width: width, height: height/4)
         startPicker.backgroundColor = white
         startPicker.tintColor = .red
@@ -176,6 +175,7 @@ class ProfileViewController: UIViewController {
         v1timeframe.textColor = gray
         scrollView.addSubview(v1timeframe)
         
+        // display total times in category (currently hard-coded)
         for pos in 0...categories.count - 1 {
             let catName = UILabel(frame:CGRect(x: 0,
                                                y: pos*scroll_height/10,
@@ -215,12 +215,6 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         navigationController?.navigationBar.barTintColor = white
         navigationItem.hidesBackButton = true
-        
-        let backButton = UIBarButtonItem(title: "Home", style: .plain, target: self, action: #selector(backTapped))
-        
-        let signoutButton = UIBarButtonItem(title: "Sign Out", style: .plain, target: self, action: #selector(signoutUser))
-        navigationItem.rightBarButtonItem = backButton
-        navigationItem.leftBarButtonItem = signoutButton
         
         view.backgroundColor = white
         
