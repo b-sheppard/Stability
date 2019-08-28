@@ -27,13 +27,9 @@ class ProfileViewController: UIViewController {
     let v3 = UIStackView() // year
     
     // baked-in categories
-    var categories = ["cat 1", "cat 2", "cat 3",
-                      "cat 4", "cat 5", "cat 6",
-                      "cat 7", "cat 8", "cat 9"]
+    var categories = ["Placeholder"]
     // baked-in times
-    var times = ["100", "200", "300",
-                 "400", "500", "600",
-                 "700", "800", "900"]
+    var times = ["coming soon!"]
     // baked-in colors
     var colors_int = [14596161,
                       16463424,

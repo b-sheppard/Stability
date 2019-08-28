@@ -17,12 +17,6 @@ class ActiveTaskViewController: UIViewController,
     
     //cell is tapped
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        /*ref?.child(USER_PATH + "/selected").setValue(name)
-        //adds selected task name to firebase
-        ref?.child(USER_PATH + "/selectedTask").setValue(self.tasks[indexPath.row])
-        ref?.child(USER_PATH + "/selectedTask").child("Name").setValue(self.tasks[indexPath.row])
-        ref?.child(USER_PATH + "/selectedTask").child("Duration").setValue(self.times[tasks[indexPath.row]])
-        */
         // REALM
         balanceTimer.categoryStaged = name
         balanceTimer.taskSelected = self.tasks[indexPath.row]
@@ -58,7 +52,15 @@ class ActiveTaskViewController: UIViewController,
         if (editingStyle == .delete) {
             //get tasks that will be deleted by swipe
             let toDelete = tasks[indexPath.row]
-            deleteTask(task:toDelete)
+            
+            if toDelete != balanceTimer.taskSelected {
+                deleteTask(task:toDelete)
+            }
+            else {
+                let alert = UIAlertController(title: "Unable to delete task", message: "Task is currently running. Please stop task before deleting.", preferredStyle: UIAlertController.Style.alert)
+                alert.addAction(UIAlertAction(title: "Continue", style: UIAlertAction.Style.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
         }
     }
     
