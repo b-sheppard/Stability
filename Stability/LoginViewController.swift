@@ -105,6 +105,8 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationController?.setNavigationBarHidden(true, animated: false)
+        
         if Auth.auth().currentUser?.uid != nil {
             print(Auth.auth().currentUser?.uid ?? "Cannot find uid")
             self.navigationController?.popViewController(animated: true)
