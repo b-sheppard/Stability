@@ -28,6 +28,7 @@ class LoginViewController: UIViewController {
             if error == nil {
                 USER_PATH = Auth.auth().currentUser?.uid ?? "error"
                 self.createDatabase()
+                self.navigationController?.setNavigationBarHidden(true, animated: false)
                 self.navigationController?.popViewController(animated: true)
             }
             else{
@@ -44,6 +45,7 @@ class LoginViewController: UIViewController {
         Auth.auth().signIn(withEmail: username.text!, password: password.text!) { (user, error) in
             if error == nil{
                 USER_PATH = Auth.auth().currentUser?.uid ?? "error"
+                self.navigationController?.setNavigationBarHidden(true, animated: false)
                 self.navigationController?.popViewController(animated: true)
             }
             else {

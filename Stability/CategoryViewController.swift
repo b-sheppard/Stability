@@ -256,6 +256,8 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         super.viewDidLoad()
         
         navigationController?.navigationBar.barTintColor = color
+        navigationController?.setNavigationBarHidden(false, animated: false)
+
         ref = Database.database().reference()
         
         path = self.name + "/Tasks/"

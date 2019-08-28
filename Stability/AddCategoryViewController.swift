@@ -70,18 +70,15 @@ UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
         saveButton.frame = CGRect(x: width - 70, y: 0, width: 60, height: 60)
         saveButton.addTarget(self, action:#selector(AddCategoryViewController.SaveClicked), for: .touchUpInside)
         
-        //self.navigationController?.isNavigationBarHidden = true
         self.view.addSubview(cancelButton)
         self.view.addSubview(saveButton)
     }
     //destroy view
     @objc func CancelClicked() {
-        self.navigationController?.isNavigationBarHidden = false
         self.animHide()
     }
     //save category
     @objc func SaveClicked() {
-        self.navigationController?.isNavigationBarHidden = false
         //save to database
         guard let text = self.categoryTextField.text else {
             print("can't get text!!!")

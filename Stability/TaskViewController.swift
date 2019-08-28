@@ -279,18 +279,14 @@ class TaskViewController: UIViewController {
         })
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        self.navigationController?.isNavigationBarHidden = false
-    } // viewDidDisappear()
-    
     override func viewDidAppear(_ animated: Bool) {
         fetchData()
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.isNavigationBarHidden = false        
         ref = Database.database().reference()
         fetchData()
         createScrollView()
