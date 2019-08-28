@@ -97,14 +97,11 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
     
     //destroy view
     @objc func CancelClicked() {
-        self.navigationController?.isNavigationBarHidden = false
-        print("cancel")
         self.animHide()
     }
     
     //save category
     @objc func SaveClicked() {
-        self.navigationController?.isNavigationBarHidden = false
         //save to database
         guard let text = self.taskTextField.text else {
             print("can't get text!!!")

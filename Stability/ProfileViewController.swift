@@ -211,6 +211,8 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         navigationController?.navigationBar.barTintColor = white
         navigationItem.hidesBackButton = true
+        navigationController?.setNavigationBarHidden(true, animated: false)
+
         
         view.backgroundColor = white
         

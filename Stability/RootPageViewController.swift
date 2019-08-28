@@ -42,9 +42,40 @@ class RootPageViewController: UIPageViewController, UIPageViewControllerDataSour
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let gray = UIColor(hex:5263695)
+        
+        self.addHelpButton()
+        self.navigationController?.isNavigationBarHidden = false
+        navigationController?.navigationBar.barTintColor = gray
         
         let secondVC = viewControllerList[1]
         self.setViewControllers([secondVC], direction: .forward, animated: true, completion: nil)
         self.dataSource = self
+    }
+}
+
+extension UIViewController {
+    // adds help button at top of each screen
+    func addHelpButton() {
+        let gray = UIColor(hex:5263695)
+        let help = UIButton(frame: CGRect(x:UIScreen.main.bounds.width - 60,
+                                          y: 20,
+                                          width: 60,
+                                          height: 30
+        ))
+        help.setTitle("Help", for: .normal)
+        help.setTitleColor(gray, for: .normal)
+        help.addTarget(self, action: #selector(UIViewController.showHelp), for: .touchUpInside)
+        
+        view.addSubview(help)
+    }
+    
+    @objc func showHelp() {
+        print("touched!")
+        let helpVC = HelpViewController()
+        self.addChild(helpVC)
+        self.view.addSubview(helpVC.view)
+        helpVC.animShow()
+        helpVC.didMove(toParent: self)
     }
 }
