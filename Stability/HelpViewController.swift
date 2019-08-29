@@ -15,7 +15,7 @@ class HelpViewController: UIViewController {
     
     let width = UIScreen.main.bounds.width
     let height = UIScreen.main.bounds.height
-    let viewHeight = UIScreen.main.bounds.height - 10
+    let viewHeight = UIScreen.main.bounds.height - 25
     
     func setupView() {
         // view size
@@ -25,13 +25,14 @@ class HelpViewController: UIViewController {
         let closeButton = UIButton(type: .custom)
         closeButton.setTitle("Close", for: .normal)
     closeButton.setTitleColor(UIColor.black.withAlphaComponent(0.4), for: .normal)
-        closeButton.frame = CGRect(x: width - 70, y: 10, width: 60, height: 60)
+        closeButton.frame = CGRect(x: width - 70, y: 0, width: 60, height: 60)
         closeButton.addTarget(self, action: #selector(HelpViewController.CloseView), for: .touchUpInside)
         
         self.view.addSubview(closeButton)
         
         // help text
         let help = UITextView(frame: CGRect(x:10, y: 50, width: width - 10, height: viewHeight))
+        help.isEditable = false
         help.backgroundColor = gray
         help.textColor = white
         help.font = UIFont(name: "Futura", size: 20)

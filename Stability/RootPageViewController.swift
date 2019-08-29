@@ -59,7 +59,7 @@ extension UIViewController {
     func addHelpButton() {
         let gray = UIColor(hex:5263695)
         let help = UIButton(frame: CGRect(x:UIScreen.main.bounds.width - 60,
-                                          y: 20,
+                                          y: 29,
                                           width: 60,
                                           height: 30
         ))
