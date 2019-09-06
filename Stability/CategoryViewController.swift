@@ -251,6 +251,9 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         self.view.addSubview(button)
         
     }
+    override func viewDidAppear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(false, animated: false)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

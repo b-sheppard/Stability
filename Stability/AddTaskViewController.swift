@@ -97,6 +97,7 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
     
     //destroy view
     @objc func CancelClicked() {
+        navigationController?.setNavigationBarHidden(false, animated: false)
         self.animHide()
     }
     
@@ -117,6 +118,7 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
             ref?.child(USER_PATH + "/categories").child(path).child(text).setValue(3600*hour + 60*minute)
             taskTextField.text = ""
         }
+        navigationController?.setNavigationBarHidden(false, animated: false)
         self.animHide()
     }
     

@@ -377,6 +377,10 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             let dataEntry = PieChartDataEntry(value: Double(cat.duration), label: nil)
             if cat.name == balanceTimer.categorySelected {
                 dataEntry.value = Double(balanceTimer.timeRemaining)
+                dataEntry.label = formatTimeRemaining(time: balanceTimer.timeRemaining)
+            }
+            else {
+                 dataEntry.label = formatTimeRemaining(time: cat.duration)
             }
             // catches negative values of categories (shouldn't happen but what if)
             if cat.duration <= 0 {
@@ -397,6 +401,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         //create completed time placeholder
         let completedEntry = PieChartDataEntry(value: Double(balanceTimer.secondsCompleted), label: nil)
         completedEntry.x = Double(position)
+        completedEntry.label = formatTimeRemaining(time: Int(balanceTimer.secondsCompleted))
         categories.append(completedEntry)
         categoryPosition[String(position)] = "Completed"
         
@@ -411,8 +416,18 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         
         chartDataSet.colors = categoryColor
         circleView.data = chartData
+        circleView.data?.setDrawValues(false) // hides x values
+        circleView.data?.setValueFont(UIFont(name:"Futura", size: 12)!)
+        circleView.data?.setValueTextColor(white)
     }
     
+    func formatTimeRemaining(time: Int) -> String {
+        let hour = Int(time / 3600)
+        let minutesLeft = time - 3600*hour
+        let minute = Int(minutesLeft / 60)
+        let seconds = minutesLeft - 60*minute
+        return String(hour) + "h" + String(minute) + "m" + String(seconds) + "s"
+    }
     // updates colors (name of category as key)
     func updateColor(category: String) {
         if category == "Unscheduled" {
@@ -571,7 +586,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     
     // stop updating chart when the view dissapears
     override func viewDidDisappear(_ animated: Bool) {
-        timer?.invalidate()
+        //timer?.invalidate()
     }
     
     //===========================================================
