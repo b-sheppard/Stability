@@ -571,7 +571,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     
     // stop updating chart when the view dissapears
     override func viewDidDisappear(_ animated: Bool) {
-        timer?.invalidate()
+        //timer?.invalidate()
     }
     
     //===========================================================
