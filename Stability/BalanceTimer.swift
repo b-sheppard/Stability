@@ -29,12 +29,14 @@ class BalanceTimer : Object {
             print("!!!!!!!ERROR!!!!!!!!!\n")
         }
         else {
-            taskTimer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: #selector(self.updateScheduled), userInfo: nil, repeats: true)
+            taskTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.updateScheduled), userInfo: nil, repeats: true)
+            RunLoop.main.add(taskTimer!, forMode: RunLoop.Mode.common)
         }
     }
     @objc public func stopScheduled() -> Int {
         print("Timer done")
         taskTimer?.invalidate()
+        print(timeRemaining)
         return timeRemaining
     }
     @objc public func updateScheduled() {
