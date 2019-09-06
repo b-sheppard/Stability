@@ -547,6 +547,10 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         super.viewDidLoad()
         ref = Database.database().reference()
         
+        // update chart values when view is visible
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: #selector(self.updateChart), userInfo: nil, repeats: true)
+        navigationController?.setToolbarHidden(true, animated: false)
+        
         view.backgroundColor = white
         
         fetchData()
@@ -562,10 +566,6 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         fetchData()
         updateChart()
         navigationController?.setNavigationBarHidden(true, animated: false)
-        
-        // update chart values when view is visible
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: #selector(self.updateChart), userInfo: nil, repeats: true)
-        navigationController?.setToolbarHidden(true, animated: false)
 
     }
     
