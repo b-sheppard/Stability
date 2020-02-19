@@ -22,6 +22,7 @@ class BalanceTimer : Object {
     var taskSelected = "" // task to start
     var taskTimer: Timer?
     var taskFinished = false
+    var beforeOvertime = 0 // time of task before left app
     
     // -----------------------------FUNCTIONS----------------------------------
     @objc public func startScheduled() {

@@ -55,6 +55,12 @@ class Category : Object {
     @objc dynamic var color = 0
 }
 
+class TotalTime : Object {
+    @objc dynamic var duration = 0
+    @objc dynamic var name = ""
+    @objc dynamic var color = 0
+}
+
 extension Task {
     func deleteTask() {
         balanceTimer.stopScheduled()

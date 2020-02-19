@@ -14,6 +14,7 @@ import RealmSwift
 
 var uirealm = try! Realm() // realm file
 var balanceTimer = BalanceTimer() // custom timer
+var totalTimes = [TotalTime]() // stores data on time in categories
 var USER_PATH = Auth.auth().currentUser?.uid ?? "error"
 
 @UIApplicationMain
@@ -43,6 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             let unscheduled = Category()
             let status = TimerStatus() // timer status
+            let unscheduledTime = TotalTime() // total time placeholder
             
             //unscheduled.duration = 3680
             let curTime = Date()
@@ -58,12 +60,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             unscheduledTask.name = unscheduled.name
             unscheduledTask.category = "Unscheduled"
             
+            unscheduledTime.color = 5263695 // gray
+            unscheduledTime.name = "Unscheduled"
+            unscheduledTime.duration = 0
 
             // REALM
             try! uirealm.write() {
                 uirealm.add(status)
                 uirealm.add(unscheduled)
                 uirealm.add(unscheduledTask)
+                uirealm.add(unscheduledTime)
             }
         }
         else {
@@ -121,6 +127,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             runningTask!.duration = balanceTimer.timeRemainingInTask
             runningTask!.name = balanceTimer.taskSelected
         }
+        
+        // update total times
+        for time in totalTimes {
+            let categoryPredicate = NSPredicate(format: "name = %@", time.name)
+            let category = uirealm.objects(TotalTime.self).filter(categoryPredicate).first
+            try! uirealm.write() {
+                category?.duration = time.duration
+            }
+        }
 
     }
 /*
@@ -146,6 +161,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var runningTask = uirealm.objects(Task.self).filter(taskPredicate).first
         
         let timeInactive = (checkStatus?.dateOnExit?.timeIntervalSinceNow ?? 0) * -1
+        
+        let savedTimes = uirealm.objects(TotalTime.self) // get total times
+        totalTimes.removeAll() // avoids adding same category twice
+        for time in savedTimes {
+            if !totalTimes.contains(time) {
+                totalTimes.append(time)
+            }
+        }
+        
+        print(totalTimes)
         balanceTimer.secondsCompleted = Double(checkStatus?.secondsCompleted ?? 0) + timeInactive
         
         // category time
