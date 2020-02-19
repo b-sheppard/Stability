@@ -202,6 +202,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         else if balanceTimer.timeRemainingInTask <= 0 {
             secondsOvertime = unscheduled.duration + balanceTimer.timeRemainingInTask
             try! uirealm.write {
+                categoryToDelete.duration = categoryToDelete.duration - taskToDelete.duration
                 checkStatus.timerRunning = false
                 checkStatus.currentCategory = "Unscheduled"
                 checkStatus.currentTask = "Unscheduled"
@@ -215,6 +216,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         balanceTimer.taskSelected = "Unscheduled"
         
         mainButton.setTitle("START", for: .normal)
+        descriptionLabel.textColor = white
         fetchData()
     }
     // time exceeds 24 hours
