@@ -130,6 +130,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // update total times
         for time in totalTimes {
+            print("saving category: " + time.name)
             let categoryPredicate = NSPredicate(format: "name = %@", time.name)
             let category = uirealm.objects(TotalTime.self).filter(categoryPredicate).first
             try! uirealm.write() {
