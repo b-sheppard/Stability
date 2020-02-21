@@ -33,7 +33,7 @@ UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
                        "ORG",
                        "GRN"]
     
-    var colors_int = [14596161,
+    var colors_int = [13084226,
                       16463424,
                       38099,
                       3131322,

@@ -16,6 +16,7 @@ class TaskViewController: UIViewController {
     
     let white = UIColor(hex:15460841)
     let gray = UIColor(hex:5263695)
+    let darkGray = UIColor()
     
     let MAX_CATEGORIES = 9;
     var categoryNames:[String] = ["+"]
@@ -148,11 +149,12 @@ class TaskViewController: UIViewController {
         taskSearchField = SearchTextField(frame: CGRect(x: 20, y: screenHeight/10 + 20, width: screenWidth - 40, height: 60))
         taskSearchField.backgroundColor = .white
         taskSearchField.borderStyle = .roundedRect
-        taskSearchField.placeholder = "Search For a Task..."
         taskSearchField.font = UIFont(name: "Futura", size: 25)
         taskSearchField.textColor = gray
         taskSearchField.keyboardAppearance = .dark
         taskSearchField.inlineMode = true
+        taskSearchField.attributedPlaceholder = NSAttributedString(string: "Search For a Task...", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray.withAlphaComponent(0.5)])
+
         
         // autocompletes search
         taskSearchField.itemSelectionHandler = {filteredResults, itemPosition in
@@ -260,6 +262,7 @@ class TaskViewController: UIViewController {
     //fetches all tasks from firebase
     func fetchData() {
         //adds task data to an array
+        taskNames.removeAll()
         ref?.child(USER_PATH + "/categories").observeSingleEvent(of: .value, with: { (snapshot) in
             for case let category as DataSnapshot in snapshot.children {
                 let cat = category.childSnapshot(forPath: "Tasks") as DataSnapshot

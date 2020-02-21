@@ -148,13 +148,25 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     
     //deletes category from database
     func deleteCategory() {
-        ref?.child(USER_PATH).child("categories").child(name).removeValue()
+        /*// removes potential time dependency if the task running is apart of the category (i'm lazy)
+        if name == balanceTimer.categorySelected {
+            let alert = UIAlertController(title: "Unable to delete category", message: "Category is currently running. Please stop category before deleting.", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Continue", style: UIAlertAction.Style.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+       */ ref?.child(USER_PATH).child("categories").child(name).removeValue()
         
         //delete active tasks
         let tasksPred = NSPredicate(format: "category = %@", self.name)
         let tasksToDelete = uirealm.objects(Task.self).filter(tasksPred)
         for task in tasksToDelete {
             task.deleteTask()
+            
+            if let rootViewController = navigationController?.viewControllers.first as? RootPageViewController {
+                let homeViewController = rootViewController.viewControllerList[1] as? HomeViewController
+                homeViewController?.fetchData()
+            }
         }
         
         //delete category

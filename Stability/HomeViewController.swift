@@ -23,7 +23,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     var circleView: PieChartView!
     
     //color variables
-    let gold = NSUIColor(hex: 16766720) //gold color
+    let gold = NSUIColor(hex: 15780864) //gold color
     
     //active category variables
     var categoryPosition: Dictionary = [String:String]()
