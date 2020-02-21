@@ -90,6 +90,18 @@ UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
                                                            "Name" : text,
                                                            "Tasks" : ""])
             categoryTextField.text = ""
+            
+            // placeholder for adding (should probably add an initializer...
+            let categoryToAdd = TotalTime()
+            categoryToAdd.duration = 0
+            categoryToAdd.name = text
+            categoryToAdd.color = colorPicked
+            
+            totalTimes.append(categoryToAdd) // adds category to total time tracker
+            
+            try! uirealm.write {
+                uirealm.add(categoryToAdd)
+            }
         }
         self.animHide()
     }

@@ -26,21 +26,6 @@ class ProfileViewController: UIViewController {
     let v2 = UIStackView() // month
     let v3 = UIStackView() // year
     
-    // baked-in categories
-    var categories = ["Placeholder"]
-    // baked-in times
-    var times = ["coming soon!"]
-    // baked-in colors
-    var colors_int = [14596161,
-                      16463424,
-                      38099,
-                      3131322,
-                      16739771,
-                      8007788,
-                      4022498,
-                      16748544,
-                      4306490]
-    
     @objc func backTapped(){
         navigationController?.popToRootViewController(animated: true)
     }
@@ -172,15 +157,15 @@ class ProfileViewController: UIViewController {
         scrollView.addSubview(v1timeframe)
         
         // display total times in category (currently hard-coded)
-        for pos in 0...categories.count - 1 {
+        for pos in 0...totalTimes.count - 1 {
             let catName = UILabel(frame:CGRect(x: 0,
                                                y: pos*scroll_height/10,
                                                width: Int(width/2) - 10,
                                                height: scroll_height/10))
             catName.adjustsFontSizeToFitWidth = true
             catName.textAlignment = .right
-            catName.text = categories[pos]
-            catName.textColor = UIColor(hex:colors_int[pos])
+            catName.text = totalTimes[pos].name
+            catName.textColor = UIColor(hex:totalTimes[pos].color)
             catName.font = UIFont(name: "Futura", size: 20)
             
             let catVal = UILabel(frame:CGRect(x: Int(width/2 + 10),
@@ -189,8 +174,8 @@ class ProfileViewController: UIViewController {
                                               height: scroll_height/10))
             catVal.adjustsFontSizeToFitWidth = true
             catVal.textAlignment = .left
-            catVal.text = times[pos]
-            catVal.textColor = UIColor(hex:colors_int[pos])
+            catVal.text = String(totalTimes[pos].duration)
+            catVal.textColor = UIColor(hex:totalTimes[pos].color)
             catVal.font = UIFont(name: "Futura", size: 20)
             v1.addSubview(catName)
             v1.addSubview(catVal)
