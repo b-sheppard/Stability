@@ -93,7 +93,7 @@ UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
             
             // placeholder for adding (should probably add an initializer...
             let categoryToAdd = TotalTime()
-            categoryToAdd.duration = 0
+            categoryToAdd.duration = 0.0
             categoryToAdd.name = text
             categoryToAdd.color = colorPicked
             

@@ -15,6 +15,8 @@ class ProfileViewController: UIViewController {
     let gray = UIColor(hex:5263695)
     let width = UIScreen.main.bounds.width
     let height = UIScreen.main.bounds.height
+    let y_pos = UIScreen.main.bounds.height/20
+           let scroll_height = Int(UIScreen.main.bounds.height/2 - UIScreen.main.bounds.height/10)
     
     let startPicker = UIDatePicker()
     
@@ -132,9 +134,6 @@ class ProfileViewController: UIViewController {
     }
     
     func setupScrollView() {
-        let y_pos = height/20
-        let scroll_height = Int(height/2 - height/10)
-        
         scrollView.frame = CGRect(x:0, y: y_pos, width: width, height: height/2 - height/10)
         scrollView.backgroundColor = white
         scrollView.isUserInteractionEnabled = true
@@ -156,7 +155,25 @@ class ProfileViewController: UIViewController {
         v1timeframe.textColor = gray
         scrollView.addSubview(v1timeframe)
         
-        // display total times in category (currently hard-coded)
+
+        scrollView.addSubview(v1)
+        
+        v2.frame = CGRect(x: width, y: 0, width: width, height: 200)
+        v2.backgroundColor = .green
+        //scrollView.addSubview(v2)
+        
+        v3.frame = CGRect(x: 2*width, y: 0, width: width, height: 200)
+        v3.backgroundColor = .blue
+        //scrollView.addSubview(v3)
+        
+        self.view.addSubview(scrollView)
+    }
+    
+    func updateTimes() {
+        for view in v1.subviews {
+            view.removeFromSuperview()
+        }
+        // display total times in category
         for pos in 0...totalTimes.count - 1 {
             let catName = UILabel(frame:CGRect(x: 0,
                                                y: pos*scroll_height/10,
@@ -174,23 +191,12 @@ class ProfileViewController: UIViewController {
                                               height: scroll_height/10))
             catVal.adjustsFontSizeToFitWidth = true
             catVal.textAlignment = .left
-            catVal.text = String(totalTimes[pos].duration)
+            catVal.text = String(ceil(totalTimes[pos].duration)) + " hours"
             catVal.textColor = UIColor(hex:totalTimes[pos].color)
             catVal.font = UIFont(name: "Futura", size: 20)
             v1.addSubview(catName)
             v1.addSubview(catVal)
         }
-        scrollView.addSubview(v1)
-        
-        v2.frame = CGRect(x: width, y: 0, width: width, height: 200)
-        v2.backgroundColor = .green
-        //scrollView.addSubview(v2)
-        
-        v3.frame = CGRect(x: 2*width, y: 0, width: width, height: 200)
-        v3.backgroundColor = .blue
-        //scrollView.addSubview(v3)
-        
-        self.view.addSubview(scrollView)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -205,5 +211,9 @@ class ProfileViewController: UIViewController {
         addPicker()
         setupScrollView()
         addSignoutButton()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        updateTimes()
     }
 }

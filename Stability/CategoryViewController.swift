@@ -180,8 +180,10 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         
         //delete total time from local data
         let totalTimeToDelete = uirealm.objects(TotalTime.self).filter(predicate).first
-        try! uirealm.write {
-            uirealm.delete(totalTimeToDelete!)
+        if totalTimeToDelete != nil {
+            try! uirealm.write {
+                uirealm.delete(totalTimeToDelete!)
+            }
         }
         
         let savedTimes = uirealm.objects(TotalTime.self) // get total times

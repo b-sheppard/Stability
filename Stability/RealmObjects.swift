@@ -56,7 +56,7 @@ class Category : Object {
 }
 
 class TotalTime : Object {
-    @objc dynamic var duration = 0
+    @objc dynamic var duration = 0.0
     @objc dynamic var name = ""
     @objc dynamic var color = 0
 }

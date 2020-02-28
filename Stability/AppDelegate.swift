@@ -60,9 +60,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             unscheduledTask.name = unscheduled.name
             unscheduledTask.category = "Unscheduled"
             
+            // total time unscheduled
             unscheduledTime.color = 5263695 // gray
             unscheduledTime.name = "Unscheduled"
-            unscheduledTime.duration = 0
+            unscheduledTime.duration = 0.0
 
             // REALM
             try! uirealm.write() {
@@ -71,6 +72,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 uirealm.add(unscheduledTask)
                 uirealm.add(unscheduledTime)
             }
+            var ref = Database.database().reference() as DatabaseReference?
+            // adds categories stored from firebase into local storage
+            ref?.child(USER_PATH + "/categories").observeSingleEvent(of: .value, with: { (snapshot) in
+                for case let category as DataSnapshot in snapshot.children {
+                    let catName = category.childSnapshot(forPath: "Name").value as! String
+                    let catColor = category.childSnapshot(forPath: "Color").value as! Int
+                    guard let totalTime = category.childSnapshot(forPath: "TotalTime").value as? Double else {
+                        print("Unable to get total time for: " + catName)
+                        continue
+                    }
+                    let tmp = TotalTime()
+                    tmp.duration = totalTime
+                    tmp.name = catName
+                    tmp.color = catColor
+                    totalTimes.append(tmp)
+                    try! uirealm.write() {
+                        uirealm.add(tmp)
+                    }
+                }
+            })
         }
         else {
             mainNavigationController.viewControllers = [rootViewController, loginViewController]
@@ -129,6 +150,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         // update total times
+        var ref = Database.database().reference() as DatabaseReference?
         for time in totalTimes {
             print("saving category: " + time.name)
             let categoryPredicate = NSPredicate(format: "name = %@", time.name)
@@ -136,6 +158,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             try! uirealm.write() {
                 category?.duration = time.duration
             }
+            // writing total times to firebase
+            if time.name == "Unscheduled" {
+                continue
+            }
+            ref?.child(USER_PATH + "/categories/\(time.name)/TotalTime").setValue(time.duration)
         }
 
     }
