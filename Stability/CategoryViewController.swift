@@ -133,6 +133,8 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     var color:UIColor!
     
     let secondaryColor = UIColor.black.withAlphaComponent(0.4)
+    let darkenedColor = UIColor.black.withAlphaComponent(0.6)
+    
     
     var ref:DatabaseReference?
     var handle:DatabaseHandle?
@@ -288,6 +290,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         button.setTitle("+", for: .normal)
         button.titleLabel?.font = UIFont(name:"Futura", size: 80)
         button.setTitleColor(secondaryColor, for: .normal)
+        button.setTitleColor(darkenedColor, for: .highlighted)
         button.backgroundColor = color //current color
         button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         self.view.addSubview(button)

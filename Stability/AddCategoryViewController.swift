@@ -152,16 +152,16 @@ UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
         while i < MAX_COLORS {
             let button = UIButton(type: .custom)
             if i < 3 {
-                let x_pos = (65 + i*100)
+                let x_pos = (45 + i*100)
                 let y_pos = UIScreen.main.bounds.height/4
                 button.frame = CGRect(x: x_pos, y: Int(y_pos), width: 90, height: 90)
             }
             else if i < 6 {
-                let x_pos = (65 + (i - 3)*100)
+                let x_pos = (45 + (i - 3)*100)
                 let y_pos = UIScreen.main.bounds.height/4 + 100
                 button.frame = CGRect(x: x_pos, y: Int(y_pos), width: 90, height: 90)
             } else {
-                let x_pos = (65 + (i - 6)*100)
+                let x_pos = (45 + (i - 6)*100)
                 let y_pos = UIScreen.main.bounds.height/4 + 200
                 button.frame = CGRect(x: x_pos, y: Int(y_pos), width: 90, height: 90)
             }
