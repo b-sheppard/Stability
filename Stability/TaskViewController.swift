@@ -113,6 +113,7 @@ class TaskViewController: UIViewController {
                 button.setTitle(category, for: .normal)
                 button.titleLabel?.font = UIFont(name:"Futura", size: 80)
                 button.setTitleColor(gray, for: .normal)
+                button.setTitleColor(.black, for: .highlighted)
                 button.backgroundColor = white //gray
                 button.addTarget(self, action: #selector(buttonTapped(sender:)), for: .touchUpInside)
             }

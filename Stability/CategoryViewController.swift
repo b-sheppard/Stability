@@ -24,79 +24,6 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         
         // fades out selection
         self.tableView.deselectRow(at: indexPath, animated: true)
-        
-        /*//adds selected number of active minutes to the total
-        self.ref?.child(USER_PATH + "/categories/" + self.path).child(self.tasks[indexPath.row])
-            .observeSingleEvent(of: .value, with: {(snapshot) in
-            let taskValue = snapshot.value! as! Int
-                
-            //REALM
-            let predicate = NSPredicate(format: "name = %@", self.name)
-            let unscheduled = uirealm.objects(Category.self).filter("name = 'Unscheduled'").first
-            let unscheduledTask = uirealm.objects(Task.self).filter("name = 'Unscheduled'").first
-            let runningCategory = uirealm.objects(Category.self).filter(predicate).first
-            var newCategoryTime = taskValue
-                
-            // add task to realm
-            let Tpredicate = NSPredicate(format: "name = %@", self.tasks[indexPath.row])
-            let doesExist = uirealm.objects(Task.self).filter(Tpredicate).first
-            let newTask = Task()
-            if(doesExist != nil) { print("Task already active") }
-            else {
-                newTask.category = self.name
-                newTask.name = self.tasks[indexPath.row]
-                newTask.duration = taskValue
-             //   newTask.duration = 5
-            }
-                
-            // edge case if timer isn't running
-            if balanceTimer.categorySelected == "Unscheduled" {
-                try! uirealm.write {
-                    unscheduled!.duration = balanceTimer.timeRemaining
-                    unscheduledTask!.duration = balanceTimer.timeRemainingInTask
-                }
-            }
-                
-            if unscheduled!.duration < taskValue {
-                let alert = UIAlertController(title: "ERROR", message: "Not enough free time to add this task", preferredStyle: UIAlertController.Style.alert)
-                alert.addAction(UIAlertAction(title: "Fix Schedule", style: UIAlertAction.Style.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-                return
-            }
-            // category doesn't exist
-            if(runningCategory == nil) {
-                let categoryToAdd = Category()
-                categoryToAdd.duration = newCategoryTime
-                //categoryToAdd.duration = 5
-                categoryToAdd.name = self.name
-                categoryToAdd.color = self.color.rgb()!
-                try! uirealm.write {
-                    uirealm.add(categoryToAdd)
-                    unscheduled!.duration -= newCategoryTime
-                    unscheduledTask!.duration -= newCategoryTime
-                    
-                    //add task
-                    uirealm.add(newTask)
-                }
-            }
-            // category exists
-            else {
-                try! uirealm.write {
-                    unscheduled!.duration -= newCategoryTime
-                    unscheduledTask!.duration -= newCategoryTime
-                    newCategoryTime += runningCategory!.duration
-                    runningCategory!.duration = newCategoryTime
-                    
-                    // add task
-                    uirealm.add(newTask)
-                }
-            }
-            // edge case if timer isn't running
-            if balanceTimer.categorySelected == "Unscheduled" {
-                balanceTimer.timeRemaining = unscheduled!.duration
-                balanceTimer.timeRemainingInTask = unscheduledTask!.duration
-            }
-        })*/
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -104,13 +31,48 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CellID") ?? UITableViewCell(style: UITableViewCell.CellStyle.value1, reuseIdentifier: "CellID")
+        
         cell.textLabel!.text = tasks[indexPath.row]
         cell.textLabel!.textColor = white
         cell.textLabel!.font = UIFont(name:"Futura", size: 30)
         cell.backgroundColor = color
         cell.accessoryType = .disclosureIndicator
+        cell.detailTextLabel?.text = "Edit >"
+        cell.detailTextLabel?.textColor = white
+        cell.detailTextLabel?.font = UIFont(name:"Futura", size: 15)
+        
+        let edit = UIView()
+        edit.backgroundColor = gray
+        
+        cell.accessoryView = edit
+        
+        // set selection color
+        let selected = UIView()
+        selected.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        cell.selectedBackgroundView = selected
         return cell
+    }
+    
+    // delete option
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let delete = UITableViewRowAction(style: .default, title: "Delete") { action, indexPath in
+            //get tasks that will be deleted by swipe
+            let toDelete = self.tasks[indexPath.row]
+            self.deleteTask(task:toDelete)
+            // handle delete (by removing the data from your array and updating the tableview)
+        }
+        
+        let edit = UITableViewRowAction(style: .default, title: "Edit") { action, indexPath in
+            let dynamicView = DynamicTaskViewController()
+            dynamicView.color = self.color
+            dynamicView.taskName = self.tasks[indexPath.row]
+            dynamicView.category = self.name
+            self.navigationController?.pushViewController(dynamicView, animated: true)
+        }
+        delete.backgroundColor = gray
+        edit.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        return [delete, edit]
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -133,6 +95,8 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     var color:UIColor!
     
     let secondaryColor = UIColor.black.withAlphaComponent(0.4)
+    let darkenedColor = UIColor.black.withAlphaComponent(0.6)
+    
     
     var ref:DatabaseReference?
     var handle:DatabaseHandle?
@@ -263,6 +227,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.delegate = self
         tableView.backgroundColor = color
         tableView.separatorColor = secondaryColor
+        tableView.rowHeight = 80
         self.view.addSubview(tableView)
         
         //delete button
@@ -288,6 +253,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         button.setTitle("+", for: .normal)
         button.titleLabel?.font = UIFont(name:"Futura", size: 80)
         button.setTitleColor(secondaryColor, for: .normal)
+        button.setTitleColor(darkenedColor, for: .highlighted)
         button.backgroundColor = color //current color
         button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         self.view.addSubview(button)
