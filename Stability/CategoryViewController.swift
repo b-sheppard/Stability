@@ -139,13 +139,26 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     var tableView: UITableView!
     
     @objc func buttonTapped() {
-        deleteCategory()
+        addAlert()
     }
-    
     @objc func addButtonTapped() {
         addTaskView()
     }
     
+    func addAlert() {
+        let alert = UIAlertController(title: "Delete Category?", message: "Once the category is deleted, all tasks will be removed", preferredStyle: UIAlertController.Style.alert)
+        let okAction = UIAlertAction(title: "Delete", style: .destructive) {
+            UIAlertAction in
+            self.deleteCategory()
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) {
+            UIAlertAction in
+            return
+        }
+        alert.addAction(okAction)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true, completion: nil)
+    }
     //deletes category from database
     func deleteCategory() {
         /*// removes potential time dependency if the task running is apart of the category (i'm lazy)
@@ -155,7 +168,9 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
             self.present(alert, animated: true, completion: nil)
             return
         }
-       */ ref?.child(USER_PATH).child("categories").child(name).removeValue()
+         
+       */
+        ref?.child(USER_PATH).child("categories").child(name).removeValue()
         
         //delete active tasks
         let tasksPred = NSPredicate(format: "category = %@", self.name)
@@ -180,8 +195,10 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         
         //delete total time from local data
         let totalTimeToDelete = uirealm.objects(TotalTime.self).filter(predicate).first
-        try! uirealm.write {
-            uirealm.delete(totalTimeToDelete!)
+        if totalTimeToDelete != nil {
+            try! uirealm.write {
+                uirealm.delete(totalTimeToDelete!)
+            }
         }
         
         let savedTimes = uirealm.objects(TotalTime.self) // get total times

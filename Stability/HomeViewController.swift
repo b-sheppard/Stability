@@ -13,7 +13,7 @@ import Charts
 import FirebaseAuth
 
 
-class HomeViewController: UIViewController, ChartViewDelegate {
+class HomeViewController: UIViewController, ChartViewDelegate, UIViewControllerTransitioningDelegate {
     let white = UIColor(hex:15460841)
     let gray = UIColor(hex:5263695)
     
@@ -42,6 +42,21 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     
     var resumeTapped = false
     
+    //animation
+    let transition = CircularTransition()
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        transition.transitionMode = .dismiss
+        transition.startingPoint = mainButton.center
+        transition.circleColor = white
+        return transition
+    }
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        transition.transitionMode = .present
+        transition.startingPoint = mainButton.center
+        transition.circleColor = presented.view.backgroundColor ?? .green
+        return transition
+    }
+    
     
     //==========================================
     //          SCHEDULED TIMER
@@ -52,6 +67,12 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         descriptionLabel.textColor = white // makes help info invisible
         // finds currently running task and removes it
         if balanceTimer.categorySelected != "Unscheduled" {
+            //update total time
+            let tmp = totalTimes.filter({$0.name == balanceTimer.categorySelected}).first?.duration ?? 0
+            try! uirealm.write {
+                totalTimes.filter({$0.name == balanceTimer.categorySelected}).first?.duration = tmp + balanceTimer.secondsInCategory * 1.0/3600
+            }
+            
             let predicate = NSPredicate(format: "name = %@", balanceTimer.taskSelected)
             let toDelete = uirealm.objects(Task.self).filter(predicate).first!
             toDelete.deleteTask()
@@ -70,6 +91,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     
     // start a task if one is actually selected
     @objc public func startTapped() {
+        mainButton.shrinkGrowButton()
         let checkStatus = uirealm.objects(TimerStatus.self).first
         if !checkStatus!.timerRunning && balanceTimer.categoryStaged != "" {
             mainButton.setTitle("STOP", for: .normal)
@@ -86,6 +108,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
                 checkStatus?.timerRunning = true
                 runningCategory!.duration = balanceTimer.timeRemaining
             }
+            
             // assign new timer
             balanceTimer.categorySelected = balanceTimer.categoryStaged
             balanceTimer.categoryStaged = ""
@@ -95,11 +118,13 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             let taskPredicate = NSPredicate(format: "name = %@", balanceTimer.taskSelected)
             let newTask = uirealm.objects(Task.self).filter(taskPredicate).first
             
+            balanceTimer.secondsInCategory = 0.0
             balanceTimer.categorySelected = newCategory!.name
             balanceTimer.timeRemaining = newCategory!.duration
             balanceTimer.taskSelected = newTask!.name
             balanceTimer.timeRemainingInTask = newTask!.duration
             balanceTimer.startScheduled()
+            
         }
         else if checkStatus!.timerRunning {
             descriptionLabel.textColor = white
@@ -119,6 +144,14 @@ class HomeViewController: UIViewController, ChartViewDelegate {
                 runningCategory!.duration = balanceTimer.timeRemaining
                 runningTask!.duration = balanceTimer.timeRemainingInTask
             }
+            
+            //update total time
+            let tmp = totalTimes.filter({$0.name == balanceTimer.categorySelected}).first?.duration ?? 0
+            print(tmp)
+            try! uirealm.write {
+                totalTimes.filter({$0.name == balanceTimer.categorySelected}).first?.duration = tmp + balanceTimer.secondsInCategory * 1.0/3600
+            }
+            
             // start free-time timer
             let predicate = NSPredicate(format: "name = %@", "Unscheduled")
             let unscheduled = uirealm.objects(Category.self).filter(predicate).first
@@ -164,14 +197,15 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             
         else {
             //assign color to category
-            ref?.child(USER_PATH + "/categories").child(category).child("Color")
-                .observeSingleEvent(of: .value, with: { (snapshot) in
-                    let color = NSUIColor(hex: snapshot.value! as! Int)
-                    categoryView.color = color
-                })
+            let categoryPredicate = NSPredicate(format: "name = %@", category)
+            let categoryColor = uirealm.objects(Category.self).filter(categoryPredicate).first!.color
             
             //go to list of active tasks
-            navigationController?.pushViewController(categoryView, animated: false)
+            categoryView.color = NSUIColor(hex: categoryColor)
+            categoryView.transitioningDelegate = self
+            categoryView.modalPresentationStyle = .custom
+            navigationController?.present(categoryView, animated: true, completion: nil)
+            navigationController?.setNavigationBarHidden(false, animated: true)
         }
     }
     
@@ -187,6 +221,12 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         let taskToDelete = uirealm.objects(Task.self).filter(taskPredicate).first!
         var secondsOvertime = 0
         
+        //update total time
+        let tmp = totalTimes.filter({$0.name == balanceTimer.categorySelected}).first?.duration ?? 0
+        try! uirealm.write {
+            totalTimes.filter({$0.name == balanceTimer.categorySelected}).first?.duration = tmp + Double(taskToDelete.duration) * 1.0/3600
+        }
+        
         // last task in category finished
         if balanceTimer.timeRemaining <= 0 {
             secondsOvertime = unscheduled.duration + balanceTimer.timeRemaining
@@ -201,6 +241,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         // not last task in category (keeps category)
         else if balanceTimer.timeRemainingInTask <= 0 {
             secondsOvertime = unscheduled.duration + balanceTimer.timeRemainingInTask
+            
             try! uirealm.write {
                 categoryToDelete.duration = categoryToDelete.duration - taskToDelete.duration
                 checkStatus.timerRunning = false
@@ -210,6 +251,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
             }
         }
         
+        balanceTimer.secondsInCategory = 0.0
         balanceTimer.timeRemaining = secondsOvertime
         balanceTimer.timeRemainingInTask = secondsOvertime
         balanceTimer.categorySelected = "Unscheduled"
@@ -235,6 +277,7 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         balanceTimer.timeRemaining = 86400 - timeInterval
         balanceTimer.timeRemainingInTask = 86400 - timeInterval
         balanceTimer.secondsCompleted = Double(timeInterval)
+        balanceTimer.secondsInCategory = Double(timeInterval)
         balanceTimer.taskSelected = "Unscheduled"
         selectedTaskName.text = "Select a Task"
 
@@ -314,7 +357,6 @@ class HomeViewController: UIViewController, ChartViewDelegate {
     // Notify user when current schedule is no longer possible
     func fixSchedule() {
         // schedule cannot be fixed
-        print(balanceTimer.secondsCompleted)
         if balanceTimer.secondsCompleted >= 86400 {
             timer?.invalidate()
             selectedTaskName.text = "You are a failure."
@@ -539,6 +581,8 @@ class HomeViewController: UIViewController, ChartViewDelegate {
         //settings on pie chart
         circleView.chartDescription?.enabled = false
         circleView.drawHoleEnabled = true
+        circleView.holeRadiusPercent = 0.6
+        circleView.holeColor = white
         circleView.rotationAngle = 0
         circleView.rotationEnabled = true
         circleView.isUserInteractionEnabled = true

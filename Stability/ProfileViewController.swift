@@ -15,6 +15,8 @@ class ProfileViewController: UIViewController {
     let gray = UIColor(hex:5263695)
     let width = UIScreen.main.bounds.width
     let height = UIScreen.main.bounds.height
+    let y_pos = UIScreen.main.bounds.height/20
+           let scroll_height = Int(UIScreen.main.bounds.height/2 - UIScreen.main.bounds.height/10)
     
     let startPicker = UIDatePicker()
     
@@ -80,11 +82,18 @@ class ProfileViewController: UIViewController {
                 balanceTimer.timeRemainingInTask -= timeDifference
             }
         }
+        dateButton.shrinkGrowButton()
+    }
+    @objc func touchDown() {
+        dateButton.shrinkButton()
+    }
+    @objc func touchExit() {
+        dateButton.growButton()
     }
     
     func addDateButton() {
         let x_pos = width/2
-        let y_pos = height/2
+        let y_pos = 85*height/100
         
         dateButton.frame = CGRect(x: x_pos - 150, y: y_pos, width: 300, height: 60)
         dateButton.clipsToBounds = true
@@ -93,7 +102,9 @@ class ProfileViewController: UIViewController {
         dateButton.setTitleColor(white, for: .normal)
         dateButton.backgroundColor = gray
         dateButton.setTitleColor(.white, for: .highlighted)
+        dateButton.addTarget(self, action: #selector(touchDown), for: .touchDown)
         dateButton.addTarget(self, action: #selector(updateStartTime), for: .touchUpInside)
+        dateButton.addTarget(self, action: #selector(touchExit), for: .touchDragExit)
         dateButton.layer.cornerRadius = 10
         view.addSubview(dateButton)
     }
@@ -116,25 +127,18 @@ class ProfileViewController: UIViewController {
     }
     
     func addSignoutButton() {
-        let x_pos = width/2
-        let y_pos = 85*height/100
-        
         let signout = UIButton()
-        signout.frame = CGRect(x: x_pos - 150, y: y_pos, width: 300, height: 60)
+        signout.frame = CGRect(x: 0, y: 30, width: width/4, height: 60)
         signout.clipsToBounds = true
         signout.setTitle("Signout", for: .normal)
-        signout.titleLabel?.font = UIFont(name:"Futura", size: 30)
-        signout.setTitleColor(white, for: .normal)
-        signout.backgroundColor = gray
+        signout.titleLabel?.font = UIFont(name:"Futura", size: 18)
+        signout.setTitleColor(UIColor.black.withAlphaComponent(0.4), for: .normal)
+        signout.setTitleColor(gray, for: .highlighted)
         signout.addTarget(self, action: #selector(signoutUser), for: .touchUpInside)
-        signout.layer.cornerRadius = 10
         view.addSubview(signout)
     }
     
     func setupScrollView() {
-        let y_pos = height/20
-        let scroll_height = Int(height/2 - height/10)
-        
         scrollView.frame = CGRect(x:0, y: y_pos, width: width, height: height/2 - height/10)
         scrollView.backgroundColor = white
         scrollView.isUserInteractionEnabled = true
@@ -156,7 +160,25 @@ class ProfileViewController: UIViewController {
         v1timeframe.textColor = gray
         scrollView.addSubview(v1timeframe)
         
-        // display total times in category (currently hard-coded)
+
+        scrollView.addSubview(v1)
+        
+        v2.frame = CGRect(x: width, y: 0, width: width, height: 200)
+        v2.backgroundColor = .green
+        //scrollView.addSubview(v2)
+        
+        v3.frame = CGRect(x: 2*width, y: 0, width: width, height: 200)
+        v3.backgroundColor = .blue
+        //scrollView.addSubview(v3)
+        
+        self.view.addSubview(scrollView)
+    }
+    
+    func updateTimes() {
+        for view in v1.subviews {
+            view.removeFromSuperview()
+        }
+        // display total times in category
         for pos in 0...totalTimes.count - 1 {
             let catName = UILabel(frame:CGRect(x: 0,
                                                y: pos*scroll_height/10,
@@ -174,23 +196,12 @@ class ProfileViewController: UIViewController {
                                               height: scroll_height/10))
             catVal.adjustsFontSizeToFitWidth = true
             catVal.textAlignment = .left
-            catVal.text = String(totalTimes[pos].duration)
+            catVal.text = String(Int(ceil(totalTimes[pos].duration))) + " hours"
             catVal.textColor = UIColor(hex:totalTimes[pos].color)
             catVal.font = UIFont(name: "Futura", size: 20)
             v1.addSubview(catName)
             v1.addSubview(catVal)
         }
-        scrollView.addSubview(v1)
-        
-        v2.frame = CGRect(x: width, y: 0, width: width, height: 200)
-        v2.backgroundColor = .green
-        //scrollView.addSubview(v2)
-        
-        v3.frame = CGRect(x: 2*width, y: 0, width: width, height: 200)
-        v3.backgroundColor = .blue
-        //scrollView.addSubview(v3)
-        
-        self.view.addSubview(scrollView)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -205,5 +216,9 @@ class ProfileViewController: UIViewController {
         addPicker()
         setupScrollView()
         addSignoutButton()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        updateTimes()
     }
 }

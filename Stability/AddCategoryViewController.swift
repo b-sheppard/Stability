@@ -59,14 +59,16 @@ UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
         //create cancel button
         let cancelButton = UIButton(type: .custom)
         cancelButton.setTitle("Cancel", for: .normal)
-        cancelButton.setTitleColor(UIColor.black.withAlphaComponent(0.4), for: .normal)
+        cancelButton.setTitleColor(UIColor.black.withAlphaComponent(0.6), for: .normal)
+        cancelButton.setTitleColor(UIColor.black.withAlphaComponent(0.8), for: .highlighted)
         cancelButton.frame = CGRect(x: 10, y: 0, width: 60, height: 60)
         cancelButton.addTarget(self, action: #selector(AddCategoryViewController.CancelClicked), for: .touchUpInside)
         
         //create save button
         let saveButton = UIButton(type: .custom)
         saveButton.setTitle("Save", for: .normal)
-        saveButton.setTitleColor(UIColor.black.withAlphaComponent(0.4), for: .normal)
+        saveButton.setTitleColor(UIColor.black.withAlphaComponent(0.6), for: .normal)
+        saveButton.setTitleColor(UIColor.black.withAlphaComponent(0.8), for: .highlighted)
         saveButton.frame = CGRect(x: width - 70, y: 0, width: 60, height: 60)
         saveButton.addTarget(self, action:#selector(AddCategoryViewController.SaveClicked), for: .touchUpInside)
         
@@ -85,7 +87,6 @@ UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
             return
         }
         if text != "" {
-            print("Add " + text)
             ref?.child(USER_PATH + "/categories/\(text)/").setValue(["Color" : colorPicked,
                                                            "Name" : text,
                                                            "Tasks" : ""])
@@ -93,7 +94,7 @@ UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
             
             // placeholder for adding (should probably add an initializer...
             let categoryToAdd = TotalTime()
-            categoryToAdd.duration = 0
+            categoryToAdd.duration = 0.0
             categoryToAdd.name = text
             categoryToAdd.color = colorPicked
             
@@ -101,6 +102,12 @@ UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
             
             try! uirealm.write {
                 uirealm.add(categoryToAdd)
+            }
+            if let rootViewController = navigationController?.viewControllers.first as? RootPageViewController {
+                let taskViewController = rootViewController.viewControllerList[2] as? TaskViewController
+                taskViewController?.fetchData()
+                taskViewController?.scrollView.removeFromSuperview()
+                taskViewController?.createScrollView()
             }
         }
         self.animHide()
@@ -145,16 +152,16 @@ UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
         while i < MAX_COLORS {
             let button = UIButton(type: .custom)
             if i < 3 {
-                let x_pos = (40 + i*100)
+                let x_pos = (65 + i*100)
                 let y_pos = UIScreen.main.bounds.height/4
                 button.frame = CGRect(x: x_pos, y: Int(y_pos), width: 90, height: 90)
             }
             else if i < 6 {
-                let x_pos = (40 + (i - 3)*100)
+                let x_pos = (65 + (i - 3)*100)
                 let y_pos = UIScreen.main.bounds.height/4 + 100
                 button.frame = CGRect(x: x_pos, y: Int(y_pos), width: 90, height: 90)
             } else {
-                let x_pos = (40 + (i - 6)*100)
+                let x_pos = (65 + (i - 6)*100)
                 let y_pos = UIScreen.main.bounds.height/4 + 200
                 button.frame = CGRect(x: x_pos, y: Int(y_pos), width: 90, height: 90)
             }
