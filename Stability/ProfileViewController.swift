@@ -139,7 +139,7 @@ class ProfileViewController: UIViewController {
     }
     
     func setupScrollView() {
-        scrollView.frame = CGRect(x:0, y: y_pos, width: width, height: height/2)
+        scrollView.frame = CGRect(x:0, y: y_pos, width: width, height: height/2 - height/10)
         scrollView.backgroundColor = white
         scrollView.isUserInteractionEnabled = true
         scrollView.isScrollEnabled = true
