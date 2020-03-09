@@ -38,7 +38,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         cell.textLabel!.font = UIFont(name:"Futura", size: 30)
         cell.backgroundColor = color
         cell.accessoryType = .disclosureIndicator
-        cell.detailTextLabel?.text = "Edit >"
+        cell.detailTextLabel?.text = "Tap to Edit >"
         cell.detailTextLabel?.textColor = white
         cell.detailTextLabel?.font = UIFont(name:"Futura", size: 15)
         

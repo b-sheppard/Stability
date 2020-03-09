@@ -139,7 +139,7 @@ class ProfileViewController: UIViewController {
     }
     
     func setupScrollView() {
-        scrollView.frame = CGRect(x:0, y: y_pos, width: width, height: height/2 - height/10)
+        scrollView.frame = CGRect(x:0, y: y_pos, width: width, height: height/2)
         scrollView.backgroundColor = white
         scrollView.isUserInteractionEnabled = true
         scrollView.isScrollEnabled = true
@@ -148,15 +148,15 @@ class ProfileViewController: UIViewController {
         scrollView.showsHorizontalScrollIndicator = true
         scrollView.flashScrollIndicators()
         
-        v1.frame = CGRect(x: 0, y: 30, width: width, height: 200)
+        v1.frame = CGRect(x: 0, y: 40, width: width, height: 200)
         
         let v1timeframe = UILabel(frame:CGRect(x:0,
-                                               y: 0*height,
+                                               y: 0.05*height,
                                                width: width,
                                                height:30))
         v1timeframe.font = UIFont(name: "Futura", size: 22)
         v1timeframe.textAlignment = .center
-        v1timeframe.text = "Total time spent"
+        v1timeframe.text = "Total Time Spent in Categories"
         v1timeframe.textColor = gray
         scrollView.addSubview(v1timeframe)
         
@@ -180,6 +180,9 @@ class ProfileViewController: UIViewController {
         }
         // display total times in category
         for pos in 0...totalTimes.count - 1 {
+            // skips unscheduled
+            if totalTimes[pos].name == "Unscheduled" { continue }
+            
             let catName = UILabel(frame:CGRect(x: 0,
                                                y: pos*scroll_height/10,
                                                width: Int(width/2) - 10,
