@@ -127,6 +127,27 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         return cell
     }
     
+    // delete option
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let delete = UITableViewRowAction(style: .default, title: "Delete") { action, indexPath in
+            //get tasks that will be deleted by swipe
+            let toDelete = self.tasks[indexPath.row]
+            self.deleteTask(task:toDelete)
+            // handle delete (by removing the data from your array and updating the tableview)
+        }
+        
+        let edit = UITableViewRowAction(style: .default, title: "Edit") { action, indexPath in
+            let dynamicView = DynamicTaskViewController()
+            dynamicView.color = self.color
+            dynamicView.taskName = self.tasks[indexPath.row]
+            dynamicView.category = self.name
+            self.navigationController?.pushViewController(dynamicView, animated: true)
+        }
+        delete.backgroundColor = gray
+        edit.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        return [delete, edit]
+    }
+    
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
@@ -279,6 +300,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.delegate = self
         tableView.backgroundColor = color
         tableView.separatorColor = secondaryColor
+        tableView.rowHeight = 80
         self.view.addSubview(tableView)
         
         //delete button

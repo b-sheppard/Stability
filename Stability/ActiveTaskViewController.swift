@@ -55,6 +55,7 @@ class ActiveTaskViewController: UIViewController,
         let selected = UIView()
         selected.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         cell?.selectedBackgroundView = selected
+        
         return cell ?? cell2
     }
     
@@ -62,6 +63,27 @@ class ActiveTaskViewController: UIViewController,
         return true
     }
     
+    // delete option
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let delete = UITableViewRowAction(style: .default, title: "Remove") { action, indexPath in
+            //get tasks that will be deleted by swipe
+            let toDelete = self.tasks[indexPath.row]
+            
+            if toDelete != balanceTimer.taskSelected {
+                self.deleteTask(task:toDelete)
+            }
+            else {
+                let alert = UIAlertController(title: "Unable to delete task", message: "Task is currently running. Please stop task before deleting.", preferredStyle: UIAlertController.Style.alert)
+                alert.addAction(UIAlertAction(title: "Continue", style: UIAlertAction.Style.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+        
+        delete.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        return [delete]
+    }
+    
+    // i think this is not needed...
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if (editingStyle == .delete) {
             //get tasks that will be deleted by swipe
@@ -139,6 +161,7 @@ class ActiveTaskViewController: UIViewController,
         tableView.delegate = self
         tableView.backgroundColor = color
         tableView.separatorColor = UIColor.black.withAlphaComponent(0.4)
+        tableView.rowHeight = 80
         self.view.addSubview(tableView)
         
         //add cancel button
