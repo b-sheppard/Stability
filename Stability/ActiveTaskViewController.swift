@@ -171,7 +171,7 @@ class ActiveTaskViewController: UIViewController,
         cancelButton.setTitle("Close", for: .normal)
         cancelButton.titleLabel?.font = UIFont(name:"Futura", size: 18)
         cancelButton.setTitleColor(UIColor.black.withAlphaComponent(0.4), for: .normal)
-        cancelButton.setTitleColor(gray, for: .highlighted)
+        cancelButton.setTitleColor(UIColor.black.withAlphaComponent(0.6), for: .highlighted)
         cancelButton.addTarget(self, action: #selector(exitView), for: .touchUpInside)
         self.view.addSubview(cancelButton)
         
