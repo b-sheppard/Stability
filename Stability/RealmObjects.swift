@@ -36,6 +36,7 @@ class TimerStatus : Object {
     @objc dynamic var dateOnExit : Date? = nil
     @objc dynamic var timerRunning = false
     @objc dynamic var secondsCompleted = 0
+    @objc dynamic var secondsInCategory = 0
     @objc dynamic var currentCategory = "Unscheduled"
     @objc dynamic var currentTask = "Unscheduled"
     @objc dynamic var tasksCompleted = 0
@@ -63,7 +64,7 @@ class TotalTime : Object {
 
 extension Task {
     func deleteTask() {
-        balanceTimer.stopScheduled()
+        let timeRemaining = balanceTimer.stopScheduled()
         let unscheduled = uirealm.objects(Category.self).filter("name = 'Unscheduled'").first!
         let unscheduledTask = uirealm.objects(Task.self).filter("name = 'Unscheduled'").first!
         
@@ -78,8 +79,8 @@ extension Task {
                 unscheduledTask.duration = balanceTimer.timeRemaining
             }
         }
-        // remove category and task locally
-        if newTime == 0 {
+        // remove category and task locally (for swipe delete)
+        if newTime == 0 && balanceTimer.categorySelected == "Unscheduled" {
             try! uirealm.write {
                 unscheduled.duration += self.duration
                 unscheduledTask.duration += self.duration
@@ -88,11 +89,29 @@ extension Task {
             }
         }
         // update unscheduled time remaining
-        else {
+        else if newTime != 0 && balanceTimer.categorySelected == "Unscheduled" {
             try! uirealm.write {
                 category!.duration = newTime
                 unscheduled.duration += self.duration
                 unscheduledTask.duration += self.duration
+                uirealm.delete(self)
+            }
+        }
+        //for long press (for swipe delete)
+        else if newTime == 0 && balanceTimer.categorySelected != "Unscheduled" {
+            try! uirealm.write {
+                unscheduled.duration += timeRemaining
+                unscheduledTask.duration += timeRemaining
+                uirealm.delete(category!)
+                uirealm.delete(self)
+            }
+        }
+        // for long press
+        else if newTime != 0 && balanceTimer.categorySelected == "Unscheduled" {
+            try! uirealm.write {
+                category!.duration = newTime
+                unscheduled.duration += timeRemaining
+                unscheduledTask.duration += timeRemaining
                 uirealm.delete(self)
             }
         }

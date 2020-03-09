@@ -12,7 +12,8 @@ import RealmSwift
 class BalanceTimer : Object {
     var hourStarted = 0
     var minuteStarted = 0
-    var secondsCompleted = 0.0
+    var secondsCompleted = 0.0 // amount of gold
+    var secondsInCategory = 0.0
     var tasksCompleted = 0
     
     var timeRemaining = 0 // time left in category
@@ -42,6 +43,7 @@ class BalanceTimer : Object {
     }
     @objc public func updateScheduled() {
         secondsCompleted += 1
+        secondsInCategory += 1
         timeRemaining -= 1
         timeRemainingInTask -= 1
     }

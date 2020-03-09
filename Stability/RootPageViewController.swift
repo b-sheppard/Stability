@@ -59,12 +59,14 @@ extension UIViewController {
     func addHelpButton() {
         let gray = UIColor(hex:5263695)
         let help = UIButton(frame: CGRect(x:UIScreen.main.bounds.width - 60,
-                                          y: 29,
+                                          y: 45,
                                           width: 60,
                                           height: 30
         ))
         help.setTitle("Help", for: .normal)
-        help.setTitleColor(gray, for: .normal)
+        help.titleLabel?.font = UIFont(name:"Futura", size: 18)
+        help.setTitleColor(UIColor.black.withAlphaComponent(0.4), for: .normal)
+        help.setTitleColor(gray, for: .highlighted)
         help.addTarget(self, action: #selector(UIViewController.showHelp), for: .touchUpInside)
         
         view.addSubview(help)

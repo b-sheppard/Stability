@@ -82,11 +82,18 @@ class ProfileViewController: UIViewController {
                 balanceTimer.timeRemainingInTask -= timeDifference
             }
         }
+        dateButton.shrinkGrowButton()
+    }
+    @objc func touchDown() {
+        dateButton.shrinkButton()
+    }
+    @objc func touchExit() {
+        dateButton.growButton()
     }
     
     func addDateButton() {
         let x_pos = width/2
-        let y_pos = height/2
+        let y_pos = 85*height/100
         
         dateButton.frame = CGRect(x: x_pos - 150, y: y_pos, width: 300, height: 60)
         dateButton.clipsToBounds = true
@@ -95,7 +102,9 @@ class ProfileViewController: UIViewController {
         dateButton.setTitleColor(white, for: .normal)
         dateButton.backgroundColor = gray
         dateButton.setTitleColor(.white, for: .highlighted)
+        dateButton.addTarget(self, action: #selector(touchDown), for: .touchDown)
         dateButton.addTarget(self, action: #selector(updateStartTime), for: .touchUpInside)
+        dateButton.addTarget(self, action: #selector(touchExit), for: .touchDragExit)
         dateButton.layer.cornerRadius = 10
         view.addSubview(dateButton)
     }
@@ -118,18 +127,14 @@ class ProfileViewController: UIViewController {
     }
     
     func addSignoutButton() {
-        let x_pos = width/2
-        let y_pos = 85*height/100
-        
         let signout = UIButton()
-        signout.frame = CGRect(x: x_pos - 150, y: y_pos, width: 300, height: 60)
+        signout.frame = CGRect(x: 0, y: 30, width: width/4, height: 60)
         signout.clipsToBounds = true
         signout.setTitle("Signout", for: .normal)
-        signout.titleLabel?.font = UIFont(name:"Futura", size: 30)
-        signout.setTitleColor(white, for: .normal)
-        signout.backgroundColor = gray
+        signout.titleLabel?.font = UIFont(name:"Futura", size: 18)
+        signout.setTitleColor(UIColor.black.withAlphaComponent(0.4), for: .normal)
+        signout.setTitleColor(gray, for: .highlighted)
         signout.addTarget(self, action: #selector(signoutUser), for: .touchUpInside)
-        signout.layer.cornerRadius = 10
         view.addSubview(signout)
     }
     
@@ -191,7 +196,7 @@ class ProfileViewController: UIViewController {
                                               height: scroll_height/10))
             catVal.adjustsFontSizeToFitWidth = true
             catVal.textAlignment = .left
-            catVal.text = String(ceil(totalTimes[pos].duration)) + " hours"
+            catVal.text = String(Int(ceil(totalTimes[pos].duration))) + " hours"
             catVal.textColor = UIColor(hex:totalTimes[pos].color)
             catVal.font = UIFont(name: "Futura", size: 20)
             v1.addSubview(catName)

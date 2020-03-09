@@ -136,6 +136,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         try! uirealm.write() {
             checkStatus?.secondsCompleted = Int(balanceTimer.secondsCompleted)
+            checkStatus?.secondsInCategory = Int(balanceTimer.secondsInCategory)
             checkStatus?.dateOnExit = date
             checkStatus?.timerRunning = timerRunning
             checkStatus?.currentCategory = balanceTimer.categorySelected
@@ -197,8 +198,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 totalTimes.append(time)
             }
         }
-        
-        print(totalTimes)
         balanceTimer.secondsCompleted = Double(checkStatus?.secondsCompleted ?? 0) + timeInactive
         
         // category time

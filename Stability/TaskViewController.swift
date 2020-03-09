@@ -16,7 +16,6 @@ class TaskViewController: UIViewController {
     
     let white = UIColor(hex:15460841)
     let gray = UIColor(hex:5263695)
-    let darkGray = UIColor()
     
     let MAX_CATEGORIES = 9;
     var categoryNames:[String] = ["+"]
@@ -44,7 +43,9 @@ class TaskViewController: UIViewController {
             return
         }
         if type == "+" {
-            addCategoryView()
+            if self.view.subviews.count == 2 {
+                addCategoryView()
+            }
         }
         else {
             categoryView(type:type, color: color)
@@ -53,6 +54,7 @@ class TaskViewController: UIViewController {
     
     //create up category view
     func addCategoryView() {
+        
         //init view
         let addCategoryViewController = AddCategoryViewController()
         
@@ -152,7 +154,12 @@ class TaskViewController: UIViewController {
         taskSearchField.font = UIFont(name: "Futura", size: 25)
         taskSearchField.textColor = gray
         taskSearchField.keyboardAppearance = .dark
-        taskSearchField.inlineMode = true
+        taskSearchField.theme = SearchTextFieldTheme.darkTheme()
+        taskSearchField.theme.cellHeight = 50
+        taskSearchField.theme.borderColor = gray
+        taskSearchField.theme.bgColor = gray
+        taskSearchField.theme.font = UIFont(name: "Futura", size: 25)!
+        taskSearchField.inlineMode = false
         taskSearchField.attributedPlaceholder = NSAttributedString(string: "Search For a Task...", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray.withAlphaComponent(0.5)])
 
         
@@ -191,6 +198,9 @@ class TaskViewController: UIViewController {
             return
         }
         else {
+            taskSearchField.text = taskName
+            slideTextField(color: catColors[categoryName]!)
+            shrinkGrowButton()
             newTask.category = categoryName
             newTask.name = taskName
             newTask.duration = taskValue
@@ -259,10 +269,37 @@ class TaskViewController: UIViewController {
         
         taskSearchField.layer.add(animation, forKey: "position")
     }
+    
+    func slideTextField(color: Int) {
+        let animation = CABasicAnimation(keyPath: "position")
+        taskSearchField.backgroundColor = UIColor(hex:color)
+        taskSearchField.attributedPlaceholder = NSAttributedString(string: " ", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray.withAlphaComponent(0)])
+        animation.beginTime = CACurrentMediaTime() + 0.4
+        animation.duration = 0.3
+        animation.fromValue = NSValue(cgPoint: CGPoint(x: taskSearchField.center.x, y: taskSearchField.center.y))
+        animation.toValue = NSValue(cgPoint: CGPoint(x: 0 - taskSearchField.center.x, y: taskSearchField.center.y))
+        taskSearchField.layer.add(animation, forKey: "position")
+    }
+    
+    func shrinkGrowButton() {
+        UIView.animate(withDuration: 0.2, delay: 0.5,
+      animations: {
+        self.taskSearchField.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
+        self.taskSearchField.backgroundColor = .white
+        self.taskSearchField.text = ""
+      }, completion: { _ in
+          UIView.animate(withDuration: 0.2) {
+            self.taskSearchField.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+            self.taskSearchField.attributedPlaceholder = NSAttributedString(string: "Search For a Task...", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray.withAlphaComponent(0.5)])
+
+          }
+      })
+    }
     //fetches all tasks from firebase
     func fetchData() {
         //adds task data to an array
         taskNames.removeAll()
+        tasks.removeAll()
         ref?.child(USER_PATH + "/categories").observeSingleEvent(of: .value, with: { (snapshot) in
             for case let category as DataSnapshot in snapshot.children {
                 let cat = category.childSnapshot(forPath: "Tasks") as DataSnapshot
@@ -284,8 +321,11 @@ class TaskViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         fetchData()
+        self.scrollView.removeFromSuperview()
+        self.createScrollView()
         navigationController?.setNavigationBarHidden(true, animated: false)
     }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()

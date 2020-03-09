@@ -20,6 +20,7 @@ class ActiveTaskViewController: UIViewController,
         // REALM
         balanceTimer.categoryStaged = name
         balanceTimer.taskSelected = self.tasks[indexPath.row]
+        exitView()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -75,62 +76,22 @@ class ActiveTaskViewController: UIViewController,
     var tableView: UITableView!
     var descriptionLabel = UILabel()
     
-    @objc func homeButtonTapped() {
-        let  vc =  self.navigationController?.viewControllers.filter({$0 is HomeViewController}).first
-        
-        self.navigationController?.popToViewController(vc!, animated: true)
-    }
-    //create right bar item
-    let homeButton: UIBarButtonItem = {
-        let barButtonItem = UIBarButtonItem(title: "Add Task", style: .plain, target: self, action: #selector(homeButtonTapped))
-        barButtonItem.tintColor = .red
-        return barButtonItem
-    }()
-    
-    @objc func addButtonTapped() {
-        addTaskView()
+    @objc func exitView() {
+        self.dismiss(animated: true, completion: nil)
     }
     
-    //edit with info
-    func editTaskView(snapshot: DataSnapshot) {
-        //init
-        let addTaskView = AddTaskViewController()
-        
-        //add the view as a child
-        addTaskView.path = path
-        addTaskView.color = color
-        addTaskView.taskName = snapshot.key
-        addTaskView.isOld = true
-        
-        self.addChild(addTaskView)
-        self.view.addSubview(addTaskView.view)
-        addTaskView.didMove(toParent: self)
-    }
-    
-    //add new task with info
-    func addTaskView() {
-        //init view
-        let addTaskView = AddTaskViewController()
-        
-        //add the view as a child
-        addTaskView.path = path
-        addTaskView.color = color
-        
-        self.addChild(addTaskView)
-        self.view.addSubview(addTaskView.view)
-        addTaskView.didMove(toParent: self)
-    }
     //delete task from database (and subtract value from active)
     func deleteTask(task:String) {
         let Tpredicate = NSPredicate(format: "name = %@", task)
         let toDelete = uirealm.objects(Task.self).filter(Tpredicate).first!
         
         toDelete.deleteTask()
-        let predicate = NSPredicate(format: "category = %@", self.name)
-        let activeTasks = uirealm.objects(Task.self).filter(predicate)
 
         fetchData()
         tableView.reloadData()
+        if task.count == 0 {
+            exitView()
+        }
     }
     
     func addDescription() {
@@ -167,8 +128,17 @@ class ActiveTaskViewController: UIViewController,
         tableView.separatorColor = UIColor.black.withAlphaComponent(0.4)
         self.view.addSubview(tableView)
         
-        self.navigationController?.isNavigationBarHidden = false
-
+        //add cancel button
+        let cancelButton = UIButton()
+        cancelButton.frame = CGRect(x: 0, y: 30, width: width/4, height: 60)
+        cancelButton.clipsToBounds = true
+        cancelButton.setTitle("Close", for: .normal)
+        cancelButton.titleLabel?.font = UIFont(name:"Futura", size: 18)
+        cancelButton.setTitleColor(UIColor.black.withAlphaComponent(0.4), for: .normal)
+        cancelButton.setTitleColor(gray, for: .highlighted)
+        cancelButton.addTarget(self, action: #selector(exitView), for: .touchUpInside)
+        self.view.addSubview(cancelButton)
+        
     }
     
     func fetchData() {
@@ -182,43 +152,18 @@ class ActiveTaskViewController: UIViewController,
             self.times[task.name] = task.duration
             self.tasks.append(task.name)
         }
-        if let rootViewController = navigationController?.viewControllers.first as? RootPageViewController {
-            let homeViewController = rootViewController.viewControllerList[1] as? HomeViewController
-            homeViewController?.fetchData()
+        if let navigationController = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController {
+            if let rootViewController = navigationController.viewControllers.first as? RootPageViewController {
+                let homeViewController = rootViewController.viewControllerList[1] as? HomeViewController
+                homeViewController?.fetchData()
+            }
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        fetchData()
-        //tableView.reloadData()
 
-        /*
-        ref = Database.database().reference()
-        
-        path = self.name + "/Active/"
-        // updates tasks list if new tasks added
-        handle = ref?.child(USER_PATH + "/categories/" + path).observe(.childAdded, with: { (snapshot) in
-            if let value = snapshot.value as? Int {
-                let key = snapshot.key
-                self.times[key] = value
-                self.tasks.append(key)
-                self.tableView.reloadData()
-            }
-        })
-        //updates tasks list if tasks was deleted
-        handle = ref?.child(USER_PATH + "/categories/" + path).observe(.childRemoved, with: { (snapshot) in
-            if (snapshot.value as? Int) != nil {
-                let key = snapshot.key
-                if let positionInTasks = self.tasks.firstIndex(of: key) {
-                    self.tasks.remove(at: positionInTasks)
-                    self.times.removeValue(forKey: key)
-                    
-                    self.tableView.reloadData()
-                }
-            }
-        })*/
+        fetchData()
         setupView()
         addDescription()
     }

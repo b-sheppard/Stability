@@ -13,12 +13,13 @@
 		510A0F2521976CE300230340 /* AddCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510A0F2421976CE300230340 /* AddCategoryViewController.swift */; };
 		510FCB8F2281355B00841B48 /* BalanceTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510FCB8E2281355B00841B48 /* BalanceTimer.swift */; };
 		5121E88C2299AD9500BBD928 /* ActiveCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5121E88B2299AD9500BBD928 /* ActiveCategories.swift */; };
-		5121E88E229CCC7A00BBD928 /* BalanceSearchField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5121E88D229CCC7A00BBD928 /* BalanceSearchField.swift */; };
 		5121E892229F6C8D00BBD928 /* FixScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5121E891229F6C8D00BBD928 /* FixScheduleView.swift */; };
 		513C8FF0219D363600785705 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513C8FEF219D363600785705 /* CategoryViewController.swift */; };
 		514830BA22D69A36000BFA5F /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514830B922D69A36000BFA5F /* LoginViewController.swift */; };
 		514A2B2A231621F7002193AF /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514A2B29231621F7002193AF /* HelpViewController.swift */; };
 		514F52712197FC590091FA83 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 514F52702197FC590091FA83 /* GoogleService-Info.plist */; };
+		51678C972413757700A0F431 /* ButtonAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51678C962413757700A0F431 /* ButtonAnimations.swift */; };
+		51678C992414521000A0F431 /* CircularTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51678C982414521000A0F431 /* CircularTransition.swift */; };
 		516B679C21A28284008BDCF4 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516B679B21A28284008BDCF4 /* HomeViewController.swift */; };
 		516B679E21A28B94008BDCF4 /* NSUIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516B679D21A28B94008BDCF4 /* NSUIColor+Hex.swift */; };
 		51781613230E018D00E95510 /* 76x76.png in Resources */ = {isa = PBXBuildFile; fileRef = 51781601230E018C00E95510 /* 76x76.png */; };
@@ -87,12 +88,13 @@
 		510A0F2421976CE300230340 /* AddCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryViewController.swift; sourceTree = "<group>"; };
 		510FCB8E2281355B00841B48 /* BalanceTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceTimer.swift; sourceTree = "<group>"; };
 		5121E88B2299AD9500BBD928 /* ActiveCategories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveCategories.swift; sourceTree = "<group>"; };
-		5121E88D229CCC7A00BBD928 /* BalanceSearchField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceSearchField.swift; sourceTree = "<group>"; };
 		5121E891229F6C8D00BBD928 /* FixScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixScheduleView.swift; sourceTree = "<group>"; };
 		513C8FEF219D363600785705 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		514830B922D69A36000BFA5F /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		514A2B29231621F7002193AF /* HelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
 		514F52702197FC590091FA83 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		51678C962413757700A0F431 /* ButtonAnimations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonAnimations.swift; sourceTree = "<group>"; };
+		51678C982414521000A0F431 /* CircularTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularTransition.swift; sourceTree = "<group>"; };
 		516B679B21A28284008BDCF4 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		516B679D21A28B94008BDCF4 /* NSUIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSUIColor+Hex.swift"; sourceTree = "<group>"; };
 		51781601230E018C00E95510 /* 76x76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 76x76.png; sourceTree = "<group>"; };
@@ -231,9 +233,9 @@
 			children = (
 				51CEA7EA22E551F300217CE5 /* Stability.xcdatamodeld */,
 				51050C372155E76F005A13DC /* MainViewController.swift */,
+				51678C982414521000A0F431 /* CircularTransition.swift */,
 				518256A5210FA94500A0788D /* AppDelegate.swift */,
 				518256A7210FA94500A0788D /* ViewController.swift */,
-				5121E88D229CCC7A00BBD928 /* BalanceSearchField.swift */,
 				514F52702197FC590091FA83 /* GoogleService-Info.plist */,
 				518256B4210FA94600A0788D /* Info.plist */,
 				51050C352155E736005A13DC /* MainNavigationController.swift */,
@@ -255,6 +257,7 @@
 				51B5F4DD230C8CF90073D42B /* AnimationController.swift */,
 				5178162A230FABD500E95510 /* RootPageViewController.swift */,
 				514A2B29231621F7002193AF /* HelpViewController.swift */,
+				51678C962413757700A0F431 /* ButtonAnimations.swift */,
 			);
 			name = stability;
 			path = Stability;
@@ -560,15 +563,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				510A0F2521976CE300230340 /* AddCategoryViewController.swift in Sources */,
+				51678C992414521000A0F431 /* CircularTransition.swift in Sources */,
 				51050C362155E736005A13DC /* MainNavigationController.swift in Sources */,
 				517B488222531ADE00544647 /* RealmObjects.swift in Sources */,
 				518256A8210FA94500A0788D /* ViewController.swift in Sources */,
 				518256A6210FA94500A0788D /* AppDelegate.swift in Sources */,
-				5121E88E229CCC7A00BBD928 /* BalanceSearchField.swift in Sources */,
 				513C8FF0219D363600785705 /* CategoryViewController.swift in Sources */,
 				5121E892229F6C8D00BBD928 /* FixScheduleView.swift in Sources */,
 				514830BA22D69A36000BFA5F /* LoginViewController.swift in Sources */,
 				51CEA7EC22E551F300217CE5 /* Stability.xcdatamodeld in Sources */,
+				51678C972413757700A0F431 /* ButtonAnimations.swift in Sources */,
 				51F5C56921DDBBEF00627E15 /* ActiveTaskViewController.swift in Sources */,
 				510FCB8F2281355B00841B48 /* BalanceTimer.swift in Sources */,
 				51B5F4DE230C8CF90073D42B /* AnimationController.swift in Sources */,
