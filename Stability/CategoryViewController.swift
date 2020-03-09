@@ -104,12 +104,26 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CellID") ?? UITableViewCell(style: UITableViewCell.CellStyle.value1, reuseIdentifier: "CellID")
+        
         cell.textLabel!.text = tasks[indexPath.row]
         cell.textLabel!.textColor = white
         cell.textLabel!.font = UIFont(name:"Futura", size: 30)
         cell.backgroundColor = color
         cell.accessoryType = .disclosureIndicator
+        cell.detailTextLabel?.text = "Edit >"
+        cell.detailTextLabel?.textColor = white
+        cell.detailTextLabel?.font = UIFont(name:"Futura", size: 15)
+        
+        let edit = UIView()
+        edit.backgroundColor = gray
+        
+        cell.accessoryView = edit
+        
+        // set selection color
+        let selected = UIView()
+        selected.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        cell.selectedBackgroundView = selected
         return cell
     }
     

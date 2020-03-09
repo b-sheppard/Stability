@@ -55,7 +55,7 @@ class DynamicTaskViewController: UIViewController, UITextFieldDelegate {
         // setup default picker time (1 hour)
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm"
-        let dateString = "01:00"
+        let dateString = "00:00"
         let date = dateFormatter.date(from:dateString)
         let screensize: CGRect = UIScreen.main.bounds
         let width = screensize.width
@@ -73,6 +73,18 @@ class DynamicTaskViewController: UIViewController, UITextFieldDelegate {
         timePicker.datePickerMode = .countDownTimer
         timePicker.setDate(date ?? Date(), animated: false)
         timePicker.setValue(secondaryColor, forKeyPath: "textColor")
+        
+        // set picker to correct value
+        ref?.child(USER_PATH + "/categories").child(category!).child("Tasks").child(taskName!).observeSingleEvent(of: .value, with: {(snapshot) in
+            let time = snapshot.value as? Int
+            let hour = Int(time! / 3600)
+            let min = Int((time! % 3600) / 60 )
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "HH:mm"
+            let dateString = String(hour) + ":" + String(min)
+            let date = dateFormatter.date(from:dateString)
+            self.timePicker.setDate(date ?? Date(), animated: true)
+        })
 
         view.addSubview(timePicker)
         
@@ -92,19 +104,19 @@ class DynamicTaskViewController: UIViewController, UITextFieldDelegate {
             print("can't get text!!!")
             return
         }
+        
+        // picker data
+        let date = timePicker.date
+        let components = Calendar.current.dateComponents([.hour, .minute], from: date)
+        let hour = components.value(for: .hour)!
+        let minute = components.value(for: .minute)!
+        // renamed task
         if text != taskName {
             // Remove old node
             ref?.child(USER_PATH + "/categories").child(category!).child("Tasks").child(taskName!).removeValue()
-            
-            // Add new node
-            let date = timePicker.date
-            let components = Calendar.current.dateComponents([.hour, .minute], from: date)
-            let hour = components.value(for: .hour)!
-            let minute = components.value(for: .minute)!
-            
-            ref?.child(USER_PATH + "/categories").child(category!).child("Tasks").child(text).setValue(3600*hour + 60*minute)
-            taskTextField.text = text
         }
+        ref?.child(USER_PATH + "/categories").child(category!).child("Tasks").child(text).setValue(3600*hour + 60*minute)
+        taskTextField.text = text
         navigationController?.popViewController(animated: true)
     }
     

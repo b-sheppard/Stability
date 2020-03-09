@@ -35,13 +35,26 @@ class ActiveTaskViewController: UIViewController,
         let cellIdentifier = "Cell"
         var cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier)
         if cell == nil {
-            cell = UITableViewCell(style: UITableViewCell.CellStyle.value2, reuseIdentifier: cellIdentifier)
+            cell = UITableViewCell(style: UITableViewCell.CellStyle.value1, reuseIdentifier: cellIdentifier)
         }
+        let hour = Int(times[tasks[indexPath.row]]! / 3600)
+        let minutesLeft = times[tasks[indexPath.row]]! - 3600*hour
+        let minute = Int(minutesLeft / 60)
+        let seconds = minutesLeft - 60*minute
+        let timeString = String(hour) + "h " + String(minute) + "m " + String(seconds) + "s"
+        
         cell?.textLabel!.text = tasks[indexPath.row]
-        cell?.detailTextLabel?.text = String(times[tasks[indexPath.row]]!)
-        cell?.accessoryType = .disclosureIndicator
+        cell?.textLabel!.font = UIFont(name:"Futura", size: 30)
+        cell?.detailTextLabel?.text = timeString
+        cell?.detailTextLabel?.font = UIFont(name:"Futura", size:20)
         cell?.backgroundColor = color
         cell?.textLabel?.textColor = white
+        cell?.detailTextLabel?.textColor = white
+        
+        // set selection color
+        let selected = UIView()
+        selected.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        cell?.selectedBackgroundView = selected
         return cell ?? cell2
     }
     
