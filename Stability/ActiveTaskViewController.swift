@@ -68,8 +68,9 @@ class ActiveTaskViewController: UIViewController,
         let delete = UITableViewRowAction(style: .default, title: "Remove") { action, indexPath in
             //get tasks that will be deleted by swipe
             let toDelete = self.tasks[indexPath.row]
+            let checkStatus = uirealm.objects(TimerStatus.self).first
             
-            if toDelete != balanceTimer.taskSelected {
+            if toDelete != balanceTimer.taskSelected || !checkStatus!.timerRunning {
                 self.deleteTask(task:toDelete)
             }
             else {

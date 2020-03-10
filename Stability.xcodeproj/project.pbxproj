@@ -231,12 +231,12 @@
 		518256A4210FA94500A0788D /* stability */ = {
 			isa = PBXGroup;
 			children = (
+				518256A5210FA94500A0788D /* AppDelegate.swift */,
 				5121E88B2299AD9500BBD928 /* ActiveCategories.swift */,
 				51F5C56821DDBBEF00627E15 /* ActiveTaskViewController.swift */,
 				510A0F2421976CE300230340 /* AddCategoryViewController.swift */,
 				51B207FB219F91B300563A9F /* AddTaskViewController.swift */,
 				51B5F4DD230C8CF90073D42B /* AnimationController.swift */,
-				518256A5210FA94500A0788D /* AppDelegate.swift */,
 				510FCB8E2281355B00841B48 /* BalanceTimer.swift */,
 				51678C962413757700A0F431 /* ButtonAnimations.swift */,
 				513C8FEF219D363600785705 /* CategoryViewController.swift */,
