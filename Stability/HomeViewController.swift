@@ -31,6 +31,7 @@ class HomeViewController: UIViewController, ChartViewDelegate, UIViewControllerT
     var colorOf: Dictionary = [String:NSUIColor]()
     var selected = "Unscheduled"
     var mainButton: UIButton!
+    var circleLayer: CAShapeLayer!
     var restartButton: UIButton!
     var selectedTaskName = UILabel()
     var descriptionLabel = UILabel()
@@ -43,6 +44,7 @@ class HomeViewController: UIViewController, ChartViewDelegate, UIViewControllerT
     var resumeTapped = false
     
     //animation
+    var didStop = true
     let transition = CircularTransition()
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         transition.transitionMode = .dismiss
@@ -56,14 +58,61 @@ class HomeViewController: UIViewController, ChartViewDelegate, UIViewControllerT
         transition.circleColor = presented.view.backgroundColor ?? .green
         return transition
     }
-    
-    
+
     //==========================================
     //          SCHEDULED TIMER
     //==========================================
+    // starts animation of longpress
+    @objc private func hold(gesture: UIGestureRecognizer) {
+        if let longPress = gesture as? UILongPressGestureRecognizer {
+            if longPress.state == UIGestureRecognizer.State.began && balanceTimer.categorySelected != "Unscheduled" {
+                
+                // ring wrap around
+                let holdAnimation = CABasicAnimation(keyPath: "strokeEnd")
+                holdAnimation.toValue = 1
+                holdAnimation.duration = 2.5
+                holdAnimation.fillMode = CAMediaTimingFillMode.forwards
+                holdAnimation.isRemovedOnCompletion = false
+                circleLayer.add(holdAnimation, forKey: "stroke")
+                
+                // get color of current task category
+                let categoryPredicate = NSPredicate(format: "name = %@", balanceTimer.categorySelected)
+                let categoryColor = uirealm.objects(Category.self).filter(categoryPredicate).first!.color
+                // change color
+                let colorAnimation = CABasicAnimation(keyPath: "strokeColor")
+                colorAnimation.fromValue = NSUIColor(hex:categoryColor).cgColor
+                colorAnimation.toValue = gold.cgColor
+                colorAnimation.duration = 2.5
+                circleLayer.add(colorAnimation, forKey: "strokeColor")
+                
+                let dummy = UIView()
+                dummy.frame = CGRect(x: 0, y: 0, width: 0.001, height: 0.001)
+                self.view.addSubview(dummy)
+                dummy.backgroundColor = gray
+                
+                UIView.animate(withDuration: 2.5, delay: 0, animations: {
+                    dummy.backgroundColor = self.white
+                    self.mainButton.shrinkButton()
+                }, completion: { _ in
+                    if self.didStop {
+                        self.longPress()
+                    }
+                    dummy.removeFromSuperview()
+                    self.circleLayer.strokeEnd = 0
+                    self.didStop = true // used so task isn't involuntarily deleted
+                })
+            }
+            if longPress.state == UIGestureRecognizer.State.ended || longPress.state == UIGestureRecognizer.State.cancelled {
+                self.didStop = false
+                circleLayer.removeAllAnimations()
+                self.mainButton.growButton()
+            }
+        }
+    }
     
     // removes currently running task and adds time back to unscheduled
     @objc public func longPress() {
+        didStop = true // used so task isn't involuntarily deleted
         descriptionLabel.textColor = white // makes help info invisible
         // finds currently running task and removes it
         if balanceTimer.categorySelected != "Unscheduled" {
@@ -92,6 +141,7 @@ class HomeViewController: UIViewController, ChartViewDelegate, UIViewControllerT
     // start a task if one is actually selected
     @objc public func startTapped() {
         mainButton.shrinkGrowButton()
+        didStop = true // used so task isn't involuntarily deleted
         let checkStatus = uirealm.objects(TimerStatus.self).first
         if !checkStatus!.timerRunning && balanceTimer.categoryStaged != "" {
             mainButton.setTitle("STOP", for: .normal)
@@ -494,9 +544,9 @@ class HomeViewController: UIViewController, ChartViewDelegate, UIViewControllerT
         
         // recognize a tap
         let tap = UITapGestureRecognizer(target: self, action: #selector(HomeViewController.startTapped))
-        // recognize a press (function called after 3 seconds)
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(HomeViewController.longPress))
-        longPress.minimumPressDuration = 3
+        // recognize a press (function called after 3 seconds
+        let hold = UILongPressGestureRecognizer(target: self, action: #selector(HomeViewController.hold(gesture:)))
+        hold.minimumPressDuration = 0.5
 
         mainButton = UIButton(type: .custom)
         mainButton.frame = CGRect(x: 160, y: 100, width: 200, height: 200)
@@ -504,7 +554,19 @@ class HomeViewController: UIViewController, ChartViewDelegate, UIViewControllerT
         mainButton.clipsToBounds = true
         mainButton.translatesAutoresizingMaskIntoConstraints = false
         mainButton.addGestureRecognizer(tap)
-        mainButton.addGestureRecognizer(longPress)
+        mainButton.addGestureRecognizer(hold)
+        
+        // for animation
+        circleLayer = CAShapeLayer()
+        let center = view.center
+        let circularPath = UIBezierPath(arcCenter: center, radius: 100, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
+        circleLayer.path = circularPath.cgPath
+        circleLayer.strokeColor = gold.cgColor
+        circleLayer.lineWidth = 150
+        circleLayer.strokeEnd = 0
+        circleLayer.backgroundColor = white.cgColor
+        circleLayer.fillColor = white.cgColor
+        view.layer.addSublayer(circleLayer)
  
         // task has started
         if(checkStatus!.timerRunning) {
@@ -551,13 +613,15 @@ class HomeViewController: UIViewController, ChartViewDelegate, UIViewControllerT
     // creates label with description on "hold to end"
     func addDescription() {
         let screensize: CGRect = UIScreen.main.bounds
-        descriptionLabel.frame = CGRect(x: screensize.width/2, y: 50, width: 300, height: 50)
+        descriptionLabel.frame = CGRect(x: screensize.width/2, y: 50, width: 300, height: 100)
         descriptionLabel.center.x = screensize.width/2
         descriptionLabel.center.y = screensize.height/8
         descriptionLabel.backgroundColor = white
-        descriptionLabel.text = "Press and hold STOP for 3 seconds to finish task"
+        descriptionLabel.text = "Press and hold STOP \n for 3 seconds to finish task"
+        descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center
         descriptionLabel.textColor = white
+        descriptionLabel.adjustsFontSizeToFitWidth = true
         descriptionLabel.font = UIFont(name: "Futura", size: 20)
         
         view.addSubview(descriptionLabel)
