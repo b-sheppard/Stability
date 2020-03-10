@@ -22,6 +22,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
+    // prompts user to accept notifications
+    @objc func setupNotifications() {
+        // set up notifications
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .badge, .sound], completionHandler: { granted, error in
+            if !granted {
+                // prompt user to actually accept this
+            }
+        })
+    }
+    
+    // schedules a notification to alert users that the time of a task is almost up
+    @objc func scheduleNotification() {
+        let center = UNUserNotificationCenter.current()
+        center.removeAllPendingNotificationRequests()
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Task ending soon"
+        content.body = "Wrap up working on " + balanceTimer.taskSelected + " and get started on your next task!"
+        content.sound = .default
+        
+        let timeInterval = TimeInterval(balanceTimer.timeRemainingInTask - 60) // notify a minute ahead of time
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        center.add(request)
+    }
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
@@ -92,6 +119,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                 }
             })
+            setupNotifications()
         }
         else {
             mainNavigationController.viewControllers = [rootViewController, loginViewController]
@@ -165,7 +193,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             ref?.child(USER_PATH + "/categories/\(time.name)/TotalTime").setValue(time.duration)
         }
-
+        scheduleNotification() // prompt user to start next task
     }
 /*
     func applicationDidEnterBackground(_ application: UIApplication) {
