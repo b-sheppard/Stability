@@ -17,9 +17,12 @@ class ActiveTaskViewController: UIViewController,
     
     //cell is tapped
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // REALM
-        balanceTimer.categoryStaged = name
-        balanceTimer.taskSelected = self.tasks[indexPath.row]
+        let checkStatus = uirealm.objects(TimerStatus.self).first
+        if !checkStatus!.timerRunning {
+            // REALM
+            balanceTimer.categoryStaged = name
+            balanceTimer.taskSelected = self.tasks[indexPath.row]
+        }
         exitView()
     }
     
