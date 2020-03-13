@@ -22,8 +22,12 @@ class LoginViewController: UIViewController {
     let username = UITextField()
     let password = UITextField()
     
+    let signUp = UIButton()
+    let login = UIButton()
+    
     var ref:DatabaseReference?
     @objc func signUpUser() {
+        signUp.shrinkGrowButton()
         Auth.auth().createUser(withEmail: username.text!, password: password.text!){ (user, error) in
             if error == nil {
                 USER_PATH = Auth.auth().currentUser?.uid ?? "error"
@@ -42,6 +46,7 @@ class LoginViewController: UIViewController {
     }
     
     @objc func loginUser() {
+        login.shrinkGrowButton()
         Auth.auth().signIn(withEmail: username.text!, password: password.text!) { (user, error) in
             if error == nil{
                 USER_PATH = Auth.auth().currentUser?.uid ?? "error"
@@ -57,36 +62,56 @@ class LoginViewController: UIViewController {
             }
         }
     }
+    
+    @objc func shrinkGrowLogin() {
+        login.shrinkGrowButton()
+    }
+    @objc func shrinkGrowSignUp() {
+        signUp.shrinkGrowButton()
+    }
     func setupTextField() {
-        username.frame = CGRect(x: width/2, y: height/8, width: width/2, height: 60)
+        username.frame = CGRect(x: width/2, y: height/8, width: 3*width/4, height: 60)
         username.center.x = view.center.x
-        username.placeholder = "Username"
+        username.textAlignment = .center
         username.textColor = gray
+        username.backgroundColor = .white
+        username.attributedPlaceholder = NSAttributedString(string: "Username",
+                                                            attributes: [NSAttributedString.Key.foregroundColor: (UIColor.black.withAlphaComponent(0.4))])
+        username.font = UIFont(name:"Futura", size:20)
 
-        password.frame = CGRect(x: width/2, y: 2*height/8, width: width/2, height: 60)
+        password.frame = CGRect(x: width/2, y: 2*height/8, width: 3*width/4, height: 60)
         password.center.x = view.center.x
-        password.placeholder = "Password"
+        password.textAlignment = .center
         password.textColor = gray
-        //password.isSecureTextEntry = true
+        password.backgroundColor = .white
+        password.isSecureTextEntry = true
+        password.attributedPlaceholder = NSAttributedString(string: "Password",
+        attributes: [NSAttributedString.Key.foregroundColor: (UIColor.black.withAlphaComponent(0.4))])
+        password.font = UIFont(name:"Futura", size:20)
         
         view.addSubview(username)
         view.addSubview(password)
     }
     func setupSignUpButton() {
-        let signUp = UIButton(frame: CGRect(x:width/2, y:3*height/8, width: width/2, height:60))
+        signUp.frame = CGRect(x:width/2, y:3*height/8, width: 3*width/4, height:60)
         signUp.center.x = view.center.x
         signUp.backgroundColor = gray
         signUp.setTitle("Sign Up", for: .normal)
         signUp.setTitleColor(white, for: .normal)
         signUp.addTarget(self, action: #selector(LoginViewController.signUpUser), for: .touchUpInside)
+        signUp.titleLabel?.font = UIFont(name:"Futura", size:20)
+        signUp.addTarget(self, action: #selector(LoginViewController.shrinkGrowSignUp), for: .touchDown)
         view.addSubview(signUp)
     }
     func setupLoginButton() {
-        let login = UIButton(frame: CGRect(x:width/2, y:height/2, width: width/2, height: 60))
+        login.frame = CGRect(x:width/2, y:height/2, width: 3*width/4, height: 60)
         login.center.x = view.center.x
         login.backgroundColor = gray
         login.setTitle("Login", for: .normal)
         login.addTarget(self, action: #selector(LoginViewController.loginUser), for: .touchUpInside)
+        login.titleLabel?.font = UIFont(name:"Futura", size:20)
+        login.addTarget(self, action: #selector(LoginViewController.shrinkGrowLogin), for: .touchDown)
+
         view.addSubview(login)
     }
     
@@ -94,10 +119,16 @@ class LoginViewController: UIViewController {
     func createDatabase() {
         //add category to database
         var i = 0
+        let sleepTime = TotalTime()
+        
         while i < categoryNames.count {
             ref?.child(USER_PATH + "/categories").child(categoryNames[i]).setValue(["Color" : colors[i],
                                                                                     "Name" : categoryNames[i],
                                                                                     "Tasks" : ""])
+            // total time unscheduled
+            sleepTime.color = colors[i] // gray
+            sleepTime.name = categoryNames[i]
+            sleepTime.duration = 0.0
             i += 1
         }
     }

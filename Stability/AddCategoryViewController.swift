@@ -59,7 +59,7 @@ UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
         //create cancel button
         let cancelButton = UIButton(type: .custom)
         cancelButton.setTitle("Cancel", for: .normal)
-        cancelButton.setTitleColor(UIColor.black.withAlphaComponent(0.6), for: .normal)
+        cancelButton.setTitleColor(white, for: .normal)
         cancelButton.setTitleColor(UIColor.black.withAlphaComponent(0.8), for: .highlighted)
         cancelButton.frame = CGRect(x: 10, y: 0, width: 60, height: 60)
         cancelButton.addTarget(self, action: #selector(AddCategoryViewController.CancelClicked), for: .touchUpInside)
@@ -67,7 +67,7 @@ UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
         //create save button
         let saveButton = UIButton(type: .custom)
         saveButton.setTitle("Save", for: .normal)
-        saveButton.setTitleColor(UIColor.black.withAlphaComponent(0.6), for: .normal)
+        saveButton.setTitleColor(white, for: .normal)
         saveButton.setTitleColor(UIColor.black.withAlphaComponent(0.8), for: .highlighted)
         saveButton.frame = CGRect(x: width - 70, y: 0, width: 60, height: 60)
         saveButton.addTarget(self, action:#selector(AddCategoryViewController.SaveClicked), for: .touchUpInside)

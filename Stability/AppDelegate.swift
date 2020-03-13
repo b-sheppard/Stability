@@ -46,7 +46,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let timeInterval = TimeInterval(balanceTimer.timeRemainingInTask - 60) // notify a minute ahead of time
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-        center.add(request)
+        if timeInterval < 60 {
+            center.add(request)
+        }
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
