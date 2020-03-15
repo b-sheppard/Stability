@@ -105,16 +105,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // adds categories stored from firebase into local storage
             ref?.child(USER_PATH + "/categories").observeSingleEvent(of: .value, with: { (snapshot) in
                 for case let category as DataSnapshot in snapshot.children {
-                    let catName = category.childSnapshot(forPath: "Name").value as! String
-                    let catColor = category.childSnapshot(forPath: "Color").value as! Int
+                    let catName = category.childSnapshot(forPath: "Name").value as? String
+                    let catColor = category.childSnapshot(forPath: "Color").value as? Int
                     guard let totalTime = category.childSnapshot(forPath: "TotalTime").value as? Double else {
-                        print("Unable to get total time for: " + catName)
+                        print("Unable to get total time for: " + (catName ?? "default"))
                         continue
                     }
                     let tmp = TotalTime()
                     tmp.duration = totalTime
-                    tmp.name = catName
-                    tmp.color = catColor
+                    tmp.name = catName ?? "default"
+                    tmp.color = catColor ?? 0
                     totalTimes.append(tmp)
                     try! uirealm.write() {
                         uirealm.add(tmp)

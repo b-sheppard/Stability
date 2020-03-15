@@ -28,6 +28,9 @@ class LoginViewController: UIViewController {
     var ref:DatabaseReference?
     @objc func signUpUser() {
         signUp.shrinkGrowButton()
+        if username.text == "" {
+            return
+        }
         Auth.auth().createUser(withEmail: username.text!, password: password.text!){ (user, error) in
             if error == nil {
                 USER_PATH = Auth.auth().currentUser?.uid ?? "error"
@@ -47,6 +50,9 @@ class LoginViewController: UIViewController {
     
     @objc func loginUser() {
         login.shrinkGrowButton()
+        if username.text == "" {
+            return
+        }
         Auth.auth().signIn(withEmail: username.text!, password: password.text!) { (user, error) in
             if error == nil{
                 USER_PATH = Auth.auth().currentUser?.uid ?? "error"
@@ -75,7 +81,7 @@ class LoginViewController: UIViewController {
         username.textAlignment = .center
         username.textColor = gray
         username.backgroundColor = .white
-        username.attributedPlaceholder = NSAttributedString(string: "Username",
+        username.attributedPlaceholder = NSAttributedString(string: "Email",
                                                             attributes: [NSAttributedString.Key.foregroundColor: (UIColor.black.withAlphaComponent(0.4))])
         username.font = UIFont(name:"Futura", size:20)
 

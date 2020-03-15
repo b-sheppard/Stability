@@ -304,13 +304,13 @@ class TaskViewController: UIViewController {
         ref?.child(USER_PATH + "/categories").observeSingleEvent(of: .value, with: { (snapshot) in
             for case let category as DataSnapshot in snapshot.children {
                 let cat = category.childSnapshot(forPath: "Tasks") as DataSnapshot
-                let catName = category.childSnapshot(forPath: "Name").value as! String
-                let catColor = category.childSnapshot(forPath: "Color").value as! Int
-                self.catColors[catName] = catColor
+                let catName = category.childSnapshot(forPath: "Name").value as? String
+                let catColor = category.childSnapshot(forPath: "Color").value as? Int
+                self.catColors[catName ?? "Unscheduled"] = catColor
                 for case let tasksInCategory as DataSnapshot in cat.children {
                     let toAdd = Task()
-                    toAdd.category = catName 
-                    toAdd.duration = tasksInCategory.value as! Int
+                    toAdd.category = catName ?? "Default"
+                    toAdd.duration = tasksInCategory.value as? Int ?? 0
                     toAdd.name = tasksInCategory.key 
                     self.tasks.append(toAdd)
                     self.taskNames.append(toAdd.name)
