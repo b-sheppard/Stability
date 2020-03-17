@@ -70,7 +70,7 @@ class HomeViewController: UIViewController, ChartViewDelegate, UIViewControllerT
                 // ring wrap around
                 let holdAnimation = CABasicAnimation(keyPath: "strokeEnd")
                 holdAnimation.toValue = 1
-                holdAnimation.duration = 2.5
+                holdAnimation.duration = 1.5
                 holdAnimation.fillMode = CAMediaTimingFillMode.forwards
                 holdAnimation.isRemovedOnCompletion = false
                 circleLayer.add(holdAnimation, forKey: "stroke")
@@ -82,7 +82,7 @@ class HomeViewController: UIViewController, ChartViewDelegate, UIViewControllerT
                 let colorAnimation = CABasicAnimation(keyPath: "strokeColor")
                 colorAnimation.fromValue = NSUIColor(hex:categoryColor).cgColor
                 colorAnimation.toValue = gold.cgColor
-                colorAnimation.duration = 2.5
+                colorAnimation.duration = 1.5
                 circleLayer.add(colorAnimation, forKey: "strokeColor")
                 
                 let dummy = UIView()
@@ -90,7 +90,7 @@ class HomeViewController: UIViewController, ChartViewDelegate, UIViewControllerT
                 self.view.addSubview(dummy)
                 dummy.backgroundColor = gray
                 
-                UIView.animate(withDuration: 2.5, delay: 0, animations: {
+                UIView.animate(withDuration: 1.5, delay: 0, animations: {
                     dummy.backgroundColor = self.white
                     self.mainButton.shrinkButton()
                 }, completion: { _ in
@@ -617,7 +617,7 @@ class HomeViewController: UIViewController, ChartViewDelegate, UIViewControllerT
         descriptionLabel.center.x = screensize.width/2
         descriptionLabel.center.y = screensize.height/8
         descriptionLabel.backgroundColor = white
-        descriptionLabel.text = "Press and hold STOP \n for 3 seconds to finish task"
+        descriptionLabel.text = "Press and hold STOP \n for 2 seconds to finish task"
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center
         descriptionLabel.textColor = white

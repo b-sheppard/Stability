@@ -59,6 +59,10 @@ class HelpViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let downSwipe = UISwipeGestureRecognizer(target: self, action: #selector(CloseView))
+        downSwipe.direction = .down
+        view.addGestureRecognizer(downSwipe)
+        
         setupView()
         
         self.view.layer.cornerRadius = 10.0

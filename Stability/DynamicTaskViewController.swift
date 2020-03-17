@@ -33,17 +33,17 @@ class DynamicTaskViewController: UIViewController, UITextFieldDelegate {
         //create cancel button
         let cancelButton = UIButton(type: .custom)
         cancelButton.setTitle("Cancel", for: .normal)
-        cancelButton.setTitleColor(secondaryColor, for: .normal)
+        cancelButton.setTitleColor(white, for: .normal)
         cancelButton.frame = CGRect(x: 10, y: 3*height/100, width: 60, height: 60)
         cancelButton.addTarget(self, action: #selector(AddCategoryViewController.CancelClicked), for: .touchUpInside)
-        cancelButton.tintColor = secondaryColor
+        cancelButton.tintColor = white
         
         //create save button
         let saveButton = UIButton(type: .custom)
         saveButton.setTitle("Save", for: .normal)
-        saveButton.setTitleColor(secondaryColor, for: .normal)
+        saveButton.setTitleColor(white, for: .normal)
         saveButton.frame = CGRect(x: width - 70, y: 3*height/100, width: 60, height: 60)
-        saveButton.tintColor = secondaryColor
+        saveButton.tintColor = white
         saveButton.addTarget(self, action:#selector(AddCategoryViewController.SaveClicked), for: .touchUpInside)        
         
         self.navigationController?.isNavigationBarHidden = true
@@ -64,7 +64,7 @@ class DynamicTaskViewController: UIViewController, UITextFieldDelegate {
         let label = UILabel()
         label.frame = CGRect(x:20, y: Int(height/4) - 30, width: 100, height: 20)
         label.text = "Duration"
-        label.textColor = secondaryColor
+        label.textColor = white
         view.addSubview(label)
         
         
@@ -72,7 +72,7 @@ class DynamicTaskViewController: UIViewController, UITextFieldDelegate {
         timePicker.backgroundColor = color
         timePicker.datePickerMode = .countDownTimer
         timePicker.setDate(date ?? Date(), animated: false)
-        timePicker.setValue(secondaryColor, forKeyPath: "textColor")
+        timePicker.setValue(white, forKeyPath: "textColor")
         
         // set picker to correct value
         ref?.child(USER_PATH + "/categories").child(category!).child("Tasks").child(taskName!).observeSingleEvent(of: .value, with: {(snapshot) in
@@ -131,7 +131,7 @@ class DynamicTaskViewController: UIViewController, UITextFieldDelegate {
         taskTextField.borderStyle = .roundedRect
         taskTextField.text = taskName
         taskTextField.textAlignment = .center
-        taskTextField.textColor = secondaryColor
+        taskTextField.textColor = white
         taskTextField.font = UIFont(name:"Futura", size:20)
         taskTextField.keyboardAppearance = .dark
         view.addSubview(taskTextField)
@@ -139,6 +139,11 @@ class DynamicTaskViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(CancelClicked))
+        edgePan.edges = .left
+
+        view.addGestureRecognizer(edgePan)
         
         ref = Database.database().reference()
         

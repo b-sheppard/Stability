@@ -22,7 +22,6 @@ UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
 
     let white = UIColor(hex:15460841)
     let gray = UIColor(hex:5263695)
-    // green: 8BB174
     lazy var colors = ["YLW",
                        "RED",
                        "BLUE",
@@ -81,11 +80,20 @@ UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
     }
     //save category
     @objc func SaveClicked() {
+        // user did not select a color
+        if colorPicked == 0 {
+            let alert = UIAlertController(title: "Unable to add category", message: "No color was selected. Please choose one of the colors", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Continue", style: UIAlertAction.Style.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+        
         //save to database
         guard let text = self.categoryTextField.text else {
             print("can't get text!!!")
             return
         }
+        
         if text != "" {
             ref?.child(USER_PATH + "/categories/\(text)/").setValue(["Color" : colorPicked,
                                                            "Name" : text,
@@ -124,7 +132,8 @@ UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
         categoryTextField.layer.borderWidth = 0.0
         //categoryTextField.backgroundColor = white
         categoryTextField.borderStyle = .roundedRect
-        categoryTextField.placeholder = "Type category name..."
+        categoryTextField.attributedPlaceholder = NSAttributedString(string: "Type category name...",
+                                                                     attributes: [NSAttributedString.Key.foregroundColor: UIColor.black.withAlphaComponent(0.4)])
         categoryTextField.font = UIFont(name: "Futura", size: 20)
         categoryTextField.textColor = white
         categoryTextField.keyboardAppearance = .dark
@@ -185,6 +194,10 @@ UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
         super.viewDidLoad()
         
         ref = Database.database().reference()
+        let downSwipe = UISwipeGestureRecognizer(target: self, action: #selector(CancelClicked))
+        downSwipe.direction = .down
+        view.addGestureRecognizer(downSwipe)
+        self.view.isUserInteractionEnabled = true
         
         setupView()
         createTextField()
@@ -193,6 +206,10 @@ UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
         self.view.layer.cornerRadius = 10.0
         view.backgroundColor = gray
         self.hideKeyboardWhenTappedAround()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.animHide()
     }
 }
 

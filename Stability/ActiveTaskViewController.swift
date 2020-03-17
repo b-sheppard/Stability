@@ -202,6 +202,10 @@ class ActiveTaskViewController: UIViewController,
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(exitView))
+        edgePan.edges = .left
+        view.addGestureRecognizer(edgePan)
 
         fetchData()
         setupView()

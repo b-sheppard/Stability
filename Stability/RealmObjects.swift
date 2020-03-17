@@ -107,7 +107,7 @@ extension Task {
             }
         }
         // for long press
-        else if newTime != 0 && balanceTimer.categorySelected == "Unscheduled" {
+        else if newTime != 0 && balanceTimer.categorySelected != "Unscheduled" {
             try! uirealm.write {
                 category!.duration = newTime
                 unscheduled.duration += timeRemaining
