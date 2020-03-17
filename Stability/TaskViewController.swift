@@ -32,6 +32,7 @@ class TaskViewController: UIViewController {
 
     // add new category
     @objc public func buttonTapped(sender: UIButton) {
+        sender.shrinkGrowButton()
         //title
         guard let type = sender.currentTitle else {
             print("nowhere to go")
@@ -51,6 +52,13 @@ class TaskViewController: UIViewController {
             categoryView(type:type, color: color)
         }
     } // buttonTapped()
+    
+    @objc func touchDown(sender: UIButton) {
+        sender.shrinkButton()
+    }
+    @objc func touchExit(sender: UIButton) {
+        sender.growButton()
+    }
     
     //create up category view
     func addCategoryView() {
@@ -131,6 +139,8 @@ class TaskViewController: UIViewController {
                 let buttonColor = UIColor(hex: categoryColors[buttonCount])
                 button.backgroundColor = buttonColor
                 button.addTarget(self, action: #selector(buttonTapped(sender:)), for: .touchUpInside)
+                button.addTarget(self, action: #selector(touchDown(sender:)), for: .touchDown)
+                button.addTarget(self, action: #selector(touchExit(sender:)), for: .touchDragExit)
             }
  
             self.scrollView.addSubview(button)

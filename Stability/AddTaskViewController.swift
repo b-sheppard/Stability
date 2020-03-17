@@ -35,20 +35,20 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
         //create cancel button
         let cancelButton = UIButton(type: .custom)
         cancelButton.setTitle("Cancel", for: .normal)
-        cancelButton.setTitleColor(secondaryColor, for: .normal)
+        cancelButton.setTitleColor(white, for: .normal)
+        cancelButton.setTitleColor(secondaryColor, for: .highlighted)
         cancelButton.frame = CGRect(x: 10, y: 0, width: 60, height: 60)
         cancelButton.tintColor = secondaryColor
         cancelButton.addTarget(self, action: #selector(AddCategoryViewController.CancelClicked), for: .touchUpInside)
-        cancelButton.tintColor = secondaryColor
         
         //create save button
         let saveButton = UIButton(type: .custom)
         saveButton.setTitle("Save", for: .normal)
-        saveButton.setTitleColor(secondaryColor, for: .normal)
+        saveButton.setTitleColor(white, for: .normal)
+        saveButton.setTitleColor(secondaryColor, for: .highlighted)
         saveButton.frame = CGRect(x: width - 70, y: 0, width: 60, height: 60)
         saveButton.tintColor = secondaryColor
         saveButton.addTarget(self, action:#selector(AddCategoryViewController.SaveClicked), for: .touchUpInside)
-        cancelButton.tintColor = secondaryColor
         
         //title ("Add Task" by default)
         let title = UILabel(frame: CGRect(x: (width/2 - 100), y: -10, width: 200, height: 80))
@@ -129,10 +129,11 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
         let screenHeight = screensize.height
         
         taskTextField = UITextField(frame: CGRect(x: 20, y: screenHeight/10, width: screenWidth - 40, height: 60))
-        taskTextField.backgroundColor = UIColor.black.withAlphaComponent(0.1)
+        taskTextField.backgroundColor = color
         taskTextField.borderStyle = .roundedRect
         //let str = NSAttributedString(string: "Give your task a name...", attributes: [NSAttributedString.Key.foregroundColor: white])
-        taskTextField.placeholder = "Give your task a name..."
+        taskTextField.attributedPlaceholder = NSAttributedString(string: "Give your task a name...",
+        attributes: [NSAttributedString.Key.foregroundColor: secondaryColor])
         taskTextField.font = UIFont(name: "Futura", size: 20)
         taskTextField.textColor = white
         taskTextField.keyboardAppearance = .dark
@@ -143,6 +144,10 @@ class AddTaskViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         ref = Database.database().reference()
+        
+        let downSwipe = UISwipeGestureRecognizer(target: self, action: #selector(CancelClicked))
+        downSwipe.direction = .down
+        view.addGestureRecognizer(downSwipe)
         
         setupView()
         createTextField()
