@@ -128,7 +128,7 @@ class ActiveTaskViewController: UIViewController,
 
         fetchData()
         tableView.reloadData()
-        if task.count == 0 {
+        if tasks.count == 0 {
             exitView()
         }
     }
